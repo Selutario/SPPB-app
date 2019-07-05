@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">SPPB</string>
+    <string name="title_home">Home</string>
+    <string name="title_users">Users</string>
+    <string name="title_activity_users">Users</string>
+    <string name="title_activity_test">Chair stand test</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="btn_all">Full test</string>
+    <string name="btn_balance">Balance test</string>
+    <string name="btn_gait">Gait speed test</string>
+    <string name="btn_chair">Chair stand test</string>
+
+
+</resources>
