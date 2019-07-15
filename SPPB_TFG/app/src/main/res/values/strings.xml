@@ -12,5 +12,13 @@
     <string name="btn_gait">Gait speed test</string>
     <string name="btn_chair">Chair stand test</string>
 
+    <string name="btn_add">Add user</string>
+    <string name="no_users">There are no saved users.</string>
+    <string name="score_test">Score:</string>
+
+    <string name="dialog_add_user">Enter the username</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+
 
 </resources>

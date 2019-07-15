@@ -14,14 +14,18 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerInside" />
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_person" />
     </RelativeLayout>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_info"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.55"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/colorChairStand">
 
         <TextView
             android:id="@+id/textView2"
@@ -72,7 +76,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_round_replay" />
+            app:srcCompat="@drawable/ic_round_info" />
 
         <ImageButton
             android:id="@+id/imageButton6"
@@ -82,9 +86,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageButton5"
-            app:srcCompat="@drawable/ic_round_arrow_forward" />
-
-
+            app:srcCompat="@drawable/ic_round_replay" />
     </android.support.constraint.ConstraintLayout>
 
 

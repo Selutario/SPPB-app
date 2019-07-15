@@ -8,10 +8,16 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorText">#757575</color>
     <color name="colorBackground">#fafafa</color>
+    <color name="colorError">#D32F2F</color>
     <color name="selection">#dcdcdc</color>
 
     <color name="colorBalance">#4CAF50</color>
     <color name="colorGaitSpeed">#7C4DFF</color>
     <color name="colorChairStand">#E64A19</color>
+
+    <color name="minimum">#4CAF50</color>
+    <color name="light">#c0ca33</color>
+    <color name="moderate">#ff6d00</color>
+    <color name="severe">#D32F2F</color>
 
 </resources>
