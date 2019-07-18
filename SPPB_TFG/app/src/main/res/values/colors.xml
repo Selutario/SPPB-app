@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorAccent">#9E9E9E</color>
+    <color name="colorAccent">#E5E5E5</color>
     <color name="colorLightPrimary">#BBDEFB</color>
     <color name="colorTextOverBlue">#FFFFFF</color>
     <color name="colorPrimaryText">#212121</color>
@@ -12,8 +12,11 @@
     <color name="selection">#dcdcdc</color>
 
     <color name="colorBalance">#4CAF50</color>
+    <color name="colorBalanceDark">#367c39</color>
     <color name="colorGaitSpeed">#7C4DFF</color>
+    <color name="colorGaitSpeedDark">#6933ff</color>
     <color name="colorChairStand">#E64A19</color>
+    <color name="colorChairStandDark">#b83a14</color>
 
     <color name="minimum">#4CAF50</color>
     <color name="light">#c0ca33</color>

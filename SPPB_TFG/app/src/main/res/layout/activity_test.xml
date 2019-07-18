@@ -1,93 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    android:layout_height="match_parent"
+    tools:context=".TestActivity">
+
+    <FrameLayout
+        android:id="@+id/test_placeHolder"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.45" >
+        android:layout_height="match_parent"/>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_person" />
-    </RelativeLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/cl_info"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.55"
-        android:background="@color/colorChairStand">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="00:10"
-            android:textAlignment="center"
-            android:textColor="@color/colorTextOverBlue"
-            android:textSize="80sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/imageButton5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="Test name"
-            android:textColor="@color/colorTextOverBlue"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/imageButton4"
-            style="@style/TestButtons"
-            android:layout_marginEnd="24dp"
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_round_volume_off" />
-
-        <ImageButton
-            android:id="@+id/imageButton5"
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
-            style="@style/TestButtons"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_round_info" />
-
-        <ImageButton
-            android:id="@+id/imageButton6"
-            style="@style/TestButtons"
-            android:layout_marginStart="24dp"
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageButton5"
-            app:srcCompat="@drawable/ic_round_replay" />
-    </android.support.constraint.ConstraintLayout>
-
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

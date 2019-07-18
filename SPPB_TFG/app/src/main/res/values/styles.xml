@@ -7,7 +7,8 @@
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
         <item name="android:statusBarColor" tools:targetApi="23">#fffafafa</item>
-
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
 
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -62,6 +63,11 @@
         <item name="android:colorAccent">#2196F3</item>
         <item name="android:textColor">#757575</item>
         <item name="android:textColorPrimary">#212121</item>
+    </style>
+
+    <style name="SliderStyle" parent="AppTheme">
+        <item name="android:statusBarColor" tools:targetApi="23">@color/colorPrimaryDark</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
     </style>
 
 </resources>

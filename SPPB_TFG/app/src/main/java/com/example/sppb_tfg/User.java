@@ -6,12 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class User {
     long id;
     String name;
-    String score;
+    int balanceScore;
+    int speedScore;
+    int chairScore;
     String testDate;
     /*String[] scores;
     String[] testDates;*/
@@ -19,7 +20,9 @@ public class User {
     private User(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndex("_id"));
         name = cursor.getString(cursor.getColumnIndex(UsersDB.UserEntry.NAME));
-        score = cursor.getString(cursor.getColumnIndex(UsersDB.UserEntry.SCORE));
+        balanceScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.BALANCE_SCORE));
+        speedScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.SPEED_SCORE));
+        chairScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.CHAIR_SCORE));
         testDate = cursor.getString(cursor.getColumnIndex(UsersDB.UserEntry.TEST_DATE));
 /*      scores = cursor.getString(cursor.getColumnIndex("scores")).split(";");
         testDates = cursor.getString(cursor.getColumnIndex("test_dates")).split(";")*/
@@ -27,13 +30,17 @@ public class User {
 
     public User(String name) {
         setName(name);
-        setScore("0");
+        setBalanceScore(0);
+        setSpeedScore(0);
+        setChairScore(0);
         setTestDate("11/07/2019");
     }
 
-    public User(String name, String score, String testDate) {
+    public User(String name, int balanceScore, int speedScore, int chairScore, String testDate) {
         setName(name);
-        this.score = score;
+        setBalanceScore(balanceScore);
+        setSpeedScore(speedScore);
+        setChairScore(chairScore);
         this.testDate = testDate;
     }
 
@@ -53,31 +60,53 @@ public class User {
         this.name = name;
     }
 
-    public String getLastScore() {
-        return score;
+    public int getBalanceScore() {
+        return balanceScore;
     }
 
-    public void setScore(String score) {
-        this.score = score;
+    public void setBalanceScore(int balanceScore) {
+        this.balanceScore = balanceScore;
     }
 
-    public void setTestDate (String testDate) {
+    public int getSpeedScore() {
+        return speedScore;
+    }
+
+    public void setSpeedScore(int speedScore) {
+        this.speedScore = speedScore;
+    }
+
+    public int getChairScore() {
+        return chairScore;
+    }
+
+    public void setChairScore(int chairScore) {
+        this.chairScore = chairScore;
+    }
+
+    public String getTestDate() {
+        return testDate;
+    }
+
+    public void setTestDate(String testDate) {
         this.testDate = testDate;
     }
 
-    public String getLastDate() {
-        return "10/07/2019";
+    public int getScore() {
+        return balanceScore + speedScore + chairScore;
     }
-
-
 
     public static ArrayList<User> getUsersList(Context context) {
         ArrayList<User> listUser = new ArrayList<>();
         LocalSQLiteOpenHelper helper = new LocalSQLiteOpenHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        Cursor cursor = db.query(true, "USERS", new String[]{"_id", UsersDB.UserEntry.NAME,
-                        UsersDB.UserEntry.SCORE, UsersDB.UserEntry.TEST_DATE},
+        Cursor cursor = db.query(true, "USERS", new String[]{"_id",
+                        UsersDB.UserEntry.NAME,
+                        UsersDB.UserEntry.BALANCE_SCORE,
+                        UsersDB.UserEntry.SPEED_SCORE,
+                        UsersDB.UserEntry.CHAIR_SCORE,
+                        UsersDB.UserEntry.TEST_DATE},
                 null, null, null, null, "name", null);
 
 
@@ -95,8 +124,12 @@ public class User {
         LocalSQLiteOpenHelper helper = new LocalSQLiteOpenHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        Cursor cursor = db.query(true, "USERS", new String[]{"_id", UsersDB.UserEntry.NAME,
-                        UsersDB.UserEntry.SCORE, UsersDB.UserEntry.TEST_DATE},
+        Cursor cursor = db.query(true, "USERS", new String[]{"_id",
+                        UsersDB.UserEntry.NAME,
+                        UsersDB.UserEntry.BALANCE_SCORE,
+                        UsersDB.UserEntry.SPEED_SCORE,
+                        UsersDB.UserEntry.CHAIR_SCORE,
+                        UsersDB.UserEntry.TEST_DATE},
                 null, null, null, null, "name", null);
 
 
@@ -117,7 +150,12 @@ public class User {
         SQLiteDatabase db = helper.getReadableDatabase();
 
         String where ="id = " + String.valueOf(id);
-        Cursor cursor = db.query(true, "USERS", new String[]{"id", "name", "scores", "test_dates"},
+        Cursor cursor = db.query(true, "USERS", new String[]{"_id",
+                        UsersDB.UserEntry.NAME,
+                        UsersDB.UserEntry.BALANCE_SCORE,
+                        UsersDB.UserEntry.SPEED_SCORE,
+                        UsersDB.UserEntry.CHAIR_SCORE,
+                        UsersDB.UserEntry.TEST_DATE},
                 where, null, null, null, "name", null);
 
         if(cursor.moveToFirst())
@@ -131,7 +169,9 @@ public class User {
     public void insert(Context context) {
         ContentValues values = new ContentValues();
         values.put(UsersDB.UserEntry.NAME,this.name);
-        values.put(UsersDB.UserEntry.SCORE, this.score);
+        values.put(UsersDB.UserEntry.BALANCE_SCORE, this.balanceScore);
+        values.put(UsersDB.UserEntry.SPEED_SCORE, this.speedScore);
+        values.put(UsersDB.UserEntry.CHAIR_SCORE, this.chairScore);
         values.put(UsersDB.UserEntry.TEST_DATE, this.testDate);
 
 /*        if(this.scores!=null) {

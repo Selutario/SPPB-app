@@ -1,7 +1,7 @@
 package com.example.sppb_tfg;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -16,10 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.app.AlertDialog;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -51,6 +48,8 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         rvUsers.setItemAnimator(new DefaultItemAnimator());
         rvUsers.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
+        showUsersList();
+
         // Swipe users in recyclerview
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerUserTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvUsers);
@@ -80,7 +79,6 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
             }
         });
 
-        showUsersList();
         return view;
     }
 

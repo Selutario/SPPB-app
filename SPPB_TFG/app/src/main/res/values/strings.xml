@@ -7,18 +7,83 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
-    <string name="btn_all">Full test</string>
-    <string name="btn_balance">Balance test</string>
-    <string name="btn_gait">Gait speed test</string>
-    <string name="btn_chair">Chair stand test</string>
+    <string name="all_tests">Full test</string>
+    <string name="balance_test">Balance test</string>
+    <string name="gait_test">Gait speed test</string>
+    <string name="chair_test">Chair stand test</string>
 
     <string name="btn_add">Add user</string>
     <string name="no_users">There are no saved users.</string>
-    <string name="score_test">Score:</string>
+    <string name="delete">Delete</string>
 
     <string name="dialog_add_user">Enter the username</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
+
+    <!-- EXPLAINING SLIDES -->
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="finish">Finish</string>
+
+    <!--Balance test-->
+    <string name="balan_heading1">Calibrate</string>
+    <string name="balan_heading2">Feet together</string>
+    <string name="balan_heading3">Semi-tandem</string>
+    <string name="balan_heading4">Tandem</string>
+    <string name="balan_heading5">Keep the balance</string>
+
+    <string name="balan_descr1">
+        Stand with the device on your chest without moving until
+        you hear a beep. Follow the voice instructions during all the tests.
+    </string>
+    <string name="balan_descr2">
+        There are three phases. Put your feet together side by side for 10 seconds for the first phase.
+    </string>
+    <string name="balan_descr3">
+        Put the heel of one foot at the height of the big toe of the opposite foot for the second phase.
+    </string>
+    <string name="balan_descr4">
+        Put the heel of one foot in contact with the tip of the other foot for the third phase.
+    </string>
+    <string name="balan_descr5">
+        Try not to lean, if you do, the test will end.
+    </string>
+
+
+    <!--Gait speed test-->
+    <string name="gait_heading1">Sound signal</string>
+    <string name="gait_heading2">Walk</string>
+    <string name="gait_heading3">Repeat</string>
+
+    <string name="gait_descr1">
+        While standing, do not move until you hear a beep. After that, you can start walking at a normal pace.
+    </string>
+    <string name="gait_descr2">
+        Travel a distance of 4 meters. Once you reach the end, do not move until you hear the beep again.
+    </string>
+    <string name="gait_descr3">
+        Repeat the same process in the opposite direction, voice instructions will guide you.
+    </string>
+
+
+    <!--Chair stand test-->
+    <string name="chair_heading1">Initial position</string>
+    <string name="chair_heading2">Calibrate</string>
+    <string name="chair_heading3">Repeat</string>
+
+    <string name="chair_descr1">
+        Sit in a chair with your arms crossed over your chest.
+    </string>
+    <string name="chair_descr2">
+        With arms crossed, try to get up and sit twice in a row following the voice instructions.
+    </string>
+    <string name="chair_descr3">
+        After this, from the initial position, get up and sit 5 times in a row.
+    </string>
+
+
+
+
 
 
 </resources>

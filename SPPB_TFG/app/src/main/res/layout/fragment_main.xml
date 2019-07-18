@@ -35,7 +35,7 @@
                 android:background="@drawable/shape_all_button"
                 android:drawableStart="@drawable/ic_all_wired3"
                 android:drawableTint="@color/colorPrimary"
-                android:text="@string/btn_all"
+                android:text="@string/all_tests"
                 android:textColor="@color/colorPrimary"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="428dp" />
@@ -46,7 +46,7 @@
                 android:background="@drawable/shape_balance_button"
                 android:drawableStart="@drawable/ic_balance_wires2"
                 android:drawableTint="@color/colorBalance"
-                android:text="@string/btn_balance"
+                android:text="@string/balance_test"
                 android:textColor="@color/colorBalance"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="428dp" />
@@ -57,7 +57,7 @@
                 android:background="@drawable/shape_gaitspeed_button"
                 android:drawableStart="@drawable/ic_speed"
                 android:drawableTint="@color/colorGaitSpeed"
-                android:text="@string/btn_gait"
+                android:text="@string/gait_test"
                 android:textColor="@color/colorGaitSpeed"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="428dp" />
@@ -68,7 +68,7 @@
                 android:background="@drawable/shape_chairstand_button"
                 android:drawableStart="@drawable/ic_chair_wires"
                 android:drawableTint="@color/colorChairStand"
-                android:text="@string/btn_chair"
+                android:text="@string/chair_test"
                 android:textColor="@color/colorChairStand"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="428dp" />

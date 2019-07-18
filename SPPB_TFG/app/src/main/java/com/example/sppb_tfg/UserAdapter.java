@@ -1,12 +1,16 @@
 package com.example.sppb_tfg;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,8 +21,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private ArrayList<User> mUsers;
     public TextView tv_score;
     public TextView tv_name;
-    private LinearLayout list_item;
-    private LinearLayout swipe_item;
+    private ImageView mDeleteIcon;
     Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -29,10 +32,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             tv_score =(TextView) itemView.findViewById(R.id.tv_score);
             tv_name = (TextView) itemView.findViewById(R.id.tv_username);
-            list_item = (LinearLayout) itemView.findViewById(R.id.main_list);
-            swipe_item = (LinearLayout) itemView.findViewById(R.id.swipe_layout);
+            mDeleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
             viewForeground = itemView.findViewById(R.id.viewForeground);
-            //viewBackground = itemView.findViewById(R.id.viewBackground);
         }
     }
 
@@ -53,11 +54,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        User user = mUsers.get(i);
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+        mDeleteIcon.setImageResource(R.drawable.ic_delete);
+        final User user = mUsers.get(i);
 
-        if (!user.getLastScore().equals("0")) {
-            int n_score = Integer.parseInt(user.getLastScore());
+        if (user.getScore() != 0) {
+            int n_score = user.getScore();
 
             if (n_score < 4) {
                 tv_score.setTextColor(context.getResources().getColor(R.color.severe));
@@ -70,8 +72,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             }
         }
 
-
-        tv_score.setText(user.getLastScore());
+        tv_score.setText(Integer.toString(user.getScore()));
         tv_name.setText(user.getName());
     }
 

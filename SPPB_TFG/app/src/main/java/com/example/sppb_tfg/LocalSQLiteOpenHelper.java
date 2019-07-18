@@ -15,7 +15,9 @@ public class LocalSQLiteOpenHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE " + UsersDB.UserEntry.TABLE_NAME + " ("
                 + UsersDB.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + UsersDB.UserEntry.NAME + " TEXT NOT NULL,"
-                + UsersDB.UserEntry.SCORE + " TEXT,"
+                + UsersDB.UserEntry.BALANCE_SCORE + " INTEGER,"
+                + UsersDB.UserEntry.SPEED_SCORE+ " INTEGER,"
+                + UsersDB.UserEntry.CHAIR_SCORE + " INTEGER,"
                 + UsersDB.UserEntry.TEST_DATE + " TEXT )");
 
     }
