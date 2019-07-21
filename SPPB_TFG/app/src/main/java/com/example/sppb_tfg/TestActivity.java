@@ -3,45 +3,78 @@ package com.example.sppb_tfg;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
+import android.os.Handler;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
+import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Random;
 
 public class TestActivity extends FragmentActivity {
 
-    private ConstraintLayout cl_info;
     private int mCurrentTest;
     private boolean full_test = false;
-    public boolean firstUse = false;
     SharedPreferences settings;
+
+    public int balanceScore = 0;
+    public int gaitScore = 0;
+    public int chairScore = 0;
+
+    public TextToSpeech tts;
+    public boolean isMuted = false;
+    public String mostRecentUtteranceID;
+    public MediaPlayer beep;
+    public boolean ttsReady = false;
+    public HashMap<String, String> params = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        // Keep screen on while performing test
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         mCurrentTest = getIntent().getIntExtra("test_number", mCurrentTest);
 
         settings = getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
 
-        if (settings.getBoolean("FirstUse", true)){
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("FirstUse", false);
-            editor.commit();
-        }
-
+        initTTS();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         startTest();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        tts.stop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        tts.stop();
+        tts.shutdown();
+        beep.stop();
+        beep.release();
     }
 
     public void startTest() {
@@ -55,7 +88,7 @@ public class TestActivity extends FragmentActivity {
                 if (settings.getBoolean("FirstUseBalance", true)){
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("FirstUseBalance", false);
-                    editor.commit();
+                    editor.apply();
                     slider_activity(Constants.BALANCE_TEST);
                 }
                 BalanceFragment balanceFragment = new BalanceFragment();
@@ -66,7 +99,7 @@ public class TestActivity extends FragmentActivity {
                 if (settings.getBoolean("FirstUseGait", true)){
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("FirstUseGait", false);
-                    editor.commit();
+                    editor.apply();
                     slider_activity(Constants.GAIT_TEST);
                 }
                 GaitFragment gaitFragment = new GaitFragment();
@@ -77,7 +110,7 @@ public class TestActivity extends FragmentActivity {
                 if (settings.getBoolean("FirstUseChair", true)){
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("FirstUseChair", false);
-                    editor.commit();
+                    editor.apply();
                     slider_activity(Constants.CHAIR_TEST);
                 }
                 ChairFragment chairFragment= new ChairFragment();
@@ -119,4 +152,101 @@ public class TestActivity extends FragmentActivity {
         startActivity(intent);
     }
 
+    public void initTTS() {
+        // Beep sound
+        beep = MediaPlayer.create(this, R.raw.beep);
+
+        // Text to speech
+        tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (tts.getEngines().size() == 0) {
+                    Toast.makeText(TestActivity.this,"No Engines Installed",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    if(status == TextToSpeech.SUCCESS) {
+                        /*tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                            @Override
+                            public void onStart(String utteranceId) {
+
+                            }
+
+                            @Override
+                            public void onDone(String utteranceId) {
+                                // only respond to the most recent utterance
+                                if (!utteranceId.equals(mostRecentUtteranceID)) {
+                                    Log.i("XXX", "onDone() blocked: utterance ID mismatch.");
+                                    return;
+                                } // else continue...
+
+                                boolean wasCalledFromBackgroundThread = (Thread.currentThread().getId() != 1);
+                                Log.i("XXX", "was onDone() called on a background thread? : " + wasCalledFromBackgroundThread);
+
+                                Log.i("XXX", "onDone working.");
+
+                                // for demonstration only... avoid references to
+                                // MainActivity (unless you use a WeakReference)
+                                // inside the onDone() method, as it
+                                // can cause a memory leak.
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // *** toast will not work if called from a background thread ***
+                                        Toast.makeText(TestActivity.this,"onDone working.",Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onError(String utteranceId) {
+
+                            }
+                        });*/
+
+                        Locale locale;
+                        switch (Locale.getDefault().getCountry()) {
+/*                        case "US":
+                            locale = Locale.US;
+                            break;
+                        case "ES":
+                            locale = new Locale("spa", "ES");
+                            break;*/
+                            default:
+                                locale = Locale.UK;
+                                break;
+                        }
+
+                        tts.setLanguage(locale);
+
+                        mostRecentUtteranceID = (new Random().nextInt() % 9999999) + ""; // "" is String force
+                        // set params
+                        // *** this method will work for more devices: API 19+ ***
+                        params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, mostRecentUtteranceID);
+                        ttsReady = true;
+                    }
+
+                }
+            }
+        });
+
+
+    }
+
+
+    @SuppressWarnings("deprecation")
+    protected void readText(String text){
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tts.speak(text, TextToSpeech.QUEUE_ADD,params,mostRecentUtteranceID);
+        } else {*/
+        if (!isMuted) {
+            tts.speak(text, TextToSpeech.QUEUE_ADD, params);
+        }
+/*        }*/
+    }
+
+    public boolean switchMute() {
+        tts.stop();
+        isMuted = !isMuted;
+        return  isMuted;
+    }
 }

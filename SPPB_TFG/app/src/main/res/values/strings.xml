@@ -83,7 +83,35 @@
 
 
 
+    <!--ACTUAL TEST-->
+    <string name="start">
+        Start
+    </string>
 
+    <!--Balance test-->
+    <string name="balance_step1">
+        Need to calibrate. While standing, put the phone on your chest and do not move until a beep
+        sounds. Press any part of the screen to start.
+    </string>
+    <string name="balance_step2">
+        Calibrating.
+    </string>
+
+    <string name="balance_step3">
+        Phase 1. Put one foot next to the other and do not move for 10 seconds. Touch the screen to start.
+    </string>
+    <string name="balance_step4">
+        Good. Phase 2, semi-tandem position. Touch the screen to start.
+    </string>
+    <string name="balance_step5">
+        Good. Phase 3, tandem position. Touch the screen to start.
+    </string>
+    <string name="balance_step6">
+        End of balance test. Touch the screen to continue.
+    </string>
+    <string name="desbalanced">
+        You have moved. End of the test. Touch the screen to continue.
+    </string>
 
 
 </resources>

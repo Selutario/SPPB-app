@@ -64,6 +64,7 @@ public class HomeFragment extends Fragment {
 
     private void test_activity(int test){
         Intent intent = new Intent(getActivity(), TestActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra("test_number", test);
         startActivity(intent);
     }

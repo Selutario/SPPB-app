@@ -1,15 +1,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:id="@+id/whole_screen"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.45" >
+        android:layout_weight="0.45">
 
         <ImageView
+            android:id="@+id/iv_person"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
@@ -23,10 +26,26 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.55"
-        android:background="@color/colorChairStand">
+        android:background="@color/colorPrimary">
 
-        <TextView
-            android:id="@+id/textView2"
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/colorTextOverBlue"
+            android:textSize="80dp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/imageButton5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <!--<TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -38,12 +57,13 @@
             android:textColor="@color/colorTextOverBlue"
             android:textSize="80dp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/imageButton5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_test_name" />
-
+-->
         <TextView
             android:id="@+id/tv_test_name"
             android:layout_width="wrap_content"
@@ -58,33 +78,54 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/imageButton4"
+            android:id="@+id/btn_play"
+            style="@style/TestButtons"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_round_play_arrow"
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/imageButton5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_mute"
             style="@style/TestButtons"
             android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_round_volume_up"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageButton5"
-            app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/ic_round_volume_off" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
             android:id="@+id/imageButton5"
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             style="@style/TestButtons"
+            android:src="@drawable/ic_round_info"
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/ic_round_info" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
-            android:id="@+id/imageButton6"
+            android:id="@+id/btn_replay"
             style="@style/TestButtons"
             android:layout_marginStart="24dp"
+            android:src="@drawable/ic_round_replay"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageButton5"
-            android:src="@drawable/ic_round_replay" />
+            app:layout_constraintStart_toEndOf="@+id/imageButton5" />
+
+
     </android.support.constraint.ConstraintLayout>
 
 

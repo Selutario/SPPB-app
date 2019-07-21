@@ -1,8 +1,5 @@
 package com.example.sppb_tfg;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -17,50 +14,42 @@ public class ChairFragment extends Fragment {
 
     private ConstraintLayout cl_info;
     private TextView test_name;
-    private ImageButton imageButton4;
-    private ImageButton imageButton5;
-    private ImageButton imageButton6;
+    private TextView tv_time;
+    private ImageButton btn_play;
+    private ImageButton btn_mute;
+    private ImageButton btn_info;
+    private ImageButton btn_replay;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup
             container, Bundle savedInstanceState) {
 
-
         View view = inflater.inflate(R.layout.fragment_test, null);
         test_name = (TextView) view.findViewById(R.id.tv_test_name);
-        imageButton4 = (ImageButton) view.findViewById(R.id.imageButton4);
-        imageButton5 = (ImageButton) view.findViewById(R.id.imageButton5);
-        imageButton6 = (ImageButton) view.findViewById(R.id.imageButton6);
+//        tv_time = (TextView) view.findViewById(R.id.tv_time);
+        btn_play = (ImageButton) view.findViewById(R.id.btn_play);
+        btn_mute = (ImageButton) view.findViewById(R.id.btn_mute);
+        btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
+        btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
         cl_info = view.findViewById(R.id.cl_info);
 
         test_name.setText(getActivity().getResources().getText(R.string.chair_test));
         cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
 
-        imageButton5.setOnClickListener(new View.OnClickListener() {
+        btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((TestActivity)getActivity()).slider_activity(Constants.CHAIR_TEST);
             }
         });
 
-        imageButton6.setOnClickListener(new View.OnClickListener() {
+        btn_replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((TestActivity)getActivity()).fragmentTestCompleted();
             }
         });
-
-/*        // SHOW INSTRUCTIONS FIRST TIME
-        SharedPreferences settings =
-                getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
-
-        if (settings.getBoolean("FirstUseChair", true)){
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("FirstUseChair", false);
-            editor.commit();
-
-            ((TestActivity)getActivity()).slider_activity(Constants.CHAIR_TEST);
-        }*/
 
         return view;
     }
