@@ -36,7 +36,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
     private int currentStep = 0;
     private boolean inProgress = false;
 
-    // Accelerometer and time variables
+    // Accelerometer and time variables specific for gait test
     private final int TIME_THRSHOLD = 3000; // Miliseconds
     private float max_y = 1f;
     private long lastChangeTime;
@@ -96,23 +96,25 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         btn_replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentStep = 0;
                 ((TestActivity)getActivity()).tts.stop();
-                cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
 
+                onClickWholeScreen(false);
+
+                currentStep = 0;
                 walkingTime = 0;
                 min_walkingTime = 100;
                 inProgress = false;
 
-                onClickWholeScreen(false);
                 chronometer.stop();
                 chronometer.setBase(SystemClock.elapsedRealtime());
 
-                iv_person.setImageResource(R.drawable.ic_person);
-
+                cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
+                tv_result.setVisibility(View.GONE);
+                tv_result_label.setVisibility(View.GONE);
                 chronometer.setVisibility(View.GONE);
                 btn_play.setImageResource(R.drawable.ic_round_play_arrow);
                 btn_play.setVisibility(View.VISIBLE);
+                iv_person.setImageResource(R.drawable.ic_person);
             }
         });
 
@@ -248,9 +250,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 walkingTime = (double)walkingTime/1000;
 
                 chronometer.stop();
-
                 if (walkingTime < min_walkingTime) { min_walkingTime = walkingTime; }
-
 
                 inProgress = false;
 
@@ -291,7 +291,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             score = 1;
         }
 
-        ((TestActivity) getActivity()).balanceScore = score;
+        ((TestActivity) getActivity()).gaitScore = score;
         tv_result.setText(Integer.toString(score));
         tv_result.setVisibility(View.VISIBLE);
         tv_result_label.setVisibility(View.VISIBLE);

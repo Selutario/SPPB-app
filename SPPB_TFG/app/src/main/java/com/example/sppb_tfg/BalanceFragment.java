@@ -122,7 +122,9 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 btn_play.setImageResource(R.drawable.ic_round_play_arrow);
                 btn_play.setVisibility(View.VISIBLE);
                 btn_play.animate().cancel();
-                btn_play.setClickable(true);
+                btn_play.setEnabled(true);
+                tv_result.setVisibility(View.GONE);
+                tv_result_label.setVisibility(View.GONE);
             }
         });
 
@@ -160,7 +162,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 ((TestActivity)getActivity()).readText(getString(R.string.balance_step2));
                 ready_to_calibrate = true;
                 onClickWholeScreen(false);
-                btn_play.setClickable(false);
+                btn_play.setEnabled(false);
                 btn_play.animate().rotation(360).setDuration(2000).start();
 
                 break;

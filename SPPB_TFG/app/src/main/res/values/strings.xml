@@ -138,5 +138,41 @@
         screen to continue.
     </string>
 
+    <!--Chair stand test-->
+    <string name="chair_step0">
+        It is necessary to calibrate the device. Sit in a chair and follow the instructions,
+        always after the beep. Touch the screen to start.
+    </string>
+    <string name="chair_step1">
+        End of calibrating. Now, you can stand up 5 times.
+    </string>
+    <string name="chair_step2">
+        End of chair stand test. Touch the screen to continue.
+    </string>
+
+    <string name="chair_instructions0">
+        Please, stand up.
+    </string>
+    <string name="chair_instructions1">
+        Please, sit down.
+    </string>
+    <string name="chair_instructions2">
+        Please, stand up again.
+    </string>
+    <string name="chair_instructions3">
+        And please, sit down.
+    </string>
+
+    <string name="standing">
+        Standing.
+    </string>
+    <string name="sitting">
+        Sitting.
+    </string>
+
+    <string name="chair_errorCalibrating">The movement was not carried out with the necessary speed.
+        Touch the repeat button to try again or touch any part of the screen to continue.
+    </string>
+
 
 </resources>

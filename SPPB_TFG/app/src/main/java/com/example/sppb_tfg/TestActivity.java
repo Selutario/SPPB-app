@@ -239,7 +239,7 @@ public class TestActivity extends FragmentActivity {
             tts.speak(text, TextToSpeech.QUEUE_ADD,params,mostRecentUtteranceID);
         } else {*/
         if (!isMuted) {
-            tts.speak(text, TextToSpeech.QUEUE_ADD, params);
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
         }
 /*        }*/
     }
