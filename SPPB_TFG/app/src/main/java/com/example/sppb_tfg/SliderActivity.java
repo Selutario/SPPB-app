@@ -63,7 +63,11 @@ public class SliderActivity extends AppCompatActivity {
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSlideViewPager.setCurrentItem(mCurrentPage - 1);
+                if(mCurrentPage > 0){
+                    mSlideViewPager.setCurrentItem(mCurrentPage - 1);
+                } else {
+                    finish();
+                }
             }
         });
     }
@@ -123,17 +127,17 @@ public class SliderActivity extends AppCompatActivity {
             if(i == 0) {
 
                 mNextButton.setEnabled(true);
-                mBackButton.setEnabled(false);
-                mBackButton.setVisibility(View.INVISIBLE);
+/*                mBackButton.setEnabled(false);
+                mBackButton.setVisibility(View.INVISIBLE);*/
 
                 mNextButton.setText(getResources().getText(R.string.next));
-                mBackButton.setText("");
+                mBackButton.setText(getString(R.string.skip));
 
             } else if (i == mDots.length -1) {
 
                 mNextButton.setEnabled(true);
                 mBackButton.setEnabled(true);
-                mBackButton.setVisibility(View.VISIBLE);
+                /*mBackButton.setVisibility(View.VISIBLE);*/
 
                 mNextButton.setText(getResources().getText(R.string.finish));
                 mBackButton.setText(getResources().getText(R.string.back));

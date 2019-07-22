@@ -8,8 +8,16 @@
     <string name="title_notifications">Notifications</string>
 
     <string name="all_tests">Full test</string>
-    <string name="balance_test">Balance test</string>
-    <string name="gait_test">Gait speed test</string>
+
+    <string name="balance_name">Balance test</string>
+    <string name="balance_name1">Balance test - Normal</string>
+    <string name="balance_name2">Balance test - Semi tandem</string>
+    <string name="balance_name3">Balance test - Tandem</string>
+
+    <string name="gait_name">Gait speed test</string>
+    <string name="gait_name1">Gait speed test - First round</string>
+    <string name="gait_name2">Gait speed test - Second round</string>
+
     <string name="chair_test">Chair stand test</string>
 
     <string name="btn_add">Add user</string>
@@ -24,6 +32,7 @@
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="finish">Finish</string>
+    <string name="skip">Skip</string>
 
     <!--Balance test-->
     <string name="balan_heading1">Calibrate</string>
@@ -84,9 +93,8 @@
 
 
     <!--ACTUAL TEST-->
-    <string name="start">
-        Start
-    </string>
+    <string name="start">Start</string>
+    <string name="score">Score</string>
 
     <!--Balance test-->
     <string name="balance_step1">
@@ -111,6 +119,23 @@
     </string>
     <string name="desbalanced">
         You have moved. End of the test. Touch the screen to continue.
+    </string>
+
+
+    <!--Gait speed test-->
+    <string name="gait_step1">
+        With the phone on your chest, touch the screen and walk 4 meters. When you finish,
+        do not move until you hear the signal.
+    </string>
+    <string name="gait_step2">
+        Good. Now repeat the process in the opposite direction. Touch the screen to start.
+    </string>
+    <string name="gait_step3">
+        End of gait speed test. Touch the screen to continue.
+    </string>
+    <string name="gait_error">
+        Error. No movement detected. Touch the repeat button to try again or touch any part of the
+        screen to continue.
     </string>
 
 

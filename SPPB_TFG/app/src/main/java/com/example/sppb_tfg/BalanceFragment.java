@@ -23,6 +23,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     private LinearLayout whole_screen;
     private ConstraintLayout cl_info;
     private TextView test_name;
+    private TextView tv_result;
+    private TextView tv_result_label;
     private Chronometer chronometer;
     private ImageView iv_person;
     private ImageButton btn_play;
@@ -61,14 +63,16 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         cl_info = view.findViewById(R.id.cl_info);
         iv_person = (ImageView) view.findViewById(R.id.iv_person);
         test_name = (TextView) view.findViewById(R.id.tv_test_name);
+        tv_result = (TextView) view.findViewById(R.id.tv_result);
+        tv_result_label = (TextView) view.findViewById(R.id.tv_result_label);
+        test_name = (TextView) view.findViewById(R.id.tv_test_name);
         chronometer = view.findViewById(R.id.chronometer);
-//        tv_time = (TextView) view.findViewById(R.id.tv_time);
         btn_play = (ImageButton) view.findViewById(R.id.btn_play);
         btn_mute = (ImageButton) view.findViewById(R.id.btn_mute);
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
-        test_name.setText(getActivity().getResources().getText(R.string.balance_test));
+        test_name.setText(getString(R.string.balance_name));
         cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
 
 
@@ -163,6 +167,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
             case 2:
                 ((TestActivity)getActivity()).tts.stop();
+                test_name.setText(getString(R.string.balance_name1));
                 ((TestActivity)getActivity()).readText(getString(R.string.balance_step3));
                 onClickWholeScreen(true);
                 btn_play.setVisibility(View.GONE);
@@ -180,6 +185,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
             case 4:
                 ((TestActivity)getActivity()).tts.stop();
+                test_name.setText(getString(R.string.balance_name2));
                 ((TestActivity)getActivity()).readText(getString(R.string.balance_step4));
                 onClickWholeScreen(true);
                 inProgress = false;
@@ -197,6 +203,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
             case 6:
                 ((TestActivity)getActivity()).tts.stop();
+                test_name.setText(getString(R.string.balance_name3));
                 ((TestActivity)getActivity()).readText(getString(R.string.balance_step5));
                 onClickWholeScreen(true);
                 inProgress = false;
@@ -213,7 +220,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 break;
 
             case 8:
-                ((TestActivity) getActivity()).balanceScore = 4;
+                showResult(4);
                 ((TestActivity)getActivity()).tts.stop();
                 ((TestActivity)getActivity()).readText(getString(R.string.balance_step6));
                 onClickWholeScreen(true);
@@ -323,31 +330,43 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
     }
 
+    public void showResult(int score) {
+        ((TestActivity) getActivity()).balanceScore = score;
+
+        test_name.setText(getString(R.string.score));
+        tv_result.setText(Integer.toString(score));
+        chronometer.setVisibility(View.GONE);
+        tv_result_label.setVisibility(View.VISIBLE);
+        tv_result.setVisibility(View.VISIBLE);
+    }
+
     public void desbalanced(long elapsedTime) {
         ((TestActivity) getActivity()).readText(getString(R.string.desbalanced));
 
         chronometer.stop();
         inProgress = false;
+        int score = 0;
 
-        if (currentStep < 4) {
+        if (currentStep < 5) {
             iv_person.setImageResource(R.drawable.ic_person_desbalanced_1);
-        } else if (currentStep < 6) {
+        } else if (currentStep < 7) {
             iv_person.setImageResource(R.drawable.ic_person_desbalan_2);
-            ((TestActivity) getActivity()).balanceScore = 1;
+            score = 1;
         } else {
             iv_person.setImageResource(R.drawable.ic_person_desbalan_3);
 
-            if(elapsedTime < 3) {
-                ((TestActivity) getActivity()).balanceScore = 2;
-            } else if (elapsedTime <= 9) {
-                ((TestActivity) getActivity()).balanceScore = 3;
+            if(elapsedTime < 3000) {
+                score = 2;
+            } else if (elapsedTime <= 9000) {
+                score = 3;
             } else {
-                ((TestActivity) getActivity()).balanceScore = 4;
+                score = 4;
             }
         }
 
+        showResult(score);
+
         currentStep = 9;
         continueTest();
-
     }
 }

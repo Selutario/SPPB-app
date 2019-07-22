@@ -69,13 +69,13 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_score"
+                app:layout_constraintStart_toEndOf="@+id/tv_result"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.507" />
 
 
             <TextView
-                android:id="@+id/tv_score"
+                android:id="@+id/tv_result"
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

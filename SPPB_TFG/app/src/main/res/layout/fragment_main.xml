@@ -46,7 +46,7 @@
                 android:background="@drawable/shape_balance_button"
                 android:drawableStart="@drawable/ic_balance_wires2"
                 android:drawableTint="@color/colorBalance"
-                android:text="@string/balance_test"
+                android:text="@string/balance_name"
                 android:textColor="@color/colorBalance"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="428dp" />
@@ -57,7 +57,7 @@
                 android:background="@drawable/shape_gaitspeed_button"
                 android:drawableStart="@drawable/ic_speed"
                 android:drawableTint="@color/colorGaitSpeed"
-                android:text="@string/gait_test"
+                android:text="@string/gait_name"
                 android:textColor="@color/colorGaitSpeed"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="428dp" />

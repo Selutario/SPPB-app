@@ -26,7 +26,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
 
-            tv_score =(TextView) itemView.findViewById(R.id.tv_score);
+            tv_score =(TextView) itemView.findViewById(R.id.tv_result);
             tv_name = (TextView) itemView.findViewById(R.id.tv_username);
             mDeleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
             viewForeground = itemView.findViewById(R.id.viewForeground);
