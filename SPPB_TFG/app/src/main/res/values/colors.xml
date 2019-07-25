@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryLight">#379FF4</color>
+    <color name="colorPrimaryLighter">#4DAAF5</color>
     <color name="colorPrimaryDark">#1976D2</color>
     <color name="colorAccent">#E5E5E5</color>
     <color name="colorLightPrimary">#BBDEFB</color>
@@ -12,15 +14,22 @@
     <color name="selection">#dcdcdc</color>
 
     <color name="colorBalance">#4CAF50</color>
+    <color name="colorBalanceLight">#5DB760</color>
+    <color name="colorBalanceLighter">#5DB760</color>
     <color name="colorBalanceDark">#367c39</color>
+
     <color name="colorGaitSpeed">#7C4DFF</color>
+    <color name="colorGaitSpeedLight">#895EFF</color>
+    <color name="colorGaitSpeedLighter">#9670FF</color>
     <color name="colorGaitSpeedDark">#6933ff</color>
+
     <color name="colorChairStand">#E64A19</color>
+    <color name="colorChairLight">#E85B30</color>
+    <color name="colorChairLighter">#ED7F5E</color>
     <color name="colorChairStandDark">#b83a14</color>
 
     <color name="minimum">#4CAF50</color>
     <color name="light">#c0ca33</color>
     <color name="moderate">#ff6d00</color>
     <color name="severe">#D32F2F</color>
-
 </resources>

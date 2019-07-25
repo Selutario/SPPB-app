@@ -1,6 +1,7 @@
 package com.example.sppb_tfg;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -32,6 +33,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
     private ImageButton btn_mute;
     private ImageButton btn_info;
     private ImageButton btn_replay;
+    private GradientDrawable drawable;
 
     private int currentStep = 0;
     private boolean inProgress = false;
@@ -46,6 +48,8 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
     SensorManager sensorManager;
     Sensor sensorAcc;
+
+    TestActivity testActivity;
 
 
     @Override
@@ -66,7 +70,10 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
         test_name.setText(getActivity().getResources().getText(R.string.gait_name));
-        cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
+        drawable = (GradientDrawable)cl_info.getBackground();
+        drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
+
+        testActivity = ((TestActivity)getActivity());
 
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +85,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         btn_mute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((TestActivity)getActivity()).switchMute()) {
+                if (testActivity.switchMute()) {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_off);
                 } else {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_up);
@@ -89,14 +96,14 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((TestActivity)getActivity()).slider_activity(Constants.GAIT_TEST);
+                testActivity.slider_activity(Constants.GAIT_TEST);
             }
         });
 
         btn_replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((TestActivity)getActivity()).tts.stop();
+                testActivity.tts.stop();
 
                 onClickWholeScreen(false);
 
@@ -108,7 +115,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 chronometer.stop();
                 chronometer.setBase(SystemClock.elapsedRealtime());
 
-                cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
+                drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
                 tv_result.setVisibility(View.GONE);
                 tv_result_label.setVisibility(View.GONE);
                 chronometer.setVisibility(View.GONE);
@@ -121,8 +128,12 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
         // Sensor declaration. We use 1Hz frequency to get smoother measurements.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        sensorAcc = sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION).get(0);
-        sensorManager.registerListener(this, sensorAcc, 1000000);
+
+        if (sensorManager != null) {
+            sensorAcc = sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION).get(0);
+            sensorManager.registerListener(this, sensorAcc, 1000000);
+        }
+
 
         return view;
     }
@@ -145,15 +156,15 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         switch (currentStep) {
             case 0:
                 test_name.setText(getString(R.string.gait_name1));
-                ((TestActivity)getActivity()).readText(getString(R.string.gait_step1));
+                testActivity.readText(getString(R.string.gait_step1));
                 onClickWholeScreen(true);
                 chronometer.setVisibility(View.VISIBLE);
                 btn_play.setVisibility(View.GONE);
                 break;
 
             case 1:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).readText(getString(R.string.start));
+                testActivity.tts.stop();
+                testActivity.readText(getString(R.string.start));
                 iv_person.setImageResource(R.drawable.ic_person_gait);
                 onClickWholeScreen(false);
                 inProgress = true;
@@ -162,16 +173,16 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 break;
 
             case 2:
-                ((TestActivity)getActivity()).tts.stop();
+                testActivity.tts.stop();
                 test_name.setText(getString(R.string.gait_name2));
-                ((TestActivity)getActivity()).readText(getString(R.string.gait_step2));
+                testActivity.readText(getString(R.string.gait_step2));
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 onClickWholeScreen(true);
                 break;
 
             case 3:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).readText(getString(R.string.start));
+                testActivity.tts.stop();
+                testActivity.readText(getString(R.string.start));
                 iv_person.setImageResource(R.drawable.ic_person_gait);
                 onClickWholeScreen(false);
                 inProgress = true;
@@ -180,27 +191,28 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 break;
 
             case 4:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).readText(getString(R.string.gait_step3));
+                testActivity.tts.stop();
+                testActivity.readText(getString(R.string.gait_step3));
                 onClickWholeScreen(true);
                 showResult(min_walkingTime);
                 break;
 
             case 5:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).fragmentTestCompleted();
+                testActivity.tts.stop();
+                testActivity.fragmentTestCompleted();
                 break;
 
             case 6:
-                ((TestActivity)getActivity()).tts.stop();
-                cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorError));
-                ((TestActivity)getActivity()).readText(getString(R.string.gait_error));
+                testActivity.tts.stop();
+                drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorError));
+//                cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorError));
+                testActivity.readText(getString(R.string.gait_error));
                 onClickWholeScreen(true);
                 break;
 
             case 7:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).fragmentTestCompleted();
+                testActivity.tts.stop();
+                testActivity.fragmentTestCompleted();
                 break;
 
         }
@@ -256,7 +268,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
                 if (max_y != 1f) {
                     max_y = 1f;
-                    ((TestActivity) getActivity()).beep.start();
+                    testActivity.beep.start();
                     iv_person.setImageResource(R.drawable.ic_test_done);
                     continueTest();
                 } else {
@@ -291,7 +303,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             score = 1;
         }
 
-        ((TestActivity) getActivity()).gaitScore = score;
+        testActivity.gaitScore = score;
         tv_result.setText(Integer.toString(score));
         tv_result.setVisibility(View.VISIBLE);
         tv_result_label.setVisibility(View.VISIBLE);

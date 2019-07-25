@@ -18,7 +18,7 @@
     <string name="gait_name1">Gait speed test - First round</string>
     <string name="gait_name2">Gait speed test - Second round</string>
 
-    <string name="chair_test">Chair stand test</string>
+    <string name="chair_name">Chair stand test</string>
 
     <string name="btn_add">Add user</string>
     <string name="no_users">There are no saved users.</string>

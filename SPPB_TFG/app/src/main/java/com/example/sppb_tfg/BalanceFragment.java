@@ -1,6 +1,8 @@
 package com.example.sppb_tfg;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -31,6 +33,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     private ImageButton btn_mute;
     private ImageButton btn_info;
     private ImageButton btn_replay;
+    private GradientDrawable drawable;
 
     private int currentStep = 0;
     private boolean inProgress = false;
@@ -53,6 +56,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     SensorManager sensorManager;
     Sensor sensorAcc;
 
+    TestActivity testActivity;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup
@@ -72,8 +77,12 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
+        testActivity = ((TestActivity)getActivity());
+
         test_name.setText(getString(R.string.balance_name));
-        cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
+        drawable = (GradientDrawable)cl_info.getBackground();
+        drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
+        //cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
 
 
         btn_play.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +95,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         btn_mute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((TestActivity)getActivity()).switchMute()) {
+                if (testActivity.switchMute()) {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_off);
                 } else {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_up);
@@ -97,7 +106,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((TestActivity)getActivity()).slider_activity(Constants.BALANCE_TEST);
+                testActivity.slider_activity(Constants.BALANCE_TEST);
             }
         });
 
@@ -105,7 +114,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 currentStep = 0;
-                ((TestActivity)getActivity()).tts.stop();
+                testActivity.tts.stop();
 
                 sample_index = 0;
                 inProgress = false;
@@ -121,7 +130,6 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 chronometer.setVisibility(View.GONE);
                 btn_play.setImageResource(R.drawable.ic_round_play_arrow);
                 btn_play.setVisibility(View.VISIBLE);
-                btn_play.animate().cancel();
                 btn_play.setEnabled(true);
                 tv_result.setVisibility(View.GONE);
                 tv_result_label.setVisibility(View.GONE);
@@ -130,8 +138,10 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
         // Sensor declaration. We use 1Hz frequency to get smoother measurements.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
-        sensorManager.registerListener(this, sensorAcc, 1000000);
+        if (sensorManager != null){
+            sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
+            sensorManager.registerListener(this, sensorAcc, 1000000);
+        }
 
         return view;
     }
@@ -152,14 +162,14 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     private void continueTest() {
         switch (currentStep) {
             case 0:
-                ((TestActivity)getActivity()).readText(getString(R.string.balance_step1));
+                testActivity.readText(getString(R.string.balance_step1));
                 onClickWholeScreen(true);
                 btn_play.setImageResource(R.drawable.ic_compass_symbol);
                 break;
 
             case 1:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).readText(getString(R.string.balance_step2));
+                testActivity.tts.stop();
+                testActivity.readText(getString(R.string.balance_step2));
                 ready_to_calibrate = true;
                 onClickWholeScreen(false);
                 btn_play.setEnabled(false);
@@ -168,17 +178,17 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 break;
 
             case 2:
-                ((TestActivity)getActivity()).tts.stop();
+                testActivity.tts.stop();
                 test_name.setText(getString(R.string.balance_name1));
-                ((TestActivity)getActivity()).readText(getString(R.string.balance_step3));
+                testActivity.readText(getString(R.string.balance_step3));
                 onClickWholeScreen(true);
                 btn_play.setVisibility(View.GONE);
                 chronometer.setVisibility(View.VISIBLE);
                 break;
 
             case 3:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).readText(getString(R.string.start));
+                testActivity.tts.stop();
+                testActivity.readText(getString(R.string.start));
                 onClickWholeScreen(false);
                 inProgress = true;
                 chronometer.setBase(SystemClock.elapsedRealtime());
@@ -186,16 +196,16 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 break;
 
             case 4:
-                ((TestActivity)getActivity()).tts.stop();
+                testActivity.tts.stop();
                 test_name.setText(getString(R.string.balance_name2));
-                ((TestActivity)getActivity()).readText(getString(R.string.balance_step4));
+                testActivity.readText(getString(R.string.balance_step4));
                 onClickWholeScreen(true);
                 inProgress = false;
                 break;
 
             case 5:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).readText(getString(R.string.start));
+                testActivity.tts.stop();
+                testActivity.readText(getString(R.string.start));
                 iv_person.setImageResource(R.drawable.ic_person_balan_2);
                 onClickWholeScreen(false);
                 inProgress = true;
@@ -204,16 +214,16 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 break;
 
             case 6:
-                ((TestActivity)getActivity()).tts.stop();
+                testActivity.tts.stop();
                 test_name.setText(getString(R.string.balance_name3));
-                ((TestActivity)getActivity()).readText(getString(R.string.balance_step5));
+                testActivity.readText(getString(R.string.balance_step5));
                 onClickWholeScreen(true);
                 inProgress = false;
                 break;
 
             case 7:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).readText(getString(R.string.start));
+                testActivity.tts.stop();
+                testActivity.readText(getString(R.string.start));
                 iv_person.setImageResource(R.drawable.ic_person_balan_3);
                 onClickWholeScreen(false);
                 inProgress = true;
@@ -223,8 +233,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
             case 8:
                 showResult(4);
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).readText(getString(R.string.balance_step6));
+                testActivity.tts.stop();
+                testActivity.readText(getString(R.string.balance_step6));
                 onClickWholeScreen(true);
                 inProgress = false;
                 currentStep = 9;
@@ -236,8 +246,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 break;
 
             case 10:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).fragmentTestCompleted();
+                testActivity.tts.stop();
+                testActivity.fragmentTestCompleted();
                 break;
 
         }

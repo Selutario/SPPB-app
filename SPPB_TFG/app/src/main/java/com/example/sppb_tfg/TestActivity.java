@@ -46,7 +46,18 @@ public class TestActivity extends FragmentActivity {
         // Keep screen on while performing test
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mCurrentTest = getIntent().getIntExtra("test_number", mCurrentTest);
+        // Open selected test in app shortcut
+        if ("android.intent.action.full_shortcut".equals(getIntent().getAction())){
+            mCurrentTest = 0;
+        } else if ("android.intent.action.balance_shortcut".equals(getIntent().getAction())) {
+            mCurrentTest = Constants.BALANCE_TEST;
+        } else if ("android.intent.action.gait_shortcut".equals(getIntent().getAction())) {
+            mCurrentTest = Constants.GAIT_TEST;
+        } else if ("android.intent.action.chair_shortcut".equals(getIntent().getAction())) {
+            mCurrentTest = Constants.CHAIR_TEST;
+        } else {
+            mCurrentTest = getIntent().getIntExtra("test_number", mCurrentTest);
+        }
 
         settings = getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
 
@@ -117,19 +128,7 @@ public class TestActivity extends FragmentActivity {
                 openFragment(chairFragment, full_test);
                 break;
         }
-    }
 
-    private  void openFragment(Fragment fragment, boolean animate) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        if(animate) {
-            transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-
-        }
-        transaction.replace(R.id.test_placeHolder, fragment);
-        //transaction.addToBackStack(null);
-        transaction.commit();
     }
 
     public void fragmentTestCompleted() {
@@ -138,12 +137,29 @@ public class TestActivity extends FragmentActivity {
         if (full_test) {
             if (mCurrentTest < 4) {
                 startTest();
+            } else if (mCurrentTest < 5){
+                ScoreFragment scoreFragment = new ScoreFragment();
+                openFragment(scoreFragment, true);
             } else {
                 onBackPressed();
             }
         } else {
-            onBackPressed();
+            ScoreFragment scoreFragment = new ScoreFragment();
+            openFragment(scoreFragment, true);
+            //onBackPressed();
         }
+    }
+
+    private  void openFragment(Fragment fragment, boolean animate) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        if(animate) {
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+        }
+
+        transaction.replace(R.id.test_placeHolder, fragment);
+        transaction.commit();
     }
 
     public void slider_activity(int test){
@@ -165,44 +181,6 @@ public class TestActivity extends FragmentActivity {
                             Toast.LENGTH_LONG).show();
                 } else {
                     if(status == TextToSpeech.SUCCESS) {
-                        /*tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                            @Override
-                            public void onStart(String utteranceId) {
-
-                            }
-
-                            @Override
-                            public void onDone(String utteranceId) {
-                                // only respond to the most recent utterance
-                                if (!utteranceId.equals(mostRecentUtteranceID)) {
-                                    Log.i("XXX", "onDone() blocked: utterance ID mismatch.");
-                                    return;
-                                } // else continue...
-
-                                boolean wasCalledFromBackgroundThread = (Thread.currentThread().getId() != 1);
-                                Log.i("XXX", "was onDone() called on a background thread? : " + wasCalledFromBackgroundThread);
-
-                                Log.i("XXX", "onDone working.");
-
-                                // for demonstration only... avoid references to
-                                // MainActivity (unless you use a WeakReference)
-                                // inside the onDone() method, as it
-                                // can cause a memory leak.
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // *** toast will not work if called from a background thread ***
-                                        Toast.makeText(TestActivity.this,"onDone working.",Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onError(String utteranceId) {
-
-                            }
-                        });*/
-
                         Locale locale;
                         switch (Locale.getDefault().getCountry()) {
 /*                        case "US":
@@ -228,8 +206,6 @@ public class TestActivity extends FragmentActivity {
                 }
             }
         });
-
-
     }
 
 
@@ -241,12 +217,40 @@ public class TestActivity extends FragmentActivity {
         if (!isMuted) {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
         }
-/*        }*/
+        /*        }*/
     }
 
     public boolean switchMute() {
         tts.stop();
         isMuted = !isMuted;
         return  isMuted;
+    }
+
+    public int getmCurrentTest() {
+        return mCurrentTest -1;
+    }
+
+    public int getScore(int test) {
+        int score = 0;
+
+        switch (test) {
+            case 1:
+                score = balanceScore;
+                break;
+            case 2:
+                score = gaitScore;
+                break;
+            case 3:
+                score = chairScore;
+                break;
+            default:
+                score = balanceScore + gaitScore + chairScore;
+                break;
+        }
+
+        if (full_test)
+            score = balanceScore + gaitScore + chairScore;
+
+        return score;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.sppb_tfg;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -19,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
     private ImageButton btn_mute;
     private ImageButton btn_info;
     private ImageButton btn_replay;
+    private GradientDrawable drawable;
 
     private int currentStep = 0;
     private boolean inProgress = false;
@@ -75,6 +78,8 @@ public class ChairFragment extends Fragment implements SensorEventListener {
     SensorManager sensorManager;
     Sensor sensorAcc;
 
+    TestActivity testActivity;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup
             container, Bundle savedInstanceState) {
@@ -92,9 +97,13 @@ public class ChairFragment extends Fragment implements SensorEventListener {
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
-        test_name.setText(getActivity().getResources().getText(R.string.chair_test));
+        test_name.setText(getActivity().getResources().getText(R.string.chair_name));
         iv_person.setImageResource(R.drawable.ic_person_sitting);
-        cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
+
+        drawable = (GradientDrawable)cl_info.getBackground();
+        drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
+
+        testActivity = ((TestActivity)getActivity());
 
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +115,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
         btn_mute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((TestActivity)getActivity()).switchMute()) {
+                if (testActivity.switchMute()) {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_off);
                 } else {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_up);
@@ -117,14 +126,14 @@ public class ChairFragment extends Fragment implements SensorEventListener {
         btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((TestActivity)getActivity()).slider_activity(Constants.CHAIR_TEST);
+                testActivity.slider_activity(Constants.CHAIR_TEST);
             }
         });
 
         btn_replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((TestActivity)getActivity()).tts.stop();
+                testActivity.tts.stop();
 
                 onClickWholeScreen(false);
 
@@ -151,7 +160,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                 last_direction = "DOWN";
                 last_printed_direction = "NONE";
 
-                cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
+                drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
                 tv_result.setVisibility(View.GONE);
                 tv_result_label.setVisibility(View.GONE);
                 btn_play.setEnabled(true);
@@ -196,14 +205,14 @@ public class ChairFragment extends Fragment implements SensorEventListener {
     private void continueTest() {
         switch (currentStep) {
             case 0:
-                test_name.setText(getString(R.string.chair_test));
-                ((TestActivity)getActivity()).readText(getString(R.string.chair_step0));
+                test_name.setText(getString(R.string.chair_name));
+                testActivity.readText(getString(R.string.chair_step0));
                 onClickWholeScreen(true);
                 btn_play.setImageResource(R.drawable.ic_compass_symbol);
                 break;
 
             case 1:
-                ((TestActivity)getActivity()).tts.stop();
+                testActivity.tts.stop();
                 onClickWholeScreen(false);
                 btn_play.setEnabled(false);
                 inProgress = true;
@@ -211,28 +220,28 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                 break;
 
             case 2:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).readText(getString(R.string.chair_step2));
+                testActivity.tts.stop();
+                testActivity.readText(getString(R.string.chair_step2));
                 onClickWholeScreen(true);
                 showResult(totalTime);
                 break;
 
             case 3:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).fragmentTestCompleted();
+                testActivity.tts.stop();
+                testActivity.fragmentTestCompleted();
                 break;
 
             case 4:
-                ((TestActivity)getActivity()).tts.stop();
-                cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorError));
-                ((TestActivity)getActivity()).readText(getString(R.string.chair_errorCalibrating));
+                testActivity.tts.stop();
+                drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorError));
+                testActivity.readText(getString(R.string.chair_errorCalibrating));
                 onClickWholeScreen(true);
                 inProgress = false;
                 break;
 
             case 5:
-                ((TestActivity)getActivity()).tts.stop();
-                ((TestActivity)getActivity()).fragmentTestCompleted();
+                testActivity.tts.stop();
+                testActivity.fragmentTestCompleted();
                 break;
 
         }
@@ -325,21 +334,21 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                 }
 
                 // Calibrate if TextToSpeech engine is ready
-            } else if(((TestActivity)getActivity()).ttsReady) {
+            } else if(testActivity.ttsReady) {
                 // Read each instruction only once
                 if(instructionIndex != lastInstruction){
                     lastInstruction = instructionIndex;
-                    ((TestActivity)getActivity()).readText(instructions.get(instructionIndex));
+                    testActivity.readText(instructions.get(instructionIndex));
                     switchImageView();
                 }
 
                 // Wait until reading is finished
-                if (((TestActivity)getActivity()).tts.isSpeaking()) {
+                if (testActivity.tts.isSpeaking()) {
                     lastChangeTime = curTime;
                     beepReady = true;
                 } else {
                     if (beepReady){
-                        ((TestActivity)getActivity()).beep.start();
+                        testActivity.beep.start();
                         beepReady = false;
                         //iniTime = curTime;
                     }
@@ -399,10 +408,13 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                                 corrCoeff = corrCoeff + overall/10;
                             }
 
-                            if(overall > 9.0f){
+                            Log.i("CHAIR", "Overall: " + overall);
+                            Toast.makeText(getActivity(), "OVERALL: " + overall, Toast.LENGTH_LONG).show();
+
+                            if(overall > 5.0f){
                                 btn_play.setVisibility(View.GONE);
                                 tv_result.setVisibility(View.VISIBLE);
-                                ((TestActivity)getActivity()).readText(getString(R.string.chair_step1));
+                                testActivity.readText(getString(R.string.chair_step1));
                             } else {
                                 currentStep = 4;
                                 continueTest();
@@ -419,7 +431,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
 
             if (last_printed_direction != direction && !calibrating){
                 if (direction == "DOWN_FINISHED" && n_standUp != 0){
-                    ((TestActivity)getActivity()).readText(getString(R.string.sitting));
+                    testActivity.readText(getString(R.string.sitting));
                     switchImageView();
                 }
 
@@ -440,7 +452,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                         iv_person.setImageResource(R.drawable.ic_test_done);
                         continueTest();
                     } else {
-                        ((TestActivity)getActivity()).readText(getString(R.string.standing));
+                        testActivity.readText(getString(R.string.standing));
                         switchImageView();
                     }
                 }

@@ -1,25 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/colorChairStand">
+    android:color="@color/colorTextOverBlue">
 
     <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
             <solid android:color="@color/colorChairStand" />
-            <corners android:radius="8dp" />
+            <corners android:radius="12dp" />
         </shape>
     </item>
 
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <stroke
-                android:width="3dp"
-                android:color="@color/colorChairStand" />
             <gradient
-                android:angle="90"
-                android:endColor="@color/colorBackground"
-                android:startColor="@color/colorBackground"
+                android:angle="180"
+                android:startColor="@color/colorChairLighter"
+                android:endColor="@color/colorChairLight"
                 android:type="linear" />
-            <corners android:radius="8dp" />
+            <corners android:radius="12dp" />
         </shape>
     </item>
 </ripple>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>
+    <ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="@color/colorChairStand">
+
+        <item android:id="@android:id/mask">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/colorChairStand" />
+                <corners android:radius="12dp" />
+            </shape>
+        </item>
+
+        <item android:id="@android:id/background">
+            <shape android:shape="rectangle">
+                <stroke
+                    android:width="3dp"
+                    android:color="@color/colorChairStand"/>
+                <gradient
+                    android:angle="180"
+                    android:startColor="@color/colorBackground"
+                    android:endColor="@color/colorBackground"
+                    android:type="linear" />
+                <corners android:radius="12dp" />
+            </shape>
+        </item>
+    </ripple>-->
+
+
+    <!-- COLOR FILLED BUTTONS -->
+
+

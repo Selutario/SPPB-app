@@ -29,13 +29,12 @@
                 android:text="@string/title_home"
                 />
 
-            <Button
+            <!--<Button
                 android:id="@+id/btn_full"
                 style="@style/HomeButtons"
                 android:background="@drawable/shape_all_button"
-                android:drawableStart="@drawable/ic_all_wired3"
-                android:drawableTint="@color/colorPrimary"
-                android:text="@string/all_tests"
+                android:drawableStart="@drawable/ic_all_wired_blue"
+                android:text="@string/balance_name"
                 android:textColor="@color/colorPrimary"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="428dp" />
@@ -45,7 +44,6 @@
                 style="@style/HomeButtons"
                 android:background="@drawable/shape_balance_button"
                 android:drawableStart="@drawable/ic_balance_wires2"
-                android:drawableTint="@color/colorBalance"
                 android:text="@string/balance_name"
                 android:textColor="@color/colorBalance"
                 tools:layout_editor_absoluteX="0dp"
@@ -55,8 +53,7 @@
                 android:id="@+id/btn_gait"
                 style="@style/HomeButtons"
                 android:background="@drawable/shape_gaitspeed_button"
-                android:drawableStart="@drawable/ic_speed"
-                android:drawableTint="@color/colorGaitSpeed"
+                android:drawableStart="@drawable/ic_speed_gait_color"
                 android:text="@string/gait_name"
                 android:textColor="@color/colorGaitSpeed"
                 tools:layout_editor_absoluteX="0dp"
@@ -66,10 +63,54 @@
                 android:id="@+id/btn_chair"
                 style="@style/HomeButtons"
                 android:background="@drawable/shape_chairstand_button"
-                android:drawableStart="@drawable/ic_chair_wires"
-                android:drawableTint="@color/colorChairStand"
-                android:text="@string/chair_test"
+                android:drawableStart="@drawable/ic_chair_balance_color"
+                android:text="@string/chair_name"
                 android:textColor="@color/colorChairStand"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="428dp" />-->
+
+            <!-- COLOR FILLED BUTTONS -->
+            <Button
+                android:id="@+id/btn_full"
+                style="@style/HomeButtons"
+                android:background="@drawable/shape_all_button"
+                android:drawableTint="@color/colorTextOverBlue"
+                android:drawableStart="@drawable/ic_all_wired_blue"
+                android:text="@string/all_tests"
+                android:textColor="@color/colorTextOverBlue"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="428dp" />
+
+            <Button
+                android:id="@+id/btn_balance"
+                style="@style/HomeButtons"
+                android:background="@drawable/shape_balance_button"
+                android:drawableTint="@color/colorTextOverBlue"
+                android:drawableStart="@drawable/ic_balance_wires2"
+                android:text="@string/balance_name"
+                android:textColor="@color/colorTextOverBlue"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="428dp" />
+
+            <Button
+                android:id="@+id/btn_gait"
+                style="@style/HomeButtons"
+                android:background="@drawable/shape_gaitspeed_button"
+                android:drawableStart="@drawable/ic_speed_gait_color"
+                android:drawableTint="@color/colorTextOverBlue"
+                android:text="@string/gait_name"
+                android:textColor="@color/colorTextOverBlue"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="428dp" />
+
+            <Button
+                android:id="@+id/btn_chair"
+                style="@style/HomeButtons"
+                android:background="@drawable/shape_chairstand_button"
+                android:drawableStart="@drawable/ic_chair_balance_color"
+                android:drawableTint="@color/colorTextOverBlue"
+                android:text="@string/chair_name"
+                android:textColor="@color/colorTextOverBlue"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="428dp" />
         </LinearLayout>
