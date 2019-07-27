@@ -227,7 +227,11 @@ public class TestActivity extends FragmentActivity {
     }
 
     public int getmCurrentTest() {
-        return mCurrentTest -1;
+        if (full_test) {
+            return 0;
+        } else {
+            return mCurrentTest -1;
+        }
     }
 
     public int getScore(int test) {

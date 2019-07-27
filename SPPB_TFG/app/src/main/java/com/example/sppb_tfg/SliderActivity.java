@@ -104,12 +104,13 @@ public class SliderActivity extends AppCompatActivity {
             mDots[i].setText(Html.fromHtml("&#8226;"));
             mDots[i].setTextSize(35);
             mDots[i].setTextColor(getResources().getColor(R.color.colorTextOverBlue));
+            mDots[i].setAlpha(0.5f);
 
             mDotLayout.addView(mDots[i]);
         }
 
         if (mDots.length > 0) {
-            mDots[position].setTextColor(getResources().getColor(R.color.colorLightPrimary));
+            mDots[position].setAlpha(1);
         }
     }
 
