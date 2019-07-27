@@ -71,7 +71,7 @@
             android:id="@+id/tv_test_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="0.15in"
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="Test name"

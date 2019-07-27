@@ -1,7 +1,9 @@
 package com.example.sppb_tfg;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -17,11 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
-public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.RecyclerUserTouchHelperListener {
+public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.RecyclerUserTouchHelperListener, UserAdapter.OnUserListener {
 
     private RecyclerView rvUsers;
     private RecyclerView.LayoutManager layoutManager;
@@ -29,6 +32,10 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
     private TextView et_empty_box;
     private ArrayList<User> usersList;
     private UserAdapter adapter;
+    private Long selectedId;
+
+    SharedPreferences settings;
+    SharedPreferences.Editor editor;
 
     public UsersFragment() {
         // Required empty public constructor
@@ -40,6 +47,10 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
 
         View view = inflater.inflate(R.layout.fragment_users,null);
         final LinearLayout btn_add_user = (LinearLayout) view.findViewById(R.id.btn_add_user);
+
+        settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
+        editor = settings.edit();
+        selectedId = settings.getLong("SelectedUser", -1);
 
         iv_empty_box = (ImageView) view.findViewById(R.id.iv_empty_box);
         et_empty_box = (TextView) view.findViewById(R.id.tv_empty_box);
@@ -92,14 +103,19 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof UserAdapter.ViewHolder) {
             // get the removed item name to display it in snack bar
-            String name = usersList.get(viewHolder.getAdapterPosition()).getName();
+            String name = usersList.get(position).getName();
 
             // backup of removed item for undo purpose
-            final User deletedItem = usersList.get(viewHolder.getAdapterPosition());
-            final int deletedIndex = viewHolder.getAdapterPosition();
+            final User deletedItem = usersList.get(position);
+            final int deletedIndex = position;
 
             // remove the item from recycler view
             deletedItem.delete(getActivity());
+            //adapter.notifyItemRemoved(position);
+            //this line below gives you the animation and also updates the
+            //list items after the deleted item
+            //adapter.notifyItemRemoved(position);
+
             showUsersList();
             /*adapter.removeUser(deletedIndex);*/
             /*adapter.removeUser(viewHolder.getAdapterPosition());
@@ -141,7 +157,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
     public void showUsersList() {
         usersList = User.getUsersList(getActivity());
         rvUsers.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        adapter = new UserAdapter(usersList);
+        adapter = new UserAdapter(usersList, selectedId, this);
         rvUsers.setAdapter(adapter);
 
         if (usersList.isEmpty()){
@@ -155,5 +171,20 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         }
     }
 
+    @Override
+    public void onUserClick(int position) {
+        long newSelectedId = usersList.get(position).getId();
+
+        if(selectedId == newSelectedId) {
+            selectedId = (long) -1;
+            editor.putLong("SelectedUser", -1);
+        } else {
+            selectedId = newSelectedId;
+            editor.putLong("SelectedUser", selectedId);
+        }
+
+        editor.apply();
+        showUsersList();
+    }
 }
 

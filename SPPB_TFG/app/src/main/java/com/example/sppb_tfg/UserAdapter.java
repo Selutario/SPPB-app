@@ -1,6 +1,8 @@
 package com.example.sppb_tfg;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,23 +21,40 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public TextView tv_score;
     public TextView tv_name;
     private ImageView mDeleteIcon;
+    public OnUserListener mOnUserListener;
+    Long mSelectedId;
     Context context;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ConstraintLayout viewBackground, viewForeground;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public ConstraintLayout viewForeground;
+        OnUserListener onUserListener;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, OnUserListener onUserListener) {
             super(itemView);
 
             tv_score =(TextView) itemView.findViewById(R.id.tv_result);
             tv_name = (TextView) itemView.findViewById(R.id.tv_username);
             mDeleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
             viewForeground = itemView.findViewById(R.id.viewForeground);
+            this.onUserListener = onUserListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onUserListener.onUserClick(getAdapterPosition());
         }
     }
 
-    public UserAdapter(ArrayList<User> users) {
-        mUsers = users;
+    public UserAdapter(ArrayList<User> users, long mSelectedId, OnUserListener onUserListener) {
+        this.mUsers = users;
+        this.mOnUserListener = onUserListener;
+        this.mSelectedId = mSelectedId;
+    }
+
+    public interface OnUserListener {
+        void onUserClick(int position);
     }
 
     @NonNull
@@ -45,7 +65,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         View userView = inflater.inflate(R.layout.listitem_user, viewGroup, false);
 
-        ViewHolder viewHolder = new ViewHolder(userView);
+        ViewHolder viewHolder = new ViewHolder(userView, mOnUserListener);
         return viewHolder;
     }
 
@@ -53,6 +73,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         mDeleteIcon.setImageResource(R.drawable.ic_delete);
         final User user = mUsers.get(i);
+
+        if (user.getId() == mSelectedId) {
+            viewHolder.viewForeground.setBackgroundColor(context.getResources().getColor(R.color.colorLightPrimary));
+        }
 
         if (user.getScore() != 0) {
             int n_score = user.getScore();

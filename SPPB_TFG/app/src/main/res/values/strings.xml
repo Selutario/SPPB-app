@@ -7,6 +7,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="test_name">Test name</string>
     <string name="all_tests">Full test</string>
 
     <string name="balance_name">Balance test</string>
@@ -95,6 +96,8 @@
     <!--ACTUAL TEST-->
     <string name="start">Start</string>
     <string name="score">Score</string>
+    <string name="points">Points</string>
+    <string name="save_result">Save result</string>
 
     <!--Balance test-->
     <string name="balance_step1">
