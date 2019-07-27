@@ -248,9 +248,6 @@ public class TestActivity extends FragmentActivity {
                 break;
         }
 
-        if (full_test)
-            score = balanceScore + gaitScore + chairScore;
-
         return score;
     }
 }

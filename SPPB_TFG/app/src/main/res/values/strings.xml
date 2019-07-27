@@ -97,7 +97,8 @@
     <string name="start">Start</string>
     <string name="score">Score</string>
     <string name="points">Points</string>
-    <string name="save_result">Save result</string>
+    <string name="save_as">Save as %1$s</string>
+    <string name="saved">Saved</string>
 
     <!--Balance test-->
     <string name="balance_step1">

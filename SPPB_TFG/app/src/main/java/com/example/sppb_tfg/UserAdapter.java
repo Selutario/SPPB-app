@@ -1,8 +1,6 @@
 package com.example.sppb_tfg;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,7 +17,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private ArrayList<User> mUsers;
     public TextView tv_score;
     public TextView tv_name;
-    private ImageView mDeleteIcon;
+    private ImageView iv_deleteIcon;
+    private ImageView iv_selected;
     public OnUserListener mOnUserListener;
     Long mSelectedId;
     Context context;
@@ -34,7 +32,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             tv_score =(TextView) itemView.findViewById(R.id.tv_result);
             tv_name = (TextView) itemView.findViewById(R.id.tv_username);
-            mDeleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
+            iv_deleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
+            iv_selected = (ImageView) itemView.findViewById(R.id.iv_selected);
             viewForeground = itemView.findViewById(R.id.viewForeground);
             this.onUserListener = onUserListener;
 
@@ -61,21 +60,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         context = viewGroup.getContext();
+
         LayoutInflater inflater = LayoutInflater.from(context);
-
         View userView = inflater.inflate(R.layout.listitem_user, viewGroup, false);
-
         ViewHolder viewHolder = new ViewHolder(userView, mOnUserListener);
+
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-        mDeleteIcon.setImageResource(R.drawable.ic_delete);
+        iv_deleteIcon.setImageResource(R.drawable.ic_delete);
         final User user = mUsers.get(i);
 
         if (user.getId() == mSelectedId) {
-            viewHolder.viewForeground.setBackgroundColor(context.getResources().getColor(R.color.colorLightPrimary));
+            iv_selected.setVisibility(View.VISIBLE);
         }
 
         if (user.getScore() != 0) {
@@ -116,16 +115,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     public void removeUser(int position) {
+        mUsers.get(position).delete(context);
         mUsers.remove(position);
-
-        // Notify removed position in order to let Recyclerview  perform
-        // delete animation
         notifyItemRemoved(position);
-        //notifyItemRangeChanged(position, mUsers.size());
+//        notifyItemRemoved(position);
     }
 
-    public void restoreUser(User user, int position) {
-        mUsers.add(position, user);
-        notifyItemInserted(position);
+    public void insertUser(User user, Context context) {
+        user.insert(context);
+        mUsers.add(user);
+        notifyItemInserted(getItemCount());
+    }
+
+    public User getUser(int position) {
+        return mUsers.get(position);
     }
 }

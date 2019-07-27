@@ -149,7 +149,7 @@ public class User {
         LocalSQLiteOpenHelper helper = new LocalSQLiteOpenHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        String where ="id = " + String.valueOf(id);
+        String where ="_id = " + String.valueOf(id);
         Cursor cursor = db.query(true, "USERS", new String[]{"_id",
                         UsersDB.UserEntry.NAME,
                         UsersDB.UserEntry.BALANCE_SCORE,
@@ -199,30 +199,20 @@ public class User {
 
     public void update(Context context) {
         ContentValues values = new ContentValues();
-        values.put("name", this.name);
+        values.put(UsersDB.UserEntry.NAME,this.name);
+        values.put(UsersDB.UserEntry.BALANCE_SCORE, this.balanceScore);
+        values.put(UsersDB.UserEntry.SPEED_SCORE, this.speedScore);
+        values.put(UsersDB.UserEntry.CHAIR_SCORE, this.chairScore);
+        values.put(UsersDB.UserEntry.TEST_DATE, this.testDate);
 
-       /* if(this.scores!=null) {
-            StringBuilder listScores = new StringBuilder();
-            StringBuilder listTestDates = new StringBuilder();
-            for(int i =0;i<this.scores.length;i++) {
-                listScores.append(this.scores[i]);
-                listTestDates.append(this.testDates[i]);
-
-                if(i < this.scores.length-1){
-                    listScores.append(";");
-                    listTestDates.append(";");
-                }
-            }
-            values.put("listScores", listScores.toString());
-            values.put("listTestDates", listTestDates.toString());
-        }*/
-
-        /*String whereClause = "id=" + String.valueOf(this.id);
+        String whereClause = "_id=?" ;
+        String[] whereArgs = new String[1];
+        whereArgs[0] = String.valueOf(this.id);
         LocalSQLiteOpenHelper helper = new
                 LocalSQLiteOpenHelper(context);
-        SQLiteDatabase db = helper.getWritableDatabase();*/
-        /*db.update("USERS", values, whereClause, null);
-        db.close();*/
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.update("USERS", values, whereClause, whereArgs);
+        db.close();
     }
 
     public void delete(Context context) {

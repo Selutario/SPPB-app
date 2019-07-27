@@ -19,14 +19,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
 public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.RecyclerUserTouchHelperListener, UserAdapter.OnUserListener {
 
-    private RecyclerView rvUsers;
+    private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ImageView iv_empty_box;
     private TextView et_empty_box;
@@ -55,19 +54,19 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         iv_empty_box = (ImageView) view.findViewById(R.id.iv_empty_box);
         et_empty_box = (TextView) view.findViewById(R.id.tv_empty_box);
 
-        rvUsers = (RecyclerView) view.findViewById(R.id.main_list);
-        rvUsers.setItemAnimator(new DefaultItemAnimator());
-        rvUsers.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.main_list);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
         showUsersList();
 
         // Swipe users in recyclerview
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerUserTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvUsers);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
 
 
         // Hide "Add user" button when scrolling down
-        rvUsers.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -102,25 +101,17 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof UserAdapter.ViewHolder) {
-            // get the removed item name to display it in snack bar
-            String name = usersList.get(position).getName();
+            User deletedItem = usersList.get(position);
 
-            // backup of removed item for undo purpose
-            final User deletedItem = usersList.get(position);
-            final int deletedIndex = position;
+            if (deletedItem.getId() == selectedId){
+                editor.putLong("SelectedUser", -1);
+                editor.apply();
+            }
 
             // remove the item from recycler view
             deletedItem.delete(getActivity());
-            //adapter.notifyItemRemoved(position);
-            //this line below gives you the animation and also updates the
-            //list items after the deleted item
-            //adapter.notifyItemRemoved(position);
-
+            usersList.remove(position);
             showUsersList();
-            /*adapter.removeUser(deletedIndex);*/
-            /*adapter.removeUser(viewHolder.getAdapterPosition());
-            adapter.notifyItemRemoved(deletedIndex);
-            adapter.notifyItemRangeChanged(deletedIndex, usersList.size());*/
         }
     }
 
@@ -138,6 +129,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
             public void onClick(DialogInterface dialog, int whichButton) {
                         User user = new User(edt.getText().toString());
                         user.insert(getActivity());
+//                        usersList.add(user);
                         showUsersList();
 
             }
@@ -156,16 +148,16 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
 
     public void showUsersList() {
         usersList = User.getUsersList(getActivity());
-        rvUsers.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         adapter = new UserAdapter(usersList, selectedId, this);
-        rvUsers.setAdapter(adapter);
+        mRecyclerView.setAdapter(adapter);
 
         if (usersList.isEmpty()){
-            rvUsers.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.GONE);
             iv_empty_box.setVisibility(View.VISIBLE);
             et_empty_box.setVisibility(View.VISIBLE);
         } else {
-            rvUsers.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
             iv_empty_box.setVisibility(View.GONE);
             et_empty_box.setVisibility(View.GONE);
         }
