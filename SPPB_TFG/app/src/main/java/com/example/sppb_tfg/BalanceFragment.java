@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import static com.example.sppb_tfg.Constants.ACCE_FILTER_DATA_MIN_TIME;
+
 public class BalanceFragment extends Fragment implements SensorEventListener {
     private LinearLayout whole_screen;
     private ConstraintLayout cl_info;
@@ -55,6 +57,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
     SensorManager sensorManager;
     Sensor sensorAcc;
+    long lastSaved = System.currentTimeMillis();
 
     TestActivity testActivity;
 
@@ -113,26 +116,32 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         btn_replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentStep = 0;
                 testActivity.tts.stop();
 
-                sample_index = 0;
-                inProgress = false;
-                calibrated = false;
-                ready_to_calibrate = false;
+                if(calibrated){
+                    currentStep = 0;
 
-                onClickWholeScreen(false);
-                chronometer.stop();
-                chronometer.setBase(SystemClock.elapsedRealtime());
+                    sample_index = 0;
+                    inProgress = false;
+                    calibrated = false;
+                    ready_to_calibrate = false;
 
-                iv_person.setImageResource(R.drawable.ic_person);
+                    onClickWholeScreen(false);
+                    chronometer.stop();
+                    chronometer.setBase(SystemClock.elapsedRealtime());
 
-                chronometer.setVisibility(View.GONE);
-                btn_play.setImageResource(R.drawable.ic_round_play_arrow);
-                btn_play.setVisibility(View.VISIBLE);
-                btn_play.setEnabled(true);
-                tv_result.setVisibility(View.GONE);
-                tv_result_label.setVisibility(View.GONE);
+                    iv_person.setImageResource(R.drawable.ic_person);
+
+                    btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                    chronometer.setVisibility(View.GONE);
+                    btn_play.setImageResource(R.drawable.ic_round_play_arrow);
+                    btn_play.setVisibility(View.VISIBLE);
+                    btn_play.setEnabled(true);
+                    tv_result.setVisibility(View.GONE);
+                    tv_result_label.setVisibility(View.GONE);
+                } else {
+                    testActivity.fragmentTestCompleted();
+                }
             }
         });
 
@@ -140,7 +149,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null){
             sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
-            sensorManager.registerListener(this, sensorAcc, 1000000);
+            sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_NORMAL);
+            /*sensorManager.registerListener(this, sensorAcc, 1000000);*/
         }
 
         return view;
@@ -182,6 +192,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 test_name.setText(getString(R.string.balance_name1));
                 testActivity.readText(getString(R.string.balance_step3));
                 onClickWholeScreen(true);
+                btn_replay.setImageResource(R.drawable.ic_round_replay);
                 btn_play.setVisibility(View.GONE);
                 chronometer.setVisibility(View.VISIBLE);
                 break;
@@ -280,61 +291,65 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Values measured on each axis.
-        float x = event.values[0];
-        float y = event.values[1];
-        float z = event.values[2];
+        if ((System.currentTimeMillis() - lastSaved) > ACCE_FILTER_DATA_MIN_TIME) {
+            lastSaved = System.currentTimeMillis();
+            // Values measured on each axis.
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
 
 
-        // Calibration process
+            // Calibration process
 
-        if(ready_to_calibrate) {
-            if (!calibrated) {
-                // If there are enough samples, calculate average.
-                if (sample_index >= MAX_INDEX) {
-                    for (int i = 0; i < MAX_INDEX; i++) {
-                        mean_x += measured_x[i];
-                        mean_y += measured_y[i];
-                        mean_z += measured_z[i];
+            if(ready_to_calibrate) {
+                if (!calibrated) {
+                    // If there are enough samples, calculate average.
+                    if (sample_index >= MAX_INDEX) {
+                        for (int i = 0; i < MAX_INDEX; i++) {
+                            mean_x += measured_x[i];
+                            mean_y += measured_y[i];
+                            mean_z += measured_z[i];
+                        }
+                        mean_x = mean_x / sample_index;
+                        mean_y = mean_y / sample_index;
+                        mean_z = mean_z / sample_index;
+
+                        calibrated = true;
+                        ready_to_calibrate = false;
+                        ((TestActivity) getActivity()).beep.start();
+                        continueTest();
+                    } else {
+                        // If there are not, save the sample value.
+                        measured_x[sample_index % MAX_INDEX] = x;
+                        measured_y[sample_index % MAX_INDEX] = y;
+                        measured_z[sample_index % MAX_INDEX] = z;
+                        sample_index++;
+
                     }
-                    mean_x = mean_x / sample_index;
-                    mean_y = mean_y / sample_index;
-                    mean_z = mean_z / sample_index;
+                }
+            }
 
-                    calibrated = true;
-                    ready_to_calibrate = false;
-                    ((TestActivity) getActivity()).beep.start();
+            if (calibrated && inProgress) {
+                // How much the current value changes with respect to the average or
+                // normal position.
+                float change_x, change_y, change_z;
+                change_x = Math.abs(x - mean_x);
+                change_y = Math.abs(y - mean_y);
+                change_z = Math.abs(z - mean_z);
+
+                long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
+
+                if(change_x > move_allowed || change_z > move_allowed || change_y > move_allowed/2) {
+                    desbalanced(elapsedMillis);
+
+                } else if (elapsedMillis > 10100) {
+                    chronometer.stop();
+                    iv_person.setImageResource(R.drawable.ic_test_done);
                     continueTest();
-                } else {
-                    // If there are not, save the sample value.
-                    measured_x[sample_index % MAX_INDEX] = x;
-                    measured_y[sample_index % MAX_INDEX] = y;
-                    measured_z[sample_index % MAX_INDEX] = z;
-                    sample_index++;
-
                 }
             }
         }
 
-        if (calibrated && inProgress) {
-            // How much the current value changes with respect to the average or
-            // normal position.
-            float change_x, change_y, change_z;
-            change_x = Math.abs(x - mean_x);
-            change_y = Math.abs(y - mean_y);
-            change_z = Math.abs(z - mean_z);
-
-            long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-
-            if(change_x > move_allowed || change_z > move_allowed || change_y > move_allowed/2) {
-                desbalanced(elapsedMillis);
-
-            } else if (elapsedMillis > 10100) {
-                chronometer.stop();
-                iv_person.setImageResource(R.drawable.ic_test_done);
-                continueTest();
-            }
-        }
     }
 
     @Override

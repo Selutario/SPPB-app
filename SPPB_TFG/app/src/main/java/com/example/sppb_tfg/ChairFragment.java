@@ -25,6 +25,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.sppb_tfg.Constants.ACCE_FILTER_DATA_MIN_TIME;
+
 public class ChairFragment extends Fragment implements SensorEventListener {
 
     // Interface control variables
@@ -58,7 +60,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
     private boolean iv_standing = false;
 
     private int timeThreshold = 300;
-    private double corrCoeff = 5;
+    private double corrCoeff = 2.5;
 
     private float maxYchange = 0;
     private float maxZchange = 0;
@@ -77,6 +79,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
 
     SensorManager sensorManager;
     Sensor sensorAcc;
+    long lastSaved = System.currentTimeMillis();
 
     TestActivity testActivity;
 
@@ -135,39 +138,45 @@ public class ChairFragment extends Fragment implements SensorEventListener {
             public void onClick(View view) {
                 testActivity.tts.stop();
 
-                onClickWholeScreen(false);
+                if(currentStep >= 1){
+                    onClickWholeScreen(false);
 
-                currentStep = 0;
-                inProgress = false;
-                instructionIndex = 0;
-                lastInstruction = -1;
-                n_standUp = 0;
-                totalTime = 0;
+                    currentStep = 0;
+                    inProgress = false;
+                    instructionIndex = 0;
+                    lastInstruction = -1;
+                    n_standUp = 0;
+                    totalTime = 0;
 
-                for(int i=0; i<axisChanges.length; i++)
-                    axisChanges[i] = 0;
+                    for(int i=0; i<axisChanges.length; i++)
+                        axisChanges[i] = 0;
 
-                movStarted = false;
-                leanDown = false;
-                leanUp = false;
-                calibrating = true;
-                iv_standing = false;
+                    movStarted = false;
+                    leanDown = false;
+                    leanUp = false;
+                    calibrating = true;
+                    iv_standing = false;
 
-                yHistory = 0;
-                zHistory = 0;
-                lastChangeTime = 0;
-                direction = "DOWN_FINISHED";
-                last_direction = "DOWN";
-                last_printed_direction = "NONE";
+                    yHistory = 0;
+                    zHistory = 0;
+                    lastChangeTime = 0;
+                    direction = "DOWN_FINISHED";
+                    last_direction = "DOWN";
+                    last_printed_direction = "NONE";
 
-                drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
-                tv_result.setVisibility(View.GONE);
-                tv_result_label.setVisibility(View.GONE);
-                btn_play.setEnabled(true);
+                    drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
+                    btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                    tv_result.setVisibility(View.GONE);
+                    tv_result_label.setVisibility(View.GONE);
+                    btn_play.setEnabled(true);
 
-                iv_person.setImageResource(R.drawable.ic_person_sitting);
-                btn_play.setImageResource(R.drawable.ic_round_play_arrow);
-                btn_play.setVisibility(View.VISIBLE);
+                    iv_person.setImageResource(R.drawable.ic_person_sitting);
+                    btn_play.setImageResource(R.drawable.ic_round_play_arrow);
+                    btn_play.setVisibility(View.VISIBLE);
+                } else {
+                    testActivity.fragmentTestCompleted();
+                }
+
             }
         });
 
@@ -184,7 +193,8 @@ public class ChairFragment extends Fragment implements SensorEventListener {
         // Sensor declaration. We use 1Hz frequency to get smoother measurements.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
-        sensorManager.registerListener(this, sensorAcc, 1000000);
+        sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_UI);
+        /*sensorManager.registerListener(this, sensorAcc, 1000000);*/
 
         return view;
     }
@@ -215,6 +225,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                 testActivity.tts.stop();
                 onClickWholeScreen(false);
                 btn_play.setEnabled(false);
+                btn_replay.setImageResource(R.drawable.ic_round_replay);
                 inProgress = true;
                 btn_play.animate().rotation(360).setDuration(2000).start();
                 break;
@@ -266,8 +277,10 @@ public class ChairFragment extends Fragment implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(inProgress) {
-            long curTime = System.currentTimeMillis();
+        long curTime = System.currentTimeMillis();
+
+        if(inProgress && ((curTime - lastSaved) > ACCE_FILTER_DATA_MIN_TIME)) {
+            lastSaved = curTime;
             long diffChanges = (curTime - lastChangeTime);
 
             // If first execution, history starts with current event value to avoid
@@ -403,6 +416,13 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                             }
 
                             Log.i("ACC", "OVERALL: " + overall);
+                            Log.i("ACC", "axisChanges[6]: " + axisChanges[6]);
+                            Log.i("ACC", "axisChanges[4]: " + axisChanges[4]);
+                            Log.i("ACC", "axisChanges[7]: " + axisChanges[7]);
+                            Log.i("ACC", "axisChanges[3]: " + axisChanges[3]);
+                            Log.i("ACC", "axisChanges[2]: " + axisChanges[2]);
+                            Log.i("ACC", "axisChanges[1]: " + axisChanges[1]);
+
                             if (overall > 25.0f){
 
                                 corrCoeff = corrCoeff + overall/10;
@@ -411,7 +431,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                             Log.i("CHAIR", "Overall: " + overall);
                             Toast.makeText(getActivity(), "OVERALL: " + overall, Toast.LENGTH_LONG).show();
 
-                            if(overall > 5.0f){
+                            if(overall > 8.0f){
                                 btn_play.setVisibility(View.GONE);
                                 tv_result.setVisibility(View.VISIBLE);
                                 testActivity.readText(getString(R.string.chair_step1));

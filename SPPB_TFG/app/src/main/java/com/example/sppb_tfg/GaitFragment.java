@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import static com.example.sppb_tfg.Constants.ACCE_FILTER_DATA_MIN_TIME;
+
 public class GaitFragment extends Fragment implements SensorEventListener {
 
     private LinearLayout whole_screen;
@@ -48,6 +50,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
     SensorManager sensorManager;
     Sensor sensorAcc;
+    long lastSaved = System.currentTimeMillis();
 
     TestActivity testActivity;
 
@@ -69,11 +72,15 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
-        test_name.setText(getActivity().getResources().getText(R.string.gait_name));
-        drawable = (GradientDrawable)cl_info.getBackground();
-        drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
+        if(getActivity() != null){
+            test_name.setText(getActivity().getResources().getText(R.string.gait_name));
+            drawable = (GradientDrawable)cl_info.getBackground();
+            drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
 
-        testActivity = ((TestActivity)getActivity());
+            testActivity = ((TestActivity)getActivity());
+        }
+
+
 
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,23 +112,29 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             public void onClick(View view) {
                 testActivity.tts.stop();
 
-                onClickWholeScreen(false);
+                if(currentStep >= 1){
+                    onClickWholeScreen(false);
 
-                currentStep = 0;
-                walkingTime = 0;
-                min_walkingTime = 100;
-                inProgress = false;
+                    currentStep = 0;
+                    walkingTime = 0;
+                    min_walkingTime = 100;
+                    inProgress = false;
 
-                chronometer.stop();
-                chronometer.setBase(SystemClock.elapsedRealtime());
+                    chronometer.stop();
+                    chronometer.setBase(SystemClock.elapsedRealtime());
 
-                drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
-                tv_result.setVisibility(View.GONE);
-                tv_result_label.setVisibility(View.GONE);
-                chronometer.setVisibility(View.GONE);
-                btn_play.setImageResource(R.drawable.ic_round_play_arrow);
-                btn_play.setVisibility(View.VISIBLE);
-                iv_person.setImageResource(R.drawable.ic_person);
+                    drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
+                    btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                    tv_result.setVisibility(View.GONE);
+                    tv_result_label.setVisibility(View.GONE);
+                    chronometer.setVisibility(View.GONE);
+                    btn_play.setImageResource(R.drawable.ic_round_play_arrow);
+                    btn_play.setVisibility(View.VISIBLE);
+                    iv_person.setImageResource(R.drawable.ic_person);
+                } else {
+                    testActivity.fragmentTestCompleted();
+                }
+
             }
         });
 
@@ -130,8 +143,10 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
 
         if (sensorManager != null) {
+            sensorAcc = sensorManager.getSensorList(Sensor.TYPE_GRAVITY).get(0);
             sensorAcc = sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION).get(0);
-            sensorManager.registerListener(this, sensorAcc, 1000000);
+            sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_NORMAL);
+//            sensorManager.registerListener(this, sensorAcc, 1000000);
         }
 
 
@@ -158,6 +173,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 test_name.setText(getString(R.string.gait_name1));
                 testActivity.readText(getString(R.string.gait_step1));
                 onClickWholeScreen(true);
+                btn_replay.setImageResource(R.drawable.ic_round_replay);
                 chronometer.setVisibility(View.VISIBLE);
                 btn_play.setVisibility(View.GONE);
                 break;
@@ -239,7 +255,9 @@ public class GaitFragment extends Fragment implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         long curTime = SystemClock.elapsedRealtime();
 
-        if(inProgress){
+        if(inProgress && ((curTime - lastSaved) > ACCE_FILTER_DATA_MIN_TIME)){
+            lastSaved = curTime;
+
             // Values measured on each axis.
             float x = event.values[0];
             float y = event.values[1];

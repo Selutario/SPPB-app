@@ -61,18 +61,18 @@
 
 
     <!--Gait speed test-->
-    <string name="gait_heading1">Sound signal</string>
+    <string name="gait_heading1">Instructions</string>
     <string name="gait_heading2">Walk</string>
     <string name="gait_heading3">Repeat</string>
 
     <string name="gait_descr1">
-        While standing, do not move until you hear a beep. After that, you can start walking at a normal pace.
+        While standing, touch the screen and follow the voice instructions.
     </string>
     <string name="gait_descr2">
-        Travel a distance of 4 meters. Once you reach the end, do not move until you hear the beep again.
+        Travel a distance of 4 meters. Once you reach the end, do not move until instructed.
     </string>
     <string name="gait_descr3">
-        Repeat the same process in the opposite direction, voice instructions will guide you.
+        Repeat the same process in the opposite direction.
     </string>
 
 
