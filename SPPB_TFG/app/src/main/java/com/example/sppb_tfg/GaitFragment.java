@@ -41,8 +41,10 @@ public class GaitFragment extends Fragment implements SensorEventListener {
     private boolean inProgress = false;
 
     // Accelerometer and time variables specific for gait test
-    private final int TIME_THRSHOLD = 3000; // Miliseconds
-    private float max_y = 1f;
+    private final int TIME_THRSHOLD = 2000; // Miliseconds
+    private float max_change = 1f;
+    private float yHistory = 0;
+    long diffChanges;
     private long lastChangeTime;
 
     private double walkingTime = 0;
@@ -139,14 +141,12 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         });
 
 
-        // Sensor declaration. We use 1Hz frequency to get smoother measurements.
+        // Sensor declaration.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
 
         if (sensorManager != null) {
-            sensorAcc = sensorManager.getSensorList(Sensor.TYPE_GRAVITY).get(0);
-            sensorAcc = sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION).get(0);
-            sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_NORMAL);
-//            sensorManager.registerListener(this, sensorAcc, 1000000);
+            sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
+            sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
         }
 
 
@@ -163,7 +163,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
     @Override
     public void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, sensorAcc, 1000000);
+        sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
     }
 
 
@@ -253,51 +253,58 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        long curTime = SystemClock.elapsedRealtime();
 
-        if(inProgress && ((curTime - lastSaved) > ACCE_FILTER_DATA_MIN_TIME)){
-            lastSaved = curTime;
+        if((System.currentTimeMillis() - lastSaved) > ACCE_FILTER_DATA_MIN_TIME){
+            long curTime = SystemClock.elapsedRealtime();
 
-            // Values measured on each axis.
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
+            if(inProgress){
+                lastSaved = System.currentTimeMillis();
 
+                float yChange = 0;
 
-            if (y > max_y /4f){
+                if (yHistory == 0) {
+                    yHistory = event.values[1];
+                }
+
+                // We obtain the difference of acceleration with respect to the previous measurement.
+                if(event.values[1] > 0)
+                    yChange = yHistory - event.values[1];
+
+                if (yChange > max_change/3f){
+                    lastChangeTime = curTime;
+                    if(yChange > max_change) {
+                        max_change = yChange;
+                    }
+                }
+
+                diffChanges = curTime - lastChangeTime;
+
+                // If there is no update of the LastChangeTime variable in the last TIME_THRSHOLD
+                // seconds, assume the user is not walking any more, and calculate the time spent walking
+                if (diffChanges > TIME_THRSHOLD){
+                    walkingTime = lastChangeTime - chronometer.getBase();
+                    walkingTime = (double)walkingTime/1000;
+
+                    chronometer.stop();
+                    if (walkingTime < min_walkingTime) { min_walkingTime = walkingTime; }
+
+                    inProgress = false;
+
+                    if (max_change != 1f) {
+                        max_change = 1f;
+                        testActivity.beep.start();
+                        iv_person.setImageResource(R.drawable.ic_test_done);
+                        continueTest();
+                    } else {
+                        currentStep = 6;
+                        continueTest();
+                    }
+
+                }
+
+            } else {
                 lastChangeTime = curTime;
-                if(y > max_y) {
-                    max_y = y;
-                }
             }
-
-            long diffChanges = curTime - lastChangeTime;
-
-            // If there is no update of the LastChangeTime variable in the last TIME_THRSHOLD
-            // seconds, assume the user is not walking any more, and calculate the time spent walking
-            if (diffChanges > TIME_THRSHOLD){
-                walkingTime = lastChangeTime - chronometer.getBase();
-                walkingTime = (double)walkingTime/1000;
-
-                chronometer.stop();
-                if (walkingTime < min_walkingTime) { min_walkingTime = walkingTime; }
-
-                inProgress = false;
-
-                if (max_y != 1f) {
-                    max_y = 1f;
-                    testActivity.beep.start();
-                    iv_person.setImageResource(R.drawable.ic_test_done);
-                    continueTest();
-                } else {
-                    currentStep = 6;
-                    continueTest();
-                }
-
-            }
-
-        } else {
-            lastChangeTime = curTime;
         }
     }
 

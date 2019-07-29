@@ -190,11 +190,12 @@ public class ChairFragment extends Fragment implements SensorEventListener {
             axisChanges[i] = 0;
 
 
-        // Sensor declaration. We use 1Hz frequency to get smoother measurements.
+        // Sensor declaration.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
-        sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_UI);
-        /*sensorManager.registerListener(this, sensorAcc, 1000000);*/
+        if (sensorManager != null){
+            sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
+            sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
+        }
 
         return view;
     }
@@ -209,7 +210,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
     @Override
     public void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, sensorAcc, 1000000);
+        sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
     }
 
     private void continueTest() {
@@ -295,10 +296,6 @@ public class ChairFragment extends Fragment implements SensorEventListener {
             float zChange = zHistory - event.values[2];
             yHistory = event.values[1];
             zHistory = event.values[2];
-
-/*            float jj = Math.abs(yChange) + Math.abs(zChange);
-            Log.i("ACC", "############################################");
-            Log.i("ACC", "JJ " + jj);*/
 
             if (!calibrating){
                 // If the movement has already begun, it only accepts the
@@ -415,21 +412,19 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                                 overall += Math.abs(axisChanges[i]);
                             }
 
-                            Log.i("ACC", "OVERALL: " + overall);
+/*                            Log.i("ACC", "OVERALL: " + overall);
                             Log.i("ACC", "axisChanges[6]: " + axisChanges[6]);
                             Log.i("ACC", "axisChanges[4]: " + axisChanges[4]);
                             Log.i("ACC", "axisChanges[7]: " + axisChanges[7]);
                             Log.i("ACC", "axisChanges[3]: " + axisChanges[3]);
                             Log.i("ACC", "axisChanges[2]: " + axisChanges[2]);
-                            Log.i("ACC", "axisChanges[1]: " + axisChanges[1]);
+                            Log.i("ACC", "axisChanges[1]: " + axisChanges[1]);*/
 
                             if (overall > 25.0f){
-
                                 corrCoeff = corrCoeff + overall/10;
                             }
 
-                            Log.i("CHAIR", "Overall: " + overall);
-                            Toast.makeText(getActivity(), "OVERALL: " + overall, Toast.LENGTH_LONG).show();
+/*                          Toast.makeText(getActivity(), "OVERALL: " + overall, Toast.LENGTH_LONG).show();*/
 
                             if(overall > 8.0f){
                                 btn_play.setVisibility(View.GONE);

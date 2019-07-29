@@ -145,12 +145,11 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             }
         });
 
-        // Sensor declaration. We use 1Hz frequency to get smoother measurements.
+        // Sensor declaration.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null){
             sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
-            sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_NORMAL);
-            /*sensorManager.registerListener(this, sensorAcc, 1000000);*/
+            sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
         }
 
         return view;
@@ -166,7 +165,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     @Override
     public void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, sensorAcc, 1000000);
+        sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
     }
 
     private void continueTest() {
