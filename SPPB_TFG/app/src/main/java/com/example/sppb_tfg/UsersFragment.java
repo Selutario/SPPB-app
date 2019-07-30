@@ -99,31 +99,54 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
     }
 
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof UserAdapter.ViewHolder) {
-            User deletedItem = usersList.get(position);
+    public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction, final int position) {
+        final User toDeleteUser = usersList.get(position);
 
-            if (deletedItem.getId() == selectedId){
-                editor.putLong("SelectedUser", -1);
-                editor.apply();
-            }
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        dialogBuilder.setTitle(toDeleteUser.getName());
+        dialogBuilder.setMessage(getString(R.string.delete_user_confirm));
+        dialogBuilder.setCancelable(false);
 
-            // remove the item from recycler view
-            deletedItem.delete(getActivity());
-            usersList.remove(position);
-            showUsersList();
-        }
+        dialogBuilder.setPositiveButton(getString(R.string.delete),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        if (viewHolder instanceof UserAdapter.ViewHolder) {
+
+                            if (toDeleteUser.getId() == selectedId){
+                                editor.putLong("SelectedUser", -1);
+                                editor.apply();
+                            }
+
+                            // remove the item from recycler view
+                            toDeleteUser.delete(getActivity());
+                            usersList.remove(position);
+                            showUsersList();
+                        }
+
+                    }
+                });
+        dialogBuilder.setNegativeButton(getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //pass
+                        adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    }
+                });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+        b.getButton(b.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorError));
+        b.getButton(b.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorText));
     }
 
     public void addUserAlertDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.custom_dialog, null);
+        final View dialogView = inflater.inflate(R.layout.add_user_dialog, null);
         dialogBuilder.setView(dialogView);
 
         final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 
-        //dialogBuilder.setTitle(getActivity().getResources().getString(R.string.dialog_add_user));
         dialogBuilder.setPositiveButton(getActivity().getResources().getString(R.string.done),
                 new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {

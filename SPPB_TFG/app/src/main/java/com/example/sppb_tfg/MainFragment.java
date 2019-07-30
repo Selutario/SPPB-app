@@ -1,6 +1,8 @@
 package com.example.sppb_tfg;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class HomeFragment extends Fragment {
+public class MainFragment extends Fragment {
     private TextView mTextMessage;
     private Button btn_full;
     private Button btn_balance;
@@ -30,6 +32,7 @@ public class HomeFragment extends Fragment {
         btn_gait = (Button) view.findViewById(R.id.btn_gait);
         btn_chair = (Button) view.findViewById(R.id.btn_chair);
 
+        checkAccelerometer();
 
         btn_full.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,5 +70,20 @@ public class HomeFragment extends Fragment {
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra("test_number", test);
         startActivity(intent);
+    }
+
+    public void checkAccelerometer() {
+        PackageManager manager = getActivity().getPackageManager();
+        boolean hasAccelerometer = manager.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER);
+
+        if(!hasAccelerometer) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+            dialogBuilder.setTitle(getString(R.string.no_accelerometer_title));
+            dialogBuilder.setMessage(getString(R.string.no_accelerometer_descp));
+            dialogBuilder.setCancelable(false);
+
+            AlertDialog b = dialogBuilder.create();
+            b.show();
+        }
     }
 }

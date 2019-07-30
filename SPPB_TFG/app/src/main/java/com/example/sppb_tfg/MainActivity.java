@@ -22,8 +22,8 @@ public class MainActivity extends FragmentActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     currentFragment = 0;
-                    HomeFragment homeFragment = new HomeFragment();
-                    openFragment(homeFragment);
+                    MainFragment mainFragment = new MainFragment();
+                    openFragment(mainFragment);
                     return true;
                 case R.id.navigation_dashboard:
                     currentFragment = 1;
@@ -50,8 +50,8 @@ public class MainActivity extends FragmentActivity {
         super.onResume();
         switch (currentFragment){
             case 0:
-                HomeFragment homeFragment = new HomeFragment();
-                openFragment(homeFragment);
+                MainFragment mainFragment = new MainFragment();
+                openFragment(mainFragment);
                 break;
             case 1:
                 UsersFragment usersFragment = new UsersFragment();

@@ -3,14 +3,22 @@
     <string name="title_home">Inicio</string>
     <string name="title_users">Usuarios</string>
     <string name="title_activity_users">Usuarios</string>
+    <string name="title_activity_test">Test</string>
 
+    <string name="no_accelerometer_title">No hay acelerómetro.</string>
+    <string name="no_accelerometer_descp">
+        Lo sentimos.
+        Su dispositivo no cuenta con acelerómetro, con lo que los tests no podrán realizarse.
+    </string>
+
+    <!-- TESTS NAMES -->
     <string name="test_name">Nombre del test</string>
     <string name="all_tests">Test completo</string>
 
     <string name="balance_name">Equilibrio</string>
     <string name="balance_name1">Equilibrio - Normal</string>
-    <string name="balance_name2">Equilibrio - Semi tandem</string>
-    <string name="balance_name3">Equilibrio - Tandem</string>
+    <string name="balance_name2">Equilibrio - Semi tándem</string>
+    <string name="balance_name3">Equilibrio - Tándem</string>
 
     <string name="gait_name">Velocidad de marcha</string>
     <string name="gait_name1">Velocidad de marcha - Primera vuelta</string>
@@ -18,9 +26,13 @@
 
     <string name="chair_name">Levantarse de la silla</string>
 
+    <!-- USERS MANAGEMENT -->
     <string name="btn_add">Añadir usuario</string>
     <string name="no_users">No hay usuarios guardados.</string>
     <string name="delete">Eliminar</string>
+    <string name="delete_user_confirm">
+        ¿Está seguro de que quiere eliminar este usuario?
+    </string>
 
     <string name="dialog_add_user">Introduzca nombre de usuario</string>
     <string name="done">Hecho</string>
@@ -35,8 +47,8 @@
     <!--Balance test-->
     <string name="balan_heading1">Calibrar</string>
     <string name="balan_heading2">Pies juntos</string>
-    <string name="balan_heading3">Semi-tandem</string>
-    <string name="balan_heading4">Tandem</string>
+    <string name="balan_heading3">Semi-tándem</string>
+    <string name="balan_heading4">Tándem</string>
     <string name="balan_heading5">Mantén el equilibrio</string>
 
     <string name="balan_descr1">
@@ -112,10 +124,10 @@
         Primera fase. Pon los pies juntos y no te muevas durante 10 segundos. Toca la pantalla para comenzar.
     </string>
     <string name="balance_step4">
-        Bien. Segunda fase, posición semi-tandem. Toca la pantalla para comenzar.
+        Bien. Segunda fase. Posición semi-tándem. Toca la pantalla para comenzar.
     </string>
     <string name="balance_step5">
-        Bien. Tercera fase, posición tandem. Toca la pantalla para comenzar.
+        Bien. Tercera fase. Posición tándem. Toca la pantalla para comenzar.
     </string>
     <string name="balance_step6">
         Fin del test de equilibrio. Toca la pantalla para continuar.
@@ -177,6 +189,7 @@
         El movimiento no se realizó con la velocidad necesaria. Toca el botón de repetir para volver
         a intentarlo o cualquier parte de la pantalla para continuar.
     </string>
+
 
 
 </resources>
