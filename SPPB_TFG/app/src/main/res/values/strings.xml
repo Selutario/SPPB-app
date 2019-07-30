@@ -152,14 +152,14 @@
 
     <!--Chair stand test-->
     <string name="chair_step0">
-        It is necessary to calibrate the device. Sit in a chair and follow the instructions,
-        always after the beep. Touch the screen to start.
+        It is necessary to calibrate the device. Sit in a chair and follow the instructions.
+        Touch the screen to start.
     </string>
     <string name="chair_step1">
-        End of calibrating. Now, you can stand up 5 times.
+        End of calibrating. Now, you can stand up and sit down 5 times in a row. Start whenever you want.
     </string>
     <string name="chair_step2">
-        End of chair stand test. Touch the screen to continue.
+        And five. End of chair stand test. Touch the screen to continue.
     </string>
 
     <string name="chair_instructions0">

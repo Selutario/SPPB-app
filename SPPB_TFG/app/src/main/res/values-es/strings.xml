@@ -155,14 +155,14 @@
 
     <!--Chair stand test-->
     <string name="chair_step0">
-        Hay que calibrar. Siéntate en una silla y sigue las instrucciones, siempre después de la señal.
+        Hay que calibrar. Siéntate en una silla y sigue las instrucciones.
         Toca la pantalla para comenzar.
     </string>
     <string name="chair_step1">
-        Fin del calibrado. Ahora puedes levantarte 5 veces.
+        Fin del calibrado. Ahora puedes levantarte y sentarte 5 veces seguidas. Empieza cuando quieras.
     </string>
     <string name="chair_step2">
-        Fin del test. Toca la pantalla para continuar.
+        Y cinco. Fin del test. Toca la pantalla para continuar.
     </string>
 
     <string name="chair_instructions0">

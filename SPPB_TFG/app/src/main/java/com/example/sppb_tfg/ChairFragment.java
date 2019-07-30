@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
     private boolean iv_standing = false;
 
     private int timeThreshold = 300;
-    private double corrCoeff = 2.5;
+    private double corrCoeff = 3;
 
     private float maxYchange = 0;
     private float maxZchange = 0;
@@ -355,10 +356,24 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                 if (testActivity.tts.isSpeaking()) {
                     lastChangeTime = curTime;
                     beepReady = true;
+
+                    if (zChange < minZchange){
+                        minZchange = zChange;
+                    }
+                    if (zChange > maxZchange){
+                        maxZchange = zChange;
+                    }
+                    if (yChange < minYchange){
+                        minYchange = yChange;
+                    }
+                    if (yChange > maxYchange){
+                        maxYchange = yChange;
+                    }
                 } else {
                     if (beepReady){
-                        testActivity.beep.start();
+                        /*testActivity.beep.start();*/
                         beepReady = false;
+                        lastChangeTime = curTime;
                         //iniTime = curTime;
                     }
                     // Read the max and min values of Z, Y axis
@@ -380,7 +395,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                     }
 
                     // When there is no major change in the last second
-                    if(diffChanges > 1000){
+                    if(diffChanges > 2000){
                         // Save the values depending on whether the user is standing up or sitting.
                         // and calculate the average value of the two measurements.
                         // (if sitting instruction, isSitting is 1 so the measurements have to be
@@ -423,7 +438,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                                 corrCoeff = corrCoeff + overall/10;
                             }
 
-/*                          Toast.makeText(getActivity(), "OVERALL: " + overall, Toast.LENGTH_LONG).show();*/
+                          Toast.makeText(getActivity(), "OVERALL: " + overall, Toast.LENGTH_LONG).show();
 
                             if(overall > 8.0f){
                                 btn_play.setVisibility(View.GONE);
@@ -445,16 +460,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
 
             if (last_printed_direction != direction && !calibrating){
                 if (direction == "DOWN_FINISHED" && n_standUp != 0){
-                    testActivity.readText(getString(R.string.sitting));
-                    switchImageView();
-                }
 
-                else if (direction == "UP_FINISHED"){
-                    if (n_standUp == 0){
-                        chronometer.setBase(SystemClock.elapsedRealtime());
-                    }
-
-                    n_standUp++;
                     tv_result.setText(Integer.toString(n_standUp));
 
                     if (n_standUp == 5) {
@@ -466,9 +472,22 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                         iv_person.setImageResource(R.drawable.ic_test_done);
                         continueTest();
                     } else {
-                        testActivity.readText(getString(R.string.standing));
+                        testActivity.readText(Integer.toString(n_standUp));
+                        //testActivity.readText(getString(R.string.sitting));
                         switchImageView();
                     }
+                }
+
+                else if (direction == "UP_FINISHED"){
+                    if (n_standUp == 0){
+                        chronometer.setBase(SystemClock.elapsedRealtime());
+                    }
+
+                    n_standUp++;
+
+                    //testActivity.readText(getString(R.string.standing));
+                    switchImageView();
+
                 }
 
                 last_printed_direction = direction;

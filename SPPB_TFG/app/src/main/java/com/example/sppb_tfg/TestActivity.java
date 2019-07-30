@@ -184,7 +184,7 @@ public class TestActivity extends FragmentActivity {
                             break;
                         case "ES":
                             locale = new Locale("spa", "ES");
-                            tts.setSpeechRate(1.4f);
+                            tts.setSpeechRate(1.5f);
                             break;
                             default:
                                 locale = Locale.UK;
