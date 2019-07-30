@@ -165,6 +165,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                     last_printed_direction = "NONE";
 
                     drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
+                    tv_result.setText("0");
                     btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
                     tv_result.setVisibility(View.GONE);
                     tv_result_label.setVisibility(View.GONE);
@@ -301,7 +302,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                 // If the movement has already begun, it only accepts the
                 // deceleration value that confirms the end of it.
                 if (movStarted) {
-                    if (diffChanges > (timeThreshold/1.5)){
+                    if (diffChanges > (timeThreshold)){
                         if (direction == "UP_STARTED"){
                             if (yChange > axisChanges[3]/corrCoeff){
 //                                Log.i("ACC", "Ychange UP FINISH: " + yChange);

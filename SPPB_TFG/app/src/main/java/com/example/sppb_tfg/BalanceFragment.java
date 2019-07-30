@@ -53,7 +53,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     private float mean_x = 0;
     private float mean_y = 0;
     private float mean_z = 0;
-    private float move_allowed = 2;
+    private final float move_allowed = 3;
 
     SensorManager sensorManager;
     Sensor sensorAcc;
@@ -338,7 +338,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
                 long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
 
-                if(change_x > move_allowed || change_z > move_allowed || change_y > move_allowed/2) {
+                if(change_x > move_allowed || change_z > move_allowed || change_y > 1) {
                     desbalanced(elapsedMillis);
 
                 } else if (elapsedMillis > 10100) {

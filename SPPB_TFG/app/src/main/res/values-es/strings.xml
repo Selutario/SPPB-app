@@ -1,0 +1,182 @@
+<resources>
+    <string name="app_name">SPPB</string>
+    <string name="title_home">Inicio</string>
+    <string name="title_users">Usuarios</string>
+    <string name="title_activity_users">Usuarios</string>
+
+    <string name="test_name">Nombre del test</string>
+    <string name="all_tests">Test completo</string>
+
+    <string name="balance_name">Equilibrio</string>
+    <string name="balance_name1">Equilibrio - Normal</string>
+    <string name="balance_name2">Equilibrio - Semi tandem</string>
+    <string name="balance_name3">Equilibrio - Tandem</string>
+
+    <string name="gait_name">Velocidad de marcha</string>
+    <string name="gait_name1">Velocidad de marcha - Primera vuelta</string>
+    <string name="gait_name2">Velocidad de marcha - Segunda vuelta</string>
+
+    <string name="chair_name">Levantarse de la silla</string>
+
+    <string name="btn_add">Añadir usuario</string>
+    <string name="no_users">No hay usuarios guardados.</string>
+    <string name="delete">Eliminar</string>
+
+    <string name="dialog_add_user">Introduzca nombre de usuario</string>
+    <string name="done">Hecho</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- EXPLAINING SLIDES -->
+    <string name="next">Siguiente</string>
+    <string name="back">Atrás</string>
+    <string name="finish">Acabar</string>
+    <string name="skip">Omitir</string>
+
+    <!--Balance test-->
+    <string name="balan_heading1">Calibrar</string>
+    <string name="balan_heading2">Pies juntos</string>
+    <string name="balan_heading3">Semi-tandem</string>
+    <string name="balan_heading4">Tandem</string>
+    <string name="balan_heading5">Mantén el equilibrio</string>
+
+    <string name="balan_descr1">
+        Ponte de pie con el móvil en el pecho. No te mueves hasta
+        escuchar un beep. Sigue las instrucciones de voz durante el test.
+    </string>
+    <string name="balan_descr2">
+        Hay tres fases. Pon los pies juntos durante 10 segundos para la primera fase.
+    </string>
+    <string name="balan_descr3">
+        Pon el talón de un pie a la altura del dedo gordo del otro pie para la segunda fase.
+    </string>
+    <string name="balan_descr4">
+        Pon el talón de un pie en contacto con la punta del otro pie para la tercera fase.
+    </string>
+    <string name="balan_descr5">
+        Intenta no inclinarte. Si lo haces, acabará el test.
+    </string>
+
+
+    <!--Gait speed test-->
+    <string name="gait_heading1">Instrucciones</string>
+    <string name="gait_heading2">Camina</string>
+    <string name="gait_heading3">Repite</string>
+
+    <string name="gait_descr1">
+        Estando de pie, toca el botón de empezar y sigue las instrucciones de voz.
+    </string>
+    <string name="gait_descr2">
+        Camina una distancia de 4 metros a paso normal. Una vez llegues al final, no te muevas
+        hasta que te sea indicado.
+    </string>
+    <string name="gait_descr3">
+        Repite el mismo proceso en dirección contraria.
+    </string>
+
+
+    <!--Chair stand test-->
+    <string name="chair_heading1">Posición inicial</string>
+    <string name="chair_heading2">Calibrar</string>
+    <string name="chair_heading3">Repetir</string>
+
+    <string name="chair_descr1">
+        Siéntate en una silla con los brazos cruzados sobre tu pecho.
+    </string>
+    <string name="chair_descr2">
+        Con los brazos cruzados, intenta levantarte y sentarte dos veces siguiendo las instrucciones
+        de voz.
+    </string>
+    <string name="chair_descr3">
+        Tras esto, desde la posición inicial, levántate y siéntate 5 veces seguidas.
+    </string>
+
+
+
+    <!--ACTUAL TEST-->
+    <string name="start">Ya</string>
+    <string name="score">Puntuación</string>
+    <string name="points">Puntos</string>
+    <string name="save_as">Guardar como %1$s</string>
+    <string name="saved">Guardado</string>
+
+    <!--Balance test-->
+    <string name="balance_step1">
+        Hay que calibrar. De pie, pon el teléfono en tu pecho y no te muevas hasta escuchar el sonido.
+        Toca cualquier parte de la pantalla para comenzar.
+    </string>
+    <string name="balance_step2">
+        Calibrando.
+    </string>
+
+    <string name="balance_step3">
+        Primera fase. Pon los pies juntos y no te muevas durante 10 segundos. Toca la pantalla para comenzar.
+    </string>
+    <string name="balance_step4">
+        Bien. Segunda fase, posición semi-tandem. Toca la pantalla para comenzar.
+    </string>
+    <string name="balance_step5">
+        Bien. Tercera fase, posición tandem. Toca la pantalla para comenzar.
+    </string>
+    <string name="balance_step6">
+        Fin del test de equilibrio. Toca la pantalla para continuar.
+    </string>
+    <string name="desbalanced">
+        Te has movido. Fin del test. Toca la pantalla para continuar.
+    </string>
+
+
+    <!--Gait speed test-->
+    <string name="gait_step1">
+        Con el móvil en el pecho, toca la pantalla y camina 4 metros. Cuando acabes, no te muevas hasta
+        escuchar la señal.
+    </string>
+    <string name="gait_step2">
+        Bien. Ahora repite el proceso en la dirección contraria. Toca la pantalla para comenzar.
+    </string>
+    <string name="gait_step3">
+        Fin del test de velocidad de marcha. Toca la pantalla para continuar.
+    </string>
+    <string name="gait_error">
+        Error. No se ha detectado movimiento. Toca el botón de repetir para intentarlo de nuevo, o cualquier
+        parte de la pantalla para continuar.
+    </string>
+
+    <!--Chair stand test-->
+    <string name="chair_step0">
+        Hay que calibrar. Siéntate en una silla y sigue las instrucciones, siempre después de la señal.
+        Toca la pantalla para comenzar.
+    </string>
+    <string name="chair_step1">
+        Fin del calibrado. Ahora puedes levantarte 5 veces.
+    </string>
+    <string name="chair_step2">
+        Fin del test. Toca la pantalla para continuar.
+    </string>
+
+    <string name="chair_instructions0">
+        Por favor, levántate.
+    </string>
+    <string name="chair_instructions1">
+        Por favor, siéntate.
+    </string>
+    <string name="chair_instructions2">
+        Por favor, levántate de nuevo.
+    </string>
+    <string name="chair_instructions3">
+        Y por último, siéntate.
+    </string>
+
+    <string name="standing">
+        De pie.
+    </string>
+    <string name="sitting">
+        Sentado.
+    </string>
+
+    <string name="chair_errorCalibrating">
+        El movimiento no se realizó con la velocidad necesaria. Toca el botón de repetir para volver
+        a intentarlo o cualquier parte de la pantalla para continuar.
+    </string>
+
+
+</resources>

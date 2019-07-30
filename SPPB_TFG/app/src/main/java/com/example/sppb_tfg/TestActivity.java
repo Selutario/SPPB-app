@@ -183,12 +183,13 @@ public class TestActivity extends FragmentActivity {
                     if(status == TextToSpeech.SUCCESS) {
                         Locale locale;
                         switch (Locale.getDefault().getCountry()) {
-/*                        case "US":
+                        case "US":
                             locale = Locale.US;
                             break;
                         case "ES":
                             locale = new Locale("spa", "ES");
-                            break;*/
+                            tts.setSpeechRate(1.4f);
+                            break;
                             default:
                                 locale = Locale.UK;
                                 break;
