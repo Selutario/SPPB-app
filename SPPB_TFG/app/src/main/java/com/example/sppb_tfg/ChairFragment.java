@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +60,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
     private boolean iv_standing = false;
 
     private int timeThreshold = 300;
-    private double corrCoeff = 3;
+    private double corrCoeff = 2.5;
 
     private float maxYchange = 0;
     private float maxZchange = 0;
@@ -79,6 +80,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
     SensorManager sensorManager;
     Sensor sensorAcc;
     long lastSaved = System.currentTimeMillis();
+
 
     TestActivity testActivity;
 
@@ -194,7 +196,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null){
             sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
-            sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
+            sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_FASTEST);
         }
 
         return view;
@@ -210,7 +212,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
     @Override
     public void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void continueTest() {
@@ -304,17 +306,19 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                     if (diffChanges > (timeThreshold)){
                         if (direction == "UP_STARTED"){
                             if (yChange > axisChanges[3]/corrCoeff){
-//                                Log.i("ACC", "Ychange UP FINISH: " + yChange);
+                                Log.i("ACC", "Ychange UP FINISH: " + yChange);
                                 direction = "UP_FINISHED";
                                 last_direction = "UP";
                                 movStarted = false;
                                 lastChangeTime = curTime;
                             }
                         } else if (direction == "DOWN_STARTED") {
-                            if(!leanDown && yChange < axisChanges[6]/corrCoeff )
+                            if(!leanDown && yChange < axisChanges[6]/corrCoeff ){
+                                Log.i("ACC", "Ychange DOWN FINISH: " + yChange);
                                 leanDown = true;
-                            if (leanDown && zChange < axisChanges[4]/corrCoeff) {
-//                                Log.i("ACC", "Ychange DOWN FINISH: " + yChange);
+                            }
+                            if (leanDown && zChange < axisChanges[4]/(corrCoeff*1.5)){
+                                Log.i("ACC", "ZZZZZchange DOWN FINISH: " + yChange);
                                 direction = "DOWN_FINISHED";
                                 last_direction = "DOWN";
                                 movStarted = false;
@@ -330,13 +334,13 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                         leanUp = true;
                     // From sitting to standing
                     if (yChange < axisChanges[2]/corrCoeff && leanUp && last_direction != "UP" && diffChanges > timeThreshold){
-//                        Log.i("ACC", "Ychange UP START: " + yChange);
+                        Log.i("ACC", "Ychange UP START: " + yChange);
                         direction = "UP_STARTED";
                         movStarted = true;
                         lastChangeTime = curTime;
                         leanUp = false;
                     } else if (yChange > axisChanges[7]/corrCoeff && last_direction != "DOWN" && diffChanges > timeThreshold){
-//                        Log.i("ACC", "Ychange DOWN START: " + yChange);
+                        Log.i("ACC", "Ychange DOWN START: " + yChange);
                         direction = "DOWN_STARTED";
                         movStarted = true;
                         lastChangeTime = curTime;
@@ -352,6 +356,8 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                     switchImageView();
                 }
 
+                int isSitting = instructionIndex%2;
+
                 // Wait until reading is finished
                 if (testActivity.tts.isSpeaking()) {
                     lastChangeTime = curTime;
@@ -359,15 +365,26 @@ public class ChairFragment extends Fragment implements SensorEventListener {
 
                     if (zChange < minZchange){
                         minZchange = zChange;
+//                        /**/Log.i("ACC", "MIN Z: " + zChange);
                     }
                     if (zChange > maxZchange){
                         maxZchange = zChange;
+//                        Log.i("ACC", "MAX Z: " + zChange);
                     }
                     if (yChange < minYchange){
                         minYchange = yChange;
+                        Log.i("ACC", "MIN Y: " + yChange);
                     }
                     if (yChange > maxYchange){
-                        maxYchange = yChange;
+                        if(isSitting == 1){
+                           if (minYchange > -0.4){
+                               maxYchange = yChange;
+                               Log.i("ACC", "MAX Y: " + yChange);
+                           }
+                        } else {
+                            maxYchange = yChange;
+                            Log.i("ACC", "MAX Y: " + yChange);
+                        }
                     }
                 } else {
                     if (beepReady){
@@ -380,18 +397,28 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                     if (zChange < minZchange){
                         minZchange = zChange;
                         lastChangeTime = curTime;
+//                        Log.i("ACC", "MIN Z: " + zChange);
                     }
                     if (zChange > maxZchange){
+//                        Log.i("ACC", "MAX Z: " + zChange);
                         maxZchange = zChange;
                         lastChangeTime = curTime;
                     }
                     if (yChange < minYchange){
+                        Log.i("ACC", "MIN Y: " + yChange);
                         minYchange = yChange;
                         lastChangeTime = curTime;
                     }
                     if (yChange > maxYchange){
-                        maxYchange = yChange;
-                        lastChangeTime = curTime;
+                        if(isSitting == 1){
+                            if (minYchange > -0.4){
+                                maxYchange = yChange;
+                                Log.i("ACC", "MAX Y: " + yChange);
+                            }
+                        } else {
+                            maxYchange = yChange;
+                            Log.i("ACC", "MAX Y: " + yChange);
+                        }
                     }
 
                     // When there is no major change in the last second
@@ -400,7 +427,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                         // and calculate the average value of the two measurements.
                         // (if sitting instruction, isSitting is 1 so the measurements have to be
                         // saved on the last 4 positions of the array)
-                        int isSitting = instructionIndex%2;
+
                         axisChanges[0 + 4*isSitting] = (axisChanges[0 + 4*isSitting]+minZchange)/(instructionIndex/2 + 1);
                         axisChanges[1 + 4*isSitting] = (axisChanges[1 + 4*isSitting]+maxZchange)/(instructionIndex/2 + 1);
                         axisChanges[2 + 4*isSitting] = (axisChanges[2 + 4*isSitting]+minYchange)/(instructionIndex/2 + 1);
@@ -411,6 +438,8 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                         maxYchange = 0;
                         minZchange = 0;
                         maxZchange = 0;
+
+                        Log.i("ACC", "####################################");
 
                         if(instructionIndex < instructions.size()-1) {
                             instructionIndex++;
@@ -434,9 +463,9 @@ public class ChairFragment extends Fragment implements SensorEventListener {
                             Log.i("ACC", "axisChanges[2]: " + axisChanges[2]);
                             Log.i("ACC", "axisChanges[1]: " + axisChanges[1]);*/
 
-                            if (overall > 25.0f){
+                            /*if (overall > 25.0f){
                                 corrCoeff = corrCoeff + overall/10;
-                            }
+                            }*/
 
                           Toast.makeText(getActivity(), "OVERALL: " + overall, Toast.LENGTH_LONG).show();
 
@@ -480,6 +509,7 @@ public class ChairFragment extends Fragment implements SensorEventListener {
 
                 else if (direction == "UP_FINISHED"){
                     if (n_standUp == 0){
+                        testActivity.readText(getString(R.string.start));
                         chronometer.setBase(SystemClock.elapsedRealtime());
                     }
 
