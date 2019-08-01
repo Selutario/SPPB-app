@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,11 +21,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.sppb_tfg.Constants.SELECTED_USER;
 
-public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.RecyclerUserTouchHelperListener, UserAdapter.OnUserListener {
+
+public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.RecyclerUserTouchHelperListener, UserAdapter.clickListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -49,7 +54,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
 
         settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
         editor = settings.edit();
-        selectedId = settings.getLong("SelectedUser", -1);
+        selectedId = settings.getLong(SELECTED_USER, -1);
 
         iv_empty_box = (ImageView) view.findViewById(R.id.iv_empty_box);
         et_empty_box = (TextView) view.findViewById(R.id.tv_empty_box);
@@ -190,20 +195,41 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         }
     }
 
+
+    private void openDetails(Long userId) {
+        ScoreFragment scoreFragment = new ScoreFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong(SELECTED_USER, userId);
+        scoreFragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.main_placeHolder, scoreFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     @Override
     public void onUserClick(int position) {
+        openDetails(usersList.get(position).getId());
+    }
+
+    @Override
+    public boolean onUserLongClick(int position) {
         long newSelectedId = usersList.get(position).getId();
 
         if(selectedId == newSelectedId) {
             selectedId = (long) -1;
-            editor.putLong("SelectedUser", -1);
+            editor.putLong(SELECTED_USER, -1);
         } else {
             selectedId = newSelectedId;
-            editor.putLong("SelectedUser", selectedId);
+            editor.putLong(SELECTED_USER, selectedId);
         }
 
         editor.apply();
         showUsersList();
+
+        return true;
     }
 }
 

@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import static com.example.sppb_tfg.Constants.SELECTED_USER;
+
 public class ScoreFragment extends Fragment {
     ConstraintLayout score_layout;
     ConstraintLayout constraing_explaining;
@@ -41,8 +43,12 @@ public class ScoreFragment extends Fragment {
     TextView tv_chair_score;
     TextView tv_chair_score_label;
 
-    User user;
-    int mCurrentTest;
+    User mUser;
+    int score = 0;
+    int mCurrentTest = 0;
+    int mBalanceScore = 0;
+    int mGaitScore = 0;
+    int mChairScore = 0;
 
     TestActivity testActivity;
 
@@ -72,10 +78,31 @@ public class ScoreFragment extends Fragment {
         tv_chair_score_label = (TextView) view.findViewById(R.id.tv_chair_score_label);
         tv_chair_score = (TextView) view.findViewById(R.id.tv_chair_score);
 
-        testActivity = ((TestActivity)getActivity());
+        Long id = -1L;
 
-        mCurrentTest = testActivity.getmCurrentTest();
-        final int score = testActivity.getScore(mCurrentTest);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            id = bundle.getLong(SELECTED_USER);
+        }
+
+        if (id == -1) {
+            testActivity = ((TestActivity)getActivity());
+
+            score = testActivity.getScore(mCurrentTest);
+            mCurrentTest = testActivity.getmCurrentTest();
+
+            mBalanceScore = testActivity.getScore(1);
+            mGaitScore = testActivity.getScore(2);
+            mChairScore = testActivity.getScore(3);
+        } else {
+            User user = User.getUser(getActivity(), id);
+
+            score = user.getScore();
+            mBalanceScore = user.getBalanceScore();
+            mGaitScore = user.getSpeedScore();
+            mChairScore = user.getChairScore();
+        }
+
         final int pb_score;
 
         if(mCurrentTest == 0){
@@ -142,22 +169,23 @@ public class ScoreFragment extends Fragment {
             }
         }, 500); //will start animation in 0.5 seconds
 
-        tv_balance_score.setText(Integer.toString(testActivity.getScore(1)));
-        tv_gait_score.setText(Integer.toString(testActivity.getScore(2)));
-        tv_chair_score.setText(Integer.toString(testActivity.getScore(3)));
+        tv_balance_score.setText(Integer.toString(mBalanceScore));
+        tv_gait_score.setText(Integer.toString(mGaitScore));
+        tv_chair_score.setText(Integer.toString(mChairScore));
 
         sharedPreferences = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
         long selectedId = sharedPreferences.getLong("SelectedUser", -1);
 
-        if(selectedId == -1) {
-            btn_save.setVisibility(View.GONE);
-        } else {
+        if(selectedId != -1 && id == -1) {
             btn_save.setVisibility(View.VISIBLE);
-            user = User.getUser(getActivity(), selectedId);
+            mUser = User.getUser(getActivity(), selectedId);
 
             Resources res = getResources();
-            String text = String.format(res.getString(R.string.save_as), user.getName());
+            String text = String.format(res.getString(R.string.save_as), mUser.getName());
             tv_save_as.setText(text);
+        } else {
+            btn_save.setVisibility(View.GONE);
+
         }
 
 
@@ -168,12 +196,12 @@ public class ScoreFragment extends Fragment {
                 btn_save.setEnabled(false);
 
                 if (tv_balance_score.getVisibility() == View.VISIBLE)
-                    user.setBalanceScore(testActivity.getScore(1));
+                    mUser.setBalanceScore(testActivity.getScore(1));
                 if (tv_gait_score.getVisibility() == View.VISIBLE)
-                    user.setSpeedScore(testActivity.getScore(2));
+                    mUser.setSpeedScore(testActivity.getScore(2));
                 if (tv_chair_score.getVisibility() == View.VISIBLE)
-                    user.setChairScore(testActivity.getScore(3));
-                user.update(getActivity());
+                    mUser.setChairScore(testActivity.getScore(3));
+                mUser.update(getActivity());
             }
         });
 

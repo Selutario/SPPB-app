@@ -19,15 +19,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public TextView tv_name;
     private ImageView iv_deleteIcon;
     private ImageView iv_selected;
-    public OnUserListener mOnUserListener;
+    public clickListener mClickListener;
     Long mSelectedId;
     Context context;
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public ConstraintLayout viewForeground;
-        OnUserListener onUserListener;
+    public interface clickListener {
+        public void onUserClick(int position);
+        public boolean onUserLongClick(int position);
+    }
 
-        public ViewHolder(View itemView, OnUserListener onUserListener) {
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+        public ConstraintLayout viewForeground;
+        clickListener clickListener;
+
+        public ViewHolder(View itemView, clickListener clickListener) {
             super(itemView);
 
             tv_score =(TextView) itemView.findViewById(R.id.tv_result);
@@ -35,25 +41,30 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             iv_deleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
             iv_selected = (ImageView) itemView.findViewById(R.id.iv_selected);
             viewForeground = itemView.findViewById(R.id.viewForeground);
-            this.onUserListener = onUserListener;
+            this.clickListener = clickListener;
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            onUserListener.onUserClick(getAdapterPosition());
+            clickListener.onUserClick(getAdapterPosition());
+        }
+
+
+        @Override
+        public boolean onLongClick(View v) {
+            clickListener.onUserLongClick(getAdapterPosition());
+            return true;
         }
     }
 
-    public UserAdapter(ArrayList<User> users, long mSelectedId, OnUserListener onUserListener) {
-        this.mUsers = users;
-        this.mOnUserListener = onUserListener;
-        this.mSelectedId = mSelectedId;
-    }
 
-    public interface OnUserListener {
-        void onUserClick(int position);
+    public UserAdapter(ArrayList<User> users, long mSelectedId, clickListener clickListener) {
+        this.mUsers = users;
+        this.mClickListener = clickListener;
+        this.mSelectedId = mSelectedId;
     }
 
     @NonNull
@@ -63,7 +74,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View userView = inflater.inflate(R.layout.listitem_user, viewGroup, false);
-        ViewHolder viewHolder = new ViewHolder(userView, mOnUserListener);
+        ViewHolder viewHolder = new ViewHolder(userView, mClickListener);
 
         return viewHolder;
     }
