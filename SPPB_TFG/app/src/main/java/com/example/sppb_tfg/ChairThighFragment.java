@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import android.widget.TextView;
 
 import static com.example.sppb_tfg.Constants.ACCE_FILTER_DATA_MIN_TIME;
 
-public class GaitFragment extends Fragment implements SensorEventListener {
+public class ChairThighFragment extends Fragment implements SensorEventListener {
 
     private LinearLayout whole_screen;
     private ConstraintLayout cl_info;
@@ -39,23 +40,16 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
     private int currentStep = 0;
     private boolean inProgress = false;
+    private String last_direction = "DOWN";
 
-    // Accelerometer and time variables specific for gait test
-    private final int TIME_THRSHOLD = 2000; // Miliseconds
-    private float max_change = 1f;
-    private float yHistory = 0;
-    long diffChanges;
-    private long lastChangeTime;
+    private int n_standUp = 0;
+    private double totalTime = 0;
 
-    private double walkingTime = 0;
-    private double min_walkingTime = 100;
+    private SensorManager sensorManager;
+    private Sensor sensorAcc;
+    private long lastSaved = System.currentTimeMillis();
 
-    SensorManager sensorManager;
-    Sensor sensorAcc;
-    long lastSaved = System.currentTimeMillis();
-
-    TestActivity testActivity;
-
+    private TestActivity testActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup
@@ -68,19 +62,20 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         test_name = (TextView) view.findViewById(R.id.tv_test_name);
         tv_result = (TextView) view.findViewById(R.id.tv_result);
         tv_result_label = (TextView) view.findViewById(R.id.tv_result_label);
+        test_name = (TextView) view.findViewById(R.id.tv_test_name);
         chronometer = view.findViewById(R.id.chronometer);
         btn_play = (ImageButton) view.findViewById(R.id.btn_play);
         btn_mute = (ImageButton) view.findViewById(R.id.btn_mute);
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
-        if(getActivity() != null){
-            test_name.setText(getActivity().getResources().getText(R.string.gait_name));
-            drawable = (GradientDrawable)cl_info.getBackground();
-            drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
+        testActivity = ((TestActivity)getActivity());
 
-            testActivity = ((TestActivity)getActivity());
-        }
+        test_name.setText(getString(R.string.chair_name));
+        iv_person.setImageResource(R.drawable.ic_person_sitting);
+
+        drawable = (GradientDrawable)cl_info.getBackground();
+        drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
 
 
         btn_play.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +99,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                testActivity.slider_activity(Constants.GAIT_TEST);
+                testActivity.slider_activity(Constants.CHAIR_TEST);
             }
         });
 
@@ -112,41 +107,34 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 testActivity.tts.stop();
-
-                if(currentStep >= 1){
-                    onClickWholeScreen(false);
-
+                if (currentStep < 2) {
+                    testActivity.fragmentTestCompleted();
+                } else {
                     currentStep = 0;
-                    walkingTime = 0;
-                    min_walkingTime = 100;
                     inProgress = false;
+                    last_direction = "DOWN";
+                    n_standUp = 0;
+                    totalTime = 0;
 
-                    chronometer.stop();
-                    chronometer.setBase(SystemClock.elapsedRealtime());
-
-                    drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
+                    iv_person.setImageResource(R.drawable.ic_person_sitting);
+                    tv_result.setText("0");
                     btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
                     tv_result.setVisibility(View.GONE);
                     tv_result_label.setVisibility(View.GONE);
-                    chronometer.setVisibility(View.GONE);
-                    btn_play.setImageResource(R.drawable.ic_round_play_arrow);
                     btn_play.setVisibility(View.VISIBLE);
-                    iv_person.setImageResource(R.drawable.ic_person);
-                } else {
-                    testActivity.fragmentTestCompleted();
+
+                    SelectPositionFragment selectPositionFragment = new SelectPositionFragment();
+                    testActivity.openFragment(selectPositionFragment, true);
                 }
             }
         });
 
-
         // Sensor declaration.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-
-        if (sensorManager != null) {
+        if (sensorManager != null){
             sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
             sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
         }
-
 
         return view;
     }
@@ -164,71 +152,32 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
     }
 
-
     private void continueTest() {
         switch (currentStep) {
             case 0:
-                test_name.setText(getString(R.string.gait_name1));
-                testActivity.readText(getString(R.string.gait_step1));
-                onClickWholeScreen(true);
-                btn_replay.setImageResource(R.drawable.ic_round_replay);
-                chronometer.setVisibility(View.VISIBLE);
+                testActivity.readText(getString(R.string.chair_thigh_step0));
                 btn_play.setVisibility(View.GONE);
+                tv_result.setVisibility(View.VISIBLE);
+                onClickWholeScreen(true);
                 break;
 
             case 1:
-                testActivity.tts.stop();
-                testActivity.readText(getString(R.string.start));
-                iv_person.setImageResource(R.drawable.ic_person_gait);
                 onClickWholeScreen(false);
+                testActivity.readText(getString(R.string.chair_thigh_step1));
+                btn_replay.setImageResource(R.drawable.ic_round_replay);
                 inProgress = true;
-                chronometer.setBase(SystemClock.elapsedRealtime());
-                chronometer.start();
                 break;
 
             case 2:
-                testActivity.tts.stop();
-                test_name.setText(getString(R.string.gait_name2));
-                testActivity.readText(getString(R.string.gait_step2));
-                chronometer.setBase(SystemClock.elapsedRealtime());
+                testActivity.readText(getString(R.string.chair_chest_step2));
+                showResult(totalTime);
                 onClickWholeScreen(true);
                 break;
 
             case 3:
                 testActivity.tts.stop();
-                testActivity.readText(getString(R.string.start));
-                iv_person.setImageResource(R.drawable.ic_person_gait);
-                onClickWholeScreen(false);
-                inProgress = true;
-                chronometer.setBase(SystemClock.elapsedRealtime());
-                chronometer.start();
-                break;
-
-            case 4:
-                testActivity.tts.stop();
-                testActivity.readText(getString(R.string.gait_step3));
-                onClickWholeScreen(true);
-                showResult(min_walkingTime);
-                break;
-
-            case 5:
-                testActivity.tts.stop();
                 testActivity.fragmentTestCompleted();
                 break;
-
-            case 6:
-                testActivity.tts.stop();
-                drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorError));
-//                cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorError));
-                testActivity.readText(getString(R.string.gait_error));
-                onClickWholeScreen(true);
-                break;
-
-            case 7:
-                testActivity.tts.stop();
-                testActivity.fragmentTestCompleted();
-                break;
-
         }
 
         currentStep = currentStep +1;
@@ -248,61 +197,50 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         }
     }
 
-
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if ((System.currentTimeMillis() - lastSaved) > ACCE_FILTER_DATA_MIN_TIME) {
+            lastSaved = System.currentTimeMillis();
 
-        if((System.currentTimeMillis() - lastSaved) > ACCE_FILTER_DATA_MIN_TIME){
-            long curTime = SystemClock.elapsedRealtime();
+            if (inProgress) {
 
-            if(inProgress){
-                lastSaved = System.currentTimeMillis();
+                float x = event.values[0];
+                float y = event.values[1];
+                float z = event.values[2];
 
-                float yChange = 0;
+                if (Math.abs(z) > Math.abs(y)) {
 
-                if (yHistory == 0) {
-                    yHistory = event.values[1];
-                }
+                    if (last_direction != "DOWN") {
 
-                // We obtain the difference of acceleration with respect to the previous measurement.
-                if(event.values[1] > 0)
-                    yChange = yHistory - event.values[1];
+                        tv_result.setText(Integer.toString(n_standUp));
 
-                if (yChange > max_change/3f){
-                    lastChangeTime = curTime;
-                    if(yChange > max_change) {
-                        max_change = yChange;
+                        if (n_standUp == 5){
+                            chronometer.stop();
+                            long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
+                            totalTime = (double)elapsedMillis/1000;
+
+                            inProgress = false;
+                            iv_person.setImageResource(R.drawable.ic_test_done);
+                            continueTest();
+                        } else {
+                            iv_person.setImageResource(R.drawable.ic_person_sitting);
+                            testActivity.readText(Integer.toString(n_standUp));
+                        }
+
+                        last_direction = "DOWN";
                     }
-                }
-
-                diffChanges = curTime - lastChangeTime;
-
-                // If there is no update of the LastChangeTime variable in the last TIME_THRSHOLD
-                // seconds, assume the user is not walking any more, and calculate the time spent walking
-                if (diffChanges > TIME_THRSHOLD){
-                    walkingTime = lastChangeTime - chronometer.getBase();
-                    walkingTime = (double)walkingTime/1000;
-
-                    chronometer.stop();
-                    if (walkingTime < min_walkingTime) { min_walkingTime = walkingTime; }
-
-                    inProgress = false;
-
-                    if (max_change != 1f) {
-                        max_change = 1f;
-                        testActivity.beep.start();
-                        iv_person.setImageResource(R.drawable.ic_test_done);
-                        continueTest();
-                    } else {
-                        currentStep = 6;
-                        continueTest();
+                } else if (last_direction != "UP"){
+                    if(n_standUp == 0) {
+                        chronometer.setBase(SystemClock.elapsedRealtime());
+                        testActivity.readText(getString(R.string.start));
                     }
 
+                    n_standUp++;
+                    iv_person.setImageResource(R.drawable.ic_person_stand_up);
+                    last_direction = "UP";
                 }
-
-            } else {
-                lastChangeTime = curTime;
             }
+
         }
     }
 
@@ -313,20 +251,20 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
     public void showResult(double time) {
         test_name.setText(getString(R.string.score));
-        chronometer.setVisibility(View.GONE);
+
         int score = 0;
 
-        if (time < 4.82) {
+        if (time < 11.19) {
             score = 4;
-        } else if (time <= 6.20) {
+        } else if (time <= 13.69) {
             score = 3;
-        } else if (time <= 8.70) {
+        } else if (time <= 16.69) {
             score = 2;
-        } else if (time <= 30) {
+        } else if (time <= 59) {
             score = 1;
         }
 
-        testActivity.gaitScore = score;
+        testActivity.chairScore = score;
         tv_result.setText(Integer.toString(score));
         tv_result.setVisibility(View.VISIBLE);
         tv_result_label.setVisibility(View.VISIBLE);

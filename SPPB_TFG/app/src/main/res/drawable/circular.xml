@@ -44,7 +44,7 @@
 
                 <gradient
                     android:endColor="@color/minimum"
-                    android:centerColor="@color/moderate"
+                    android:centerColor="@color/slight"
                     android:startColor="@color/severe"
                     android:type="sweep" />
                 <corners android:radius="80dp"/>

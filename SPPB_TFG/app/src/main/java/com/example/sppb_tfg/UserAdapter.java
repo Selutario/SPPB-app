@@ -85,7 +85,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             } else if (n_score < 7) {
                 tv_score.setTextColor(context.getResources().getColor(R.color.moderate));
             } else if (n_score < 10) {
-                tv_score.setTextColor(context.getResources().getColor(R.color.light));
+                tv_score.setTextColor(context.getResources().getColor(R.color.slight));
             } else if (n_score <= 12) {
                 tv_score.setTextColor(context.getResources().getColor(R.color.minimum));
             }
@@ -118,7 +118,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         mUsers.get(position).delete(context);
         mUsers.remove(position);
         notifyItemRemoved(position);
-//        notifyItemRemoved(position);
     }
 
     public void insertUser(User user, Context context) {

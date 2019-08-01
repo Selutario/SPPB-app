@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/colorPrimaryDark" />
+    <solid android:color="@color/colorBackGroundDark" />
     <!--border color and border width-->
-    <stroke
-        android:width="7dp"
-        android:color="@color/colorPrimaryDark" />
+
     <!--border radius in dp-->
-    <corners android:topLeftRadius="8dp" android:topRightRadius="8dp"
-        android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp"/>
+    <corners android:topLeftRadius="16dp" android:topRightRadius="16dp"
+        android:bottomLeftRadius="16dp" android:bottomRightRadius="16dp"/>
 </shape>

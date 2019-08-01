@@ -75,7 +75,7 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/constraing_explaining" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="44dp"
                 android:text="@string/score"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -180,15 +180,34 @@
                 app:layout_constraintTop_toTopOf="@+id/tv_chair_score_label" />
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout"
+                android:id="@+id/constraing_explaining"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
+                android:background="@drawable/shape_round_corners"
+                android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/score_progressbar">
+                app:layout_constraintTop_toBottomOf="@+id/score_progressbar"
+                tools:visibility="gone">
 
+                <TextView
+                    android:id="@+id/tv_explaining_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorText"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </android.support.constraint.ConstraintLayout>
 
 
@@ -249,13 +268,14 @@
 
         <TextView
             android:id="@+id/tv_save_as"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="@string/save_as"
+            android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="@color/colorTextOverBlue"
             android:textSize="18sp"

@@ -21,7 +21,6 @@ public class SliderAdapter extends PagerAdapter {
         mCurrentTest = test;
     }
 
-
     @Override
     public int getCount() {
         return sliderResources.slide_headings[mCurrentTest].length;

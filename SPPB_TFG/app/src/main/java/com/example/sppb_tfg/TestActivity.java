@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
@@ -120,8 +121,9 @@ public class TestActivity extends FragmentActivity {
                     editor.apply();
                     slider_activity(Constants.CHAIR_TEST);
                 }
-                ChairFragment chairFragment= new ChairFragment();
-                openFragment(chairFragment, full_test);
+
+                SelectPositionFragment selectPositionFragment = new SelectPositionFragment();
+                openFragment(selectPositionFragment, full_test);
                 break;
         }
 
@@ -146,7 +148,7 @@ public class TestActivity extends FragmentActivity {
         }
     }
 
-    private  void openFragment(Fragment fragment, boolean animate) {
+    public void openFragment(Fragment fragment, boolean animate) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
@@ -192,11 +194,6 @@ public class TestActivity extends FragmentActivity {
                         }
 
                         tts.setLanguage(locale);
-
-                        mostRecentUtteranceID = (new Random().nextInt() % 9999999) + ""; // "" is String force
-                        // set params
-                        // *** this method will work for more devices: API 19+ ***
-                        params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, mostRecentUtteranceID);
                         ttsReady = true;
                     }
 
@@ -208,13 +205,13 @@ public class TestActivity extends FragmentActivity {
 
     @SuppressWarnings("deprecation")
     protected void readText(String text){
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            tts.speak(text, TextToSpeech.QUEUE_ADD,params,mostRecentUtteranceID);
-        } else {*/
         if (!isMuted) {
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+            } else {
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
+            }
         }
-        /*        }*/
     }
 
     public boolean switchMute() {

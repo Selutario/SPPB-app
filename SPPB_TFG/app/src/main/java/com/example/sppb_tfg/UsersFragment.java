@@ -152,7 +152,11 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
             public void onClick(DialogInterface dialog, int whichButton) {
                         User user = new User(edt.getText().toString());
                         user.insert(getActivity());
-//                        usersList.add(user);
+
+                        selectedId = user.getId();
+                        editor.putLong("SelectedUser", selectedId);
+                        editor.apply();
+
                         showUsersList();
 
             }

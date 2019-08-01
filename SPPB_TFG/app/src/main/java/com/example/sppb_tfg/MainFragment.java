@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainFragment extends Fragment {
-    private TextView mTextMessage;
     private Button btn_full;
     private Button btn_balance;
     private Button btn_gait;
@@ -26,7 +25,6 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main,
                 null);
 
-        mTextMessage = (TextView) view.findViewById(R.id.title_users);
         btn_full = (Button) view.findViewById(R.id.btn_full);
         btn_balance = (Button) view.findViewById(R.id.btn_balance);
         btn_gait = (Button) view.findViewById(R.id.btn_gait);

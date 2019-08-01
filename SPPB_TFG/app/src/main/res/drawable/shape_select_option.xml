@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+android:color="@color/colorChairStand">
+
+<item android:id="@android:id/mask">
+    <shape android:shape="rectangle">
+        <solid android:color="@color/colorPrimary" />
+        <corners android:radius="16dp" />
+    </shape>
+</item>
+
+<item android:id="@android:id/background">
+    <shape android:shape="rectangle">
+        <stroke
+            android:color="@color/colorPrimaryText"
+            android:width="3dp"/>
+        <corners
+            android:topLeftRadius="16dp" android:topRightRadius="16dp"
+            android:bottomLeftRadius="16dp" android:bottomRightRadius="16dp"/>
+    </shape>
+</item>
+</ripple>

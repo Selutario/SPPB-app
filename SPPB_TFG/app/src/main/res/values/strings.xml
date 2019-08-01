@@ -103,10 +103,6 @@
 
     <!--ACTUAL TEST-->
     <string name="start">Start</string>
-    <string name="score">Score</string>
-    <string name="points">Points</string>
-    <string name="save_as">Save as %1$s</string>
-    <string name="saved">Saved</string>
 
     <!--Balance test-->
     <string name="balance_step1">
@@ -150,15 +146,20 @@
         screen to continue.
     </string>
 
-    <!--Chair stand test-->
-    <string name="chair_step0">
+    <!-- Chair stand test -->
+    <string name="where_phone">Where do you want to place the phone?</string>
+    <string name="on_chest">On the chest</string>
+    <string name="on_thigh">On the thigh</string>
+
+    <!--CHEST -->
+    <string name="chair_chest_step0">
         It is necessary to calibrate the device. Sit in a chair and follow the instructions.
         Touch the screen to start.
     </string>
-    <string name="chair_step1">
+    <string name="chair_chest_step1">
         End of calibrating. Now, you can stand up and sit down 5 times in a row. Start whenever you want.
     </string>
-    <string name="chair_step2">
+    <string name="chair_chest_step2">
         And five. End of chair stand test. Touch the screen to continue.
     </string>
 
@@ -186,7 +187,25 @@
         Touch the repeat button to try again or touch any part of the screen to continue.
     </string>
 
+    <!-- THIGH -->
+    <string name="chair_thigh_step0">
+        Hook the device in the leg or put it inside a pocket. Then, get up 5 times and sit back
+        down. Touch the screen when you are ready.
+    </string>
+    <string name="chair_thigh_step1">
+        Start whenever you want.
+    </string>
 
+    <!-- SCORE -->
+    <string name="score">Score</string>
+    <string name="points">Points</string>
+    <string name="save_as">Save as %1$s</string>
+    <string name="saved">Saved</string>
+
+    <string name="severe">Severe limitation</string>
+    <string name="moderate">Moderate limitation</string>
+    <string name="slight">Slight limitation</string>
+    <string name="minimum">Minimum limitation</string>
 
 
 </resources>

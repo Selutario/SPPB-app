@@ -106,10 +106,6 @@
 
     <!--ACTUAL TEST-->
     <string name="start">Ya</string>
-    <string name="score">Puntuación</string>
-    <string name="points">Puntos</string>
-    <string name="save_as">Guardar como %1$s</string>
-    <string name="saved">Guardado</string>
 
     <!--Balance test-->
     <string name="balance_step1">
@@ -154,14 +150,19 @@
     </string>
 
     <!--Chair stand test-->
-    <string name="chair_step0">
+    <string name="where_phone">¿Dónde quieres colocar el móvil?</string>
+    <string name="on_chest">En el pecho</string>
+    <string name="on_thigh">En el muslo</string>
+
+    <!-- CHEST -->
+    <string name="chair_chest_step0">
         Hay que calibrar. Siéntate en una silla y sigue las instrucciones.
         Toca la pantalla para comenzar.
     </string>
-    <string name="chair_step1">
+    <string name="chair_chest_step1">
         Fin del calibrado. Ahora puedes levantarte y sentarte 5 veces seguidas. Empieza cuando quieras.
     </string>
-    <string name="chair_step2">
+    <string name="chair_chest_step2">
         Y cinco. Fin del test. Toca la pantalla para continuar.
     </string>
 
@@ -190,6 +191,24 @@
         a intentarlo o cualquier parte de la pantalla para continuar.
     </string>
 
+    <!-- THIGH -->
+    <string name="chair_thigh_step0">
+        Engancha el móvil a tu pierna o mételo dentro del bolsillo. Después, levántate 5 veces y
+        vuelve a sentarte. Toca la pantalla cuando estés listo.
+    </string>
+    <string name="chair_thigh_step1">
+        Comienza cuando quieras.
+    </string>
 
+    <!-- SCORE -->
+    <string name="score">Puntos</string>
+    <string name="points">Puntos</string>
+    <string name="save_as">Guardar como %1$s</string>
+    <string name="saved">Guardado</string>
+
+    <string name="severe">Limitación severa</string>
+    <string name="moderate">Limitación moderada</string>
+    <string name="slight">Limitación leve</string>
+    <string name="minimum">Limitación mínima</string>
 
 </resources>

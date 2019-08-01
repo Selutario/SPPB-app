@@ -54,11 +54,11 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     private float mean_z = 0;
     private final float move_allowed = 3;
 
-    SensorManager sensorManager;
-    Sensor sensorAcc;
-    long lastSaved = System.currentTimeMillis();
+    private SensorManager sensorManager;
+    private Sensor sensorAcc;
+    private long lastSaved = System.currentTimeMillis();
 
-    TestActivity testActivity;
+    private TestActivity testActivity;
 
 
     @Override
@@ -84,8 +84,6 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         test_name.setText(getString(R.string.balance_name));
         drawable = (GradientDrawable)cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
-        //cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
-
 
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,11 +276,6 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         }
     }
 
-    public void startChronometer() {
-        chronometer.setBase(SystemClock.elapsedRealtime());
-        chronometer.start();
-    }
-
     public void stopChronometer() {
         chronometer.stop();
     }
@@ -314,7 +307,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
                         calibrated = true;
                         ready_to_calibrate = false;
-                        ((TestActivity) getActivity()).beep.start();
+                        testActivity.beep.start();
                         continueTest();
                     } else {
                         // If there are not, save the sample value.
@@ -356,7 +349,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     }
 
     public void showResult(int score) {
-        ((TestActivity) getActivity()).balanceScore = score;
+        testActivity.balanceScore = score;
 
         test_name.setText(getString(R.string.score));
         tv_result.setText(Integer.toString(score));
@@ -366,7 +359,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     }
 
     public void desbalanced(long elapsedTime) {
-        ((TestActivity) getActivity()).readText(getString(R.string.desbalanced));
+        testActivity.readText(getString(R.string.desbalanced));
 
         chronometer.stop();
         inProgress = false;
@@ -390,7 +383,6 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         }
 
         showResult(score);
-
         currentStep = 9;
         continueTest();
     }

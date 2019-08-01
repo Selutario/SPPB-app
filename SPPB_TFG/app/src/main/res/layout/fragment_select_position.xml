@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:weightSum="2"
+    android:background="@color/colorBackground">
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/ActivityTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="0"
+        android:text="@string/where_phone"
+        tools:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/btn_chest"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:padding="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape_select_option"
+        android:scaleType="fitCenter"
+        android:src="@drawable/chest2"
+        android:clickable="true"
+        android:focusable="true"/>
+
+    <ImageButton
+        android:id="@+id/btn_thigh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape_select_option"
+        android:scaleType="fitCenter"
+        android:src="@drawable/thigh2"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</LinearLayout>

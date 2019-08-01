@@ -19,12 +19,15 @@ import android.widget.TextView;
 
 public class ScoreFragment extends Fragment {
     ConstraintLayout score_layout;
+    ConstraintLayout constraing_explaining;
+
     ProgressBar progressBar;
     ConstraintLayout btn_save;
     TextView tv_save_as;
     SharedPreferences sharedPreferences;
 
     TextView tv_score;
+    TextView tv_explaining_label;
 
     ImageView iv_balance_color;
     TextView tv_balance_score_label;
@@ -49,11 +52,14 @@ public class ScoreFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_score, null);
         score_layout = view.findViewById(R.id.fragment_score);
+        constraing_explaining = view.findViewById(R.id.constraing_explaining);
         progressBar = (ProgressBar) view.findViewById(R.id.score_progressbar);
         btn_save = view.findViewById(R.id.btn_save);
         tv_save_as = (TextView) view.findViewById(R.id.tv_save_as);
 
         tv_score = (TextView) view.findViewById(R.id.tv_final_score);
+        tv_explaining_label = (TextView) view.findViewById(R.id.tv_explaining_label);
+
         iv_balance_color = (ImageView) view.findViewById(R.id.iv_balance_color);
         tv_balance_score_label = (TextView) view.findViewById(R.id.tv_balance_score_label);
         tv_balance_score = (TextView) view.findViewById(R.id.tv_balance_score);
@@ -74,8 +80,20 @@ public class ScoreFragment extends Fragment {
 
         if(mCurrentTest == 0){
             pb_score = 9*score - (9*score)/18;
+            constraing_explaining.setVisibility(View.VISIBLE);
+
+            if(score <= 3){
+                tv_explaining_label.setText(getString(R.string.severe));
+            } else if (score <= 6) {
+                tv_explaining_label.setText(getString(R.string.moderate));
+            } else if (score <= 9) {
+                tv_explaining_label.setText(getString(R.string.slight));
+            } else {
+                tv_explaining_label.setText(getString(R.string.minimum));
+            }
         } else {
             pb_score = 25*score;
+            constraing_explaining.setVisibility(View.GONE);
 
             if (mCurrentTest == 1){
                 iv_gait_color.setVisibility(View.GONE);
@@ -149,12 +167,6 @@ public class ScoreFragment extends Fragment {
                 tv_save_as.setText(getString(R.string.saved));
                 btn_save.setEnabled(false);
 
-/*                Date c = Calendar.getInstance().getTime();
-                Toast.makeText(getActivity(), "Current time => " + c, Toast.LENGTH_LONG);
-
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                String formattedDate = df.format(c);*/
-
                 if (tv_balance_score.getVisibility() == View.VISIBLE)
                     user.setBalanceScore(testActivity.getScore(1));
                 if (tv_gait_score.getVisibility() == View.VISIBLE)
@@ -168,5 +180,4 @@ public class ScoreFragment extends Fragment {
 
         return view;
     }
-
 }
