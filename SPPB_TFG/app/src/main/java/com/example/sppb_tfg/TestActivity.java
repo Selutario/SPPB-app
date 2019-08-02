@@ -85,14 +85,15 @@ public class TestActivity extends FragmentActivity {
         beep.release();
     }
 
+    // Open chosen test or all sequentially if full test is chosen.
     public void startTest() {
-
         switch (mCurrentTest) {
             case 0:
                 boolean animate;
                 full_test = animate = true;
                 mCurrentTest = 1;
             case Constants.BALANCE_TEST:
+                // Show info/instructions if first time user open this test
                 if (settings.getBoolean("FirstUseBalance", true)){
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("FirstUseBalance", false);
@@ -104,6 +105,7 @@ public class TestActivity extends FragmentActivity {
                 break;
 
             case Constants.GAIT_TEST:
+                // Show info/instructions if first time user open this test
                 if (settings.getBoolean("FirstUseGait", true)){
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("FirstUseGait", false);
@@ -115,6 +117,7 @@ public class TestActivity extends FragmentActivity {
                 break;
 
             case Constants.CHAIR_TEST:
+                // Show info/instructions if first time user open this test
                 if (settings.getBoolean("FirstUseChair", true)){
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("FirstUseChair", false);
@@ -129,6 +132,7 @@ public class TestActivity extends FragmentActivity {
 
     }
 
+    // Go to the next test if full test is chosen, or show result if there is no test to be done.
     public void fragmentTestCompleted() {
         mCurrentTest = mCurrentTest +1;
 
@@ -144,10 +148,10 @@ public class TestActivity extends FragmentActivity {
         } else {
             ScoreFragment scoreFragment = new ScoreFragment();
             openFragment(scoreFragment, true);
-            //onBackPressed();
         }
     }
 
+    // Open fragment with or without animation
     public void openFragment(Fragment fragment, boolean animate) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -160,12 +164,14 @@ public class TestActivity extends FragmentActivity {
         transaction.commit();
     }
 
+    // Open info/instructions activity
     public void slider_activity(int test){
         Intent intent = new Intent(this, SliderActivity.class);
         intent.putExtra("test", test);
         startActivity(intent);
     }
 
+    // Start Text to speech engine, to voice instructions.
     public void initTTS() {
         // Beep sound
         beep = MediaPlayer.create(this, R.raw.beep);
@@ -202,7 +208,6 @@ public class TestActivity extends FragmentActivity {
         });
     }
 
-
     @SuppressWarnings("deprecation")
     protected void readText(String text){
         if (!isMuted) {
@@ -213,6 +218,7 @@ public class TestActivity extends FragmentActivity {
             }
         }
     }
+
 
     public boolean switchMute() {
         tts.stop();
@@ -228,6 +234,7 @@ public class TestActivity extends FragmentActivity {
         }
     }
 
+    // Get score of selected test
     public int getScore(int test) {
         int score = 0;
 

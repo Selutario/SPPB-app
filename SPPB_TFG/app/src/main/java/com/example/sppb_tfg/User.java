@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
+/*
+* Class of the user object, to save data such as the name and score obtained in each test.
+*/
 public class User {
     long id;
     String name;
@@ -96,6 +99,7 @@ public class User {
         return balanceScore + speedScore + chairScore;
     }
 
+    // Get full list with all saved users
     public static ArrayList<User> getUsersList(Context context) {
         ArrayList<User> listUser = new ArrayList<>();
         LocalSQLiteOpenHelper helper = new LocalSQLiteOpenHelper(context);
@@ -119,6 +123,7 @@ public class User {
         return listUser;
     }
 
+    // Get number of saved users
     public static int getUsersCount(Context context) {
         int count = 0;
         LocalSQLiteOpenHelper helper = new LocalSQLiteOpenHelper(context);
@@ -144,6 +149,7 @@ public class User {
         return count;
     }
 
+    // Get an user by its ID number
     public static User getUser(Context context, long id){
         User user = null;
         LocalSQLiteOpenHelper helper = new LocalSQLiteOpenHelper(context);
@@ -166,6 +172,7 @@ public class User {
         return user;
     }
 
+    // Insert new user
     public void insert(Context context) {
         ContentValues values = new ContentValues();
         values.put(UsersDB.UserEntry.NAME,this.name);
@@ -197,6 +204,7 @@ public class User {
         db.close();
     }
 
+    // Update user
     public void update(Context context) {
         ContentValues values = new ContentValues();
         values.put(UsersDB.UserEntry.NAME,this.name);
@@ -215,6 +223,7 @@ public class User {
         db.close();
     }
 
+    // Delete user
     public void delete(Context context) {
 
 

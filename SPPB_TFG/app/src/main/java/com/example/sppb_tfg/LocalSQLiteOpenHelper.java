@@ -10,6 +10,7 @@ public class LocalSQLiteOpenHelper extends SQLiteOpenHelper {
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
     }
 
+    // Creates local data base
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + UsersDB.UserEntry.TABLE_NAME + " ("

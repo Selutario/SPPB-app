@@ -42,7 +42,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
     // Accelerometer and time variables specific for gait test
     private final int TIME_THRSHOLD = 2000; // Miliseconds
-    private float max_change = 1f;
+    private float max_change = 0.5f;
     private float yHistory = 0;
     long diffChanges;
     private long lastChangeTime;
@@ -74,15 +74,14 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
-        if(getActivity() != null){
-            test_name.setText(getActivity().getResources().getText(R.string.gait_name));
-            drawable = (GradientDrawable)cl_info.getBackground();
-            drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
+        // Set test name and test color on the interface
+        test_name.setText(getActivity().getResources().getText(R.string.gait_name));
+        drawable = (GradientDrawable)cl_info.getBackground();
+        drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
 
-            testActivity = ((TestActivity)getActivity());
-        }
+        testActivity = ((TestActivity)getActivity());
 
-
+        // Start test
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +89,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             }
         });
 
+        // Mute sound
         btn_mute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +101,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             }
         });
 
+        // Open info/instruction slides
         btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,6 +109,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             }
         });
 
+        // Restore all variables and views to their original state
         btn_replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,7 +166,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
     }
 
-
+    // Execute the steps sequentially.
     private void continueTest() {
         switch (currentStep) {
             case 0:
@@ -219,7 +221,6 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             case 6:
                 testActivity.tts.stop();
                 drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorError));
-//                cl_info.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorError));
                 testActivity.readText(getString(R.string.gait_error));
                 onClickWholeScreen(true);
                 break;
@@ -228,13 +229,12 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 testActivity.tts.stop();
                 testActivity.fragmentTestCompleted();
                 break;
-
         }
 
         currentStep = currentStep +1;
     }
 
-
+    // Set click listener in a whole screen layout
     private void onClickWholeScreen(boolean activated) {
         if (activated) {
             whole_screen.setOnClickListener(new View.OnClickListener() {
@@ -251,10 +251,11 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
+        // This conditional makes sure that the function is never executed before it is supposed to.
         if((System.currentTimeMillis() - lastSaved) > ACCE_FILTER_DATA_MIN_TIME){
             long curTime = SystemClock.elapsedRealtime();
 
+            // If test started
             if(inProgress){
                 lastSaved = System.currentTimeMillis();
 
@@ -284,12 +285,15 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                     walkingTime = (double)walkingTime/1000;
 
                     chronometer.stop();
+                    // Save best result (shortest time walking)
                     if (walkingTime < min_walkingTime) { min_walkingTime = walkingTime; }
 
                     inProgress = false;
 
-                    if (max_change != 1f) {
-                        max_change = 1f;
+                    // If max_change is not different to original value, probably the mobile has not,
+                    // then show error
+                    if (max_change != 0.5f) {
+                        max_change = 0.5f;
                         testActivity.beep.start();
                         iv_person.setImageResource(R.drawable.ic_test_done);
                         continueTest();
@@ -311,6 +315,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
     }
 
+    // Calculate, show score and store score on TestActivity
     public void showResult(double time) {
         test_name.setText(getString(R.string.score));
         chronometer.setVisibility(View.GONE);

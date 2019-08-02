@@ -80,11 +80,13 @@ public class ScoreFragment extends Fragment {
 
         Long id = -1L;
 
+        // Determine if the fragment is called from UserFragment
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             id = bundle.getLong(SELECTED_USER);
         }
 
+        // If is called from TestActivity, get data from it
         if (id == -1) {
             testActivity = ((TestActivity)getActivity());
 
@@ -94,7 +96,7 @@ public class ScoreFragment extends Fragment {
             mBalanceScore = testActivity.getScore(1);
             mGaitScore = testActivity.getScore(2);
             mChairScore = testActivity.getScore(3);
-        } else {
+        } else { // else, get data from local data base
             User user = User.getUser(getActivity(), id);
 
             score = user.getScore();
@@ -105,6 +107,7 @@ public class ScoreFragment extends Fragment {
 
         final int pb_score;
 
+        // Calculate how much progression bar have to advance and print explaining label if full test.
         if(mCurrentTest == 0){
             pb_score = 9*score - (9*score)/18;
             constraing_explaining.setVisibility(View.VISIBLE);
@@ -118,7 +121,7 @@ public class ScoreFragment extends Fragment {
             } else {
                 tv_explaining_label.setText(getString(R.string.minimum));
             }
-        } else {
+        } else { // if not full test, show only the corresponding items.
             pb_score = 25*score;
             constraing_explaining.setVisibility(View.GONE);
 
@@ -149,6 +152,7 @@ public class ScoreFragment extends Fragment {
             }
         }
 
+        // After 0.5s, animate progressBar (circle) and score number
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -169,13 +173,16 @@ public class ScoreFragment extends Fragment {
             }
         }, 500); //will start animation in 0.5 seconds
 
+        // Show items score
         tv_balance_score.setText(Integer.toString(mBalanceScore));
         tv_gait_score.setText(Integer.toString(mGaitScore));
         tv_chair_score.setText(Integer.toString(mChairScore));
 
+        // Get selected user if any
         sharedPreferences = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
-        long selectedId = sharedPreferences.getLong("SelectedUser", -1);
+        long selectedId = sharedPreferences.getLong(SELECTED_USER, -1);
 
+        // Show save button if there is a selected user
         if(selectedId != -1 && id == -1) {
             btn_save.setVisibility(View.VISIBLE);
             mUser = User.getUser(getActivity(), selectedId);
@@ -183,12 +190,13 @@ public class ScoreFragment extends Fragment {
             Resources res = getResources();
             String text = String.format(res.getString(R.string.save_as), mUser.getName());
             tv_save_as.setText(text);
+        } else if (id != -1){ // else, hide it.
+            btn_save.setVisibility(View.INVISIBLE);
         } else {
             btn_save.setVisibility(View.GONE);
-
         }
 
-
+        // Save data in local db
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

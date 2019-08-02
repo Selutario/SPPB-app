@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/*
+* Adapter to display user list in Recyclerview.
+*/
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private ArrayList<User> mUsers;
@@ -36,6 +39,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         public ViewHolder(View itemView, clickListener clickListener) {
             super(itemView);
 
+            // Get listItemView views
             tv_score =(TextView) itemView.findViewById(R.id.tv_result);
             tv_name = (TextView) itemView.findViewById(R.id.tv_username);
             iv_deleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
@@ -43,6 +47,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             viewForeground = itemView.findViewById(R.id.viewForeground);
             this.clickListener = clickListener;
 
+            // Obtain position of clicked user
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }
@@ -84,10 +89,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         iv_deleteIcon.setImageResource(R.drawable.ic_delete);
         final User user = mUsers.get(i);
 
+        // Show a blue line if the user is selected to save future tests results
         if (user.getId() == mSelectedId) {
             iv_selected.setVisibility(View.VISIBLE);
         }
 
+        // Print score with different color depending on result
         if (user.getScore() != 0) {
             int n_score = user.getScore();
 
@@ -102,6 +109,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             }
         }
 
+        // Set name and score
         tv_score.setText(Integer.toString(user.getScore()));
         tv_name.setText(user.getName());
     }
@@ -123,21 +131,5 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         } else {
             return 0;
         }
-    }
-
-    public void removeUser(int position) {
-        mUsers.get(position).delete(context);
-        mUsers.remove(position);
-        notifyItemRemoved(position);
-    }
-
-    public void insertUser(User user, Context context) {
-        user.insert(context);
-        mUsers.add(user);
-        notifyItemInserted(getItemCount());
-    }
-
-    public User getUser(int position) {
-        return mUsers.get(position);
     }
 }

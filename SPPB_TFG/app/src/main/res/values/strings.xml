@@ -93,7 +93,8 @@
         Sit in a chair with your arms crossed over your chest.
     </string>
     <string name="chair_descr2">
-        With arms crossed, try to get up and sit twice in a row following the voice instructions.
+        If you do it with the mobile in the chest, try to get up and sit twice following
+        the voice instructions.
     </string>
     <string name="chair_descr3">
         After this, from the initial position, get up and sit 5 times in a row.

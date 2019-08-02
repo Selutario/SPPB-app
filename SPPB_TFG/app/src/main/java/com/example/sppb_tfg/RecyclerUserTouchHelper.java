@@ -6,6 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+/*
+* Class used to manage swipe to delete gesture on user list, made with Recyclerview
+*/
 public class RecyclerUserTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     public static final float ALPHA_FULL = 1.0f;

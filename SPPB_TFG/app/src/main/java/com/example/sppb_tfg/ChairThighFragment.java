@@ -69,15 +69,16 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
-        testActivity = ((TestActivity)getActivity());
-
+        // Set test name and test color on the interface
         test_name.setText(getString(R.string.chair_name));
         iv_person.setImageResource(R.drawable.ic_person_sitting);
 
         drawable = (GradientDrawable)cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
 
+        testActivity = ((TestActivity)getActivity());
 
+        // Start test
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +86,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
             }
         });
 
+        // Mute sound
         btn_mute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +98,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
             }
         });
 
+        // Open info/instruction slides
         btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +106,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
             }
         });
 
+        // Restore all variables and views to their original state
         btn_replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,6 +156,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
         sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
     }
 
+    // Execute the steps sequentially.
     private void continueTest() {
         switch (currentStep) {
             case 0:
@@ -183,7 +188,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
         currentStep = currentStep +1;
     }
 
-
+    // Used to set click listener in a whole screen layout
     private void onClickWholeScreen(boolean activated) {
         if (activated) {
             whole_screen.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +204,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        // This conditional makes sure that the function is never executed before it is supposed to.
         if ((System.currentTimeMillis() - lastSaved) > ACCE_FILTER_DATA_MIN_TIME) {
             lastSaved = System.currentTimeMillis();
 
@@ -208,10 +214,10 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
                 float y = event.values[1];
                 float z = event.values[2];
 
+                // If z axis is bigger than y axis, it means that the device is lying down, which
+                // means that the person must be sitting.
                 if (Math.abs(z) > Math.abs(y)) {
-
                     if (last_direction != "DOWN") {
-
                         tv_result.setText(Integer.toString(n_standUp));
 
                         if (n_standUp == 5){
@@ -249,6 +255,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
 
     }
 
+    // Calculate, show score and store score on TestActivity
     public void showResult(double time) {
         test_name.setText(getString(R.string.score));
 

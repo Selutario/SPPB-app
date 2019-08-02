@@ -63,6 +63,7 @@ public class MainFragment extends Fragment {
         return view;
     }
 
+    // Open test in a new activity, send test clicked by the user.
     private void test_activity(int test){
         Intent intent = new Intent(getActivity(), TestActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -70,6 +71,7 @@ public class MainFragment extends Fragment {
         startActivity(intent);
     }
 
+    // If the device has no accelerometer, the user won't be able to use the app in order to avoid errors
     public void checkAccelerometer() {
         PackageManager manager = getActivity().getPackageManager();
         boolean hasAccelerometer = manager.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER);
@@ -84,4 +86,6 @@ public class MainFragment extends Fragment {
             b.show();
         }
     }
+
+
 }

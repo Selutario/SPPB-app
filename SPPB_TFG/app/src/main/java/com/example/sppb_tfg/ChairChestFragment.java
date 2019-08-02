@@ -100,14 +100,15 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
+        // Set test name and test color on the interface
         test_name.setText(getActivity().getResources().getText(R.string.chair_name));
         iv_person.setImageResource(R.drawable.ic_person_sitting);
-
         drawable = (GradientDrawable)cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
 
         testActivity = ((TestActivity)getActivity());
 
+        // Start test
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +116,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
             }
         });
 
+        // Mute sound
         btn_mute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,6 +128,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
             }
         });
 
+        // Open info/instruction slides
         btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,6 +136,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
             }
         });
 
+        // Restore all variables and views to their original state
         btn_replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,6 +188,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
             }
         });
 
+        // Create a vector with the instructions ordered for calibration.
         instructions = new ArrayList<String>();
         instructions.add(getString(R.string.chair_instructions0));
         instructions.add(getString(R.string.chair_instructions1));
@@ -217,6 +222,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
+    // Execute the steps sequentially.
     private void continueTest() {
         switch (currentStep) {
             case 0:
@@ -265,7 +271,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         currentStep = currentStep +1;
     }
 
-
+    // Used to set click listener in a whole screen layout
     private void onClickWholeScreen(boolean activated) {
         if (activated) {
             whole_screen.setOnClickListener(new View.OnClickListener() {
@@ -284,6 +290,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
     public void onSensorChanged(SensorEvent event) {
         long curTime = System.currentTimeMillis();
 
+        // This conditional makes sure that the function is never executed before it is supposed to.
         if(inProgress && ((curTime - lastSaved) > ACCE_FILTER_DATA_MIN_TIME)) {
             lastSaved = curTime;
             long diffChanges = (curTime - lastChangeTime);
@@ -407,7 +414,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                         }
                     }
 
-                    // When there is no major change in the last second
+                    // When there is no major change in the last 2 seconds
                     if(diffChanges > 2000){
                         // Save the values depending on whether the user is standing up or sitting.
                         // and calculate the average value of the two measurements.
@@ -452,6 +459,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                 }
             }
 
+            // Only speaks if it has something different to say
             if (last_printed_direction != direction && !calibrating){
                 if (direction == "DOWN_FINISHED" && n_standUp != 0){
 
@@ -490,6 +498,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
 
     }
 
+    // Switch between sitting and standing images
     public void switchImageView() {
         if (iv_standing) {
             iv_person.setImageResource(R.drawable.ic_person_sitting);
@@ -500,6 +509,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         }
     }
 
+    // Calculate, show score and store score on TestActivity
     public void showResult(double time) {
         test_name.setText(getString(R.string.score));
 

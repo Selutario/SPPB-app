@@ -52,6 +52,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         View view = inflater.inflate(R.layout.fragment_users,null);
         final LinearLayout btn_add_user = (LinearLayout) view.findViewById(R.id.btn_add_user);
 
+        // Get selected user to save future test results, if any
         settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
         editor = settings.edit();
         selectedId = settings.getLong(SELECTED_USER, -1);
@@ -59,6 +60,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         iv_empty_box = (ImageView) view.findViewById(R.id.iv_empty_box);
         et_empty_box = (TextView) view.findViewById(R.id.tv_empty_box);
 
+        // Set recyclerview and link it with adapter, to show list of users saved on DB
         mRecyclerView = (RecyclerView) view.findViewById(R.id.main_list);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
@@ -85,7 +87,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         });
 
 
-
+        // Open AlertDialog to write name of new user
         btn_add_user.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -103,6 +105,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         showUsersList();
     }
 
+    // Show alertdialog message to confirm delete of user when swiped, and if confirmed, delete.
     @Override
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction, final int position) {
         final User toDeleteUser = usersList.get(position);
@@ -119,7 +122,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
                         if (viewHolder instanceof UserAdapter.ViewHolder) {
 
                             if (toDeleteUser.getId() == selectedId){
-                                editor.putLong("SelectedUser", -1);
+                                editor.putLong(SELECTED_USER, -1);
                                 editor.apply();
                             }
 
@@ -144,6 +147,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         b.getButton(b.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorText));
     }
 
+    // Open AlertDialog to write name of new user
     public void addUserAlertDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = this.getLayoutInflater();
@@ -155,15 +159,17 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         dialogBuilder.setPositiveButton(getActivity().getResources().getString(R.string.done),
                 new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                        User user = new User(edt.getText().toString());
-                        user.insert(getActivity());
+                        String userName = edt.getText().toString();
+                        if (userName.length() != 0) {
+                            User user = new User(edt.getText().toString());
+                            user.insert(getActivity());
 
-                        selectedId = user.getId();
-                        editor.putLong("SelectedUser", selectedId);
-                        editor.apply();
+                            selectedId = user.getId();
+                            editor.putLong(SELECTED_USER, selectedId);
+                            editor.apply();
 
-                        showUsersList();
-
+                            showUsersList();
+                        }
             }
         });
         dialogBuilder.setNegativeButton(getActivity().getResources().getString(R.string.cancel),
@@ -178,6 +184,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         b.getButton(b.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 
+    // Update user list in recyclerview
     public void showUsersList() {
         usersList = User.getUsersList(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -195,7 +202,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         }
     }
 
-
+    // Open score fragment and send corresponding user ID
     private void openDetails(Long userId) {
         ScoreFragment scoreFragment = new ScoreFragment();
         Bundle bundle = new Bundle();
@@ -204,16 +211,19 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
         transaction.replace(R.id.main_placeHolder, scoreFragment);
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
         transaction.commit();
     }
 
+    // Open user details when clicked
     @Override
     public void onUserClick(int position) {
         openDetails(usersList.get(position).getId());
     }
 
+    // Select/unselect user to save future tests results.
     @Override
     public boolean onUserLongClick(int position) {
         long newSelectedId = usersList.get(position).getId();

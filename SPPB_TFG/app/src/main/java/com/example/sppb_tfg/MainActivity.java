@@ -13,6 +13,7 @@ public class MainActivity extends FragmentActivity {
 
     int currentFragment = 0;
 
+    // Bottom navigation bar
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -45,6 +46,7 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    // Reopen the fragment which was opened before closing
     @Override
     protected void onResume() {
         super.onResume();
@@ -60,12 +62,14 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    // Store current open fragment before closing
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentFragment", currentFragment);
     }
 
+    // Restore current fragment
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -81,4 +85,15 @@ public class MainActivity extends FragmentActivity {
         transaction.commit();
     }
 
+    // Close app if backpressed on MainFragment or UsersFragment, go back if on ScoreFragment
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_placeHolder);
+        if ((fragment instanceof MainFragment) || (fragment instanceof UsersFragment)) {
+            super.onBackPressed();
+        } else if ((fragment instanceof ScoreFragment)) {
+            UsersFragment usersFragment = new UsersFragment();
+            openFragment(usersFragment);
+        }
+    }
 }

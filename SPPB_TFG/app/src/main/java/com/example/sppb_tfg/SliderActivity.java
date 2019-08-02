@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/*
+* Info/instruction slides
+*/
 public class SliderActivity extends AppCompatActivity {
 
     private ViewPager mSlideViewPager;
@@ -49,6 +52,7 @@ public class SliderActivity extends AppCompatActivity {
         addDotsIndicator(0);
         mSlideViewPager.addOnPageChangeListener(viewListener);
 
+        // Move to next slide when Next button is clicked, or exit slides if it is the last one
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +64,7 @@ public class SliderActivity extends AppCompatActivity {
             }
         });
 
+        // Move to previous slide when Next button is clicked, or exit slides if Skip button
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +77,7 @@ public class SliderActivity extends AppCompatActivity {
         });
     }
 
+    // Set slides color depending on performing test
     public void setStatusBarColor(int test) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -93,6 +99,7 @@ public class SliderActivity extends AppCompatActivity {
         }
     }
 
+    // Add dots in bottom to show in which slide is the user
     public void addDotsIndicator(int position) {
         SliderResources sliderResources = new SliderResources();
 
@@ -114,6 +121,7 @@ public class SliderActivity extends AppCompatActivity {
         }
     }
 
+    // Change Next and Back labels depending on current slide
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i1) {

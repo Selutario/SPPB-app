@@ -22,6 +22,15 @@ import android.widget.TextView;
 
 import static com.example.sppb_tfg.Constants.ACCE_FILTER_DATA_MIN_TIME;
 
+/*
+ * The objective of this algorithm is to check if the user changes his original position.
+ *
+ * To do this, the user is asked to remain still in the original position, and the accelerometer
+ * samples are used to calculate the average position of the three axes during that time.
+ * Once calibrated, if any of the axes measures a significantly different value from the average,
+ * it indicates that the user has lost balance.
+ *
+ * Made by José Luis López Sánchez.*/
 public class BalanceFragment extends Fragment implements SensorEventListener {
     private LinearLayout whole_screen;
     private ConstraintLayout cl_info;
@@ -81,10 +90,12 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
         testActivity = ((TestActivity)getActivity());
 
+        // Set test name and test color on the interface
         test_name.setText(getString(R.string.balance_name));
         drawable = (GradientDrawable)cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
 
+        // Start test
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,6 +103,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             }
         });
 
+        // Mute sound
         btn_mute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +115,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             }
         });
 
+        // Open info/instruction slides
         btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,6 +123,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             }
         });
 
+        // Restore all variables and views to their original state
         btn_replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,6 +179,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
     }
 
+    // Execute the steps sequentially.
     private void continueTest() {
         switch (currentStep) {
             case 0:
@@ -262,7 +277,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         currentStep = currentStep +1;
     }
 
-
+    // Used to set click listener in a whole screen layout
     private void onClickWholeScreen(boolean activated) {
         if (activated) {
             whole_screen.setOnClickListener(new View.OnClickListener() {
@@ -276,12 +291,10 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         }
     }
 
-    public void stopChronometer() {
-        chronometer.stop();
-    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        // This conditional makes sure that the function is never executed before it is supposed to.
         if ((System.currentTimeMillis() - lastSaved) > ACCE_FILTER_DATA_MIN_TIME) {
             lastSaved = System.currentTimeMillis();
             // Values measured on each axis.
@@ -291,7 +304,6 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
 
             // Calibration process
-
             if(ready_to_calibrate) {
                 if (!calibrated) {
                     // If there are enough samples, calculate average.
@@ -348,6 +360,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
     }
 
+    // To show result on test layout after completing the test.
     public void showResult(int score) {
         testActivity.balanceScore = score;
 
@@ -358,6 +371,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         tv_result.setVisibility(View.VISIBLE);
     }
 
+    // If user is desbalanced, this function is called to calculate score and store it on TestActivity
     public void desbalanced(long elapsedTime) {
         testActivity.readText(getString(R.string.desbalanced));
 
