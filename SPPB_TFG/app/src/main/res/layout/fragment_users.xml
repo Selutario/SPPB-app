@@ -44,7 +44,8 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.339" />
+            app:layout_constraintVertical_bias="0.339"
+            tools:ignore="contentDescription"/>
 
         <TextView
             android:id="@+id/tv_empty_box"
@@ -71,15 +72,17 @@
             android:layout_marginBottom="64dp"
             android:background="@drawable/shape_rounded_button"
             android:clickable="true"
+            android:focusable="true"
             android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="12dp"
-            android:paddingRight="16dp"
+            android:paddingEnd="12dp"
+            android:paddingStart="16dp"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="contentDescription">
 
             <ImageView
                 android:layout_width="24dp"
@@ -89,7 +92,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
                 android:text="@string/btn_add"
                 android:textAllCaps="true"
                 android:textColor="@color/colorTextOverBlue"

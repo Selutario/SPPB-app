@@ -82,7 +82,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/play"/>
 
         <ImageButton
             android:id="@+id/btn_mute"
@@ -92,7 +93,8 @@
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageButton5"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/mute"/>
 
         <ImageButton
             android:id="@+id/imageButton5"
@@ -101,19 +103,20 @@
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/info"/>
 
         <ImageButton
             android:id="@+id/btn_replay"
             style="@style/TestButtons"
             android:layout_marginStart="24dp"
-            android:contentDescription="Unable to perform test"
             android:src="@drawable/ic_round_cancel_24px"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             android:tint="@color/colorTextOverBlue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageButton5" />
+            app:layout_constraintStart_toEndOf="@+id/imageButton5"
+            android:contentDescription="@string/unable"/>
 
         <TextView
             android:id="@+id/tv_result_label"

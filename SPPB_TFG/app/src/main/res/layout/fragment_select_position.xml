@@ -31,7 +31,8 @@
         android:focusable="true"
         android:padding="3dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/chest2" />
+        android:src="@drawable/chest3"
+        android:contentDescription="@string/chest"/>
 
     <ImageButton
         android:id="@+id/btn_thigh"
@@ -45,6 +46,7 @@
         android:focusable="true"
         android:padding="3dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/thigh2" />
+        android:src="@drawable/thigh3"
+        android:contentDescription="@string/thigh"/>
 
 </LinearLayout>

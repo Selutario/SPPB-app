@@ -208,5 +208,14 @@
     <string name="slight">Slight limitation</string>
     <string name="minimum">Minimum limitation</string>
 
+    <!-- Content Description -->
+    <string name="play">Play button</string>
+    <string name="mute">Mute button</string>
+    <string name="info">Information button</string>
+    <string name="unable">Unable to perform test button</string>
+    <string name="chest">Chest</string>
+    <string name="thigh">Thigh</string>
+
+
 
 </resources>
