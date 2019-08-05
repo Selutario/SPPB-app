@@ -112,7 +112,9 @@ public class ScoreFragment extends Fragment {
             pb_score = 9*score - (9*score)/18;
             constraing_explaining.setVisibility(View.VISIBLE);
 
-            if(score <= 3){
+            if(score == 0) {
+                constraing_explaining.setVisibility(View.GONE);
+            } else if(score <= 3){
                 tv_explaining_label.setText(getString(R.string.severe));
             } else if (score <= 6) {
                 tv_explaining_label.setText(getString(R.string.moderate));

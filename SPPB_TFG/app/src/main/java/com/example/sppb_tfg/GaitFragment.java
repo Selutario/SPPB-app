@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,8 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
     // Accelerometer and time variables specific for gait test
     private final int TIME_THRSHOLD = 2000; // Miliseconds
-    private float max_change = 0.5f;
+    private final float CHANGE_THRSHOLD = 0.7f;
+    private float max_change = CHANGE_THRSHOLD;
     private float yHistory = 0;
     long diffChanges;
     private long lastChangeTime;
@@ -122,6 +124,8 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                     walkingTime = 0;
                     min_walkingTime = 100;
                     inProgress = false;
+                    max_change = CHANGE_THRSHOLD;
+                    yHistory = 0;
 
                     chronometer.stop();
                     chronometer.setBase(SystemClock.elapsedRealtime());
@@ -266,8 +270,13 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 }
 
                 // We obtain the difference of acceleration with respect to the previous measurement.
-                if(event.values[1] > 0)
-                    yChange = yHistory - event.values[1];
+                if(event.values[1] > 0){
+                    yChange =  yHistory - event.values[1];
+                    yHistory = event.values[1];
+                }
+
+
+
 
                 if (yChange > max_change/3f){
                     lastChangeTime = curTime;
@@ -292,8 +301,8 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
                     // If max_change is not different to original value, probably the mobile has not,
                     // then show error
-                    if (max_change != 0.5f) {
-                        max_change = 0.5f;
+                    if (max_change != CHANGE_THRSHOLD) {
+                        max_change = CHANGE_THRSHOLD;
                         testActivity.beep.start();
                         iv_person.setImageResource(R.drawable.ic_test_done);
                         continueTest();

@@ -76,7 +76,7 @@
             android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingEnd="12dp"
+            android:paddingEnd="20dp"
             android:paddingStart="16dp"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:layout_constraintBottom_toBottomOf="parent"
