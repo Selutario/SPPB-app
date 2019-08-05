@@ -211,4 +211,12 @@
     <string name="slight">Limitación leve</string>
     <string name="minimum">Limitación mínima</string>
 
+    <!-- Content Description -->
+    <string name="play">Play</string>
+    <string name="mute">Silenciar</string>
+    <string name="info">Información</string>
+    <string name="unable">Incapaz de realizar test.</string>
+    <string name="chest">Pecho</string>
+    <string name="thigh">Muslo</string>
+
 </resources>
