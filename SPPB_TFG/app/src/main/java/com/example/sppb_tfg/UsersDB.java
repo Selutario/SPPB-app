@@ -13,5 +13,6 @@ public class UsersDB {
         public static final String SPEED_SCORE = "speed_score";
         public static final String CHAIR_SCORE = "chair_score";
         public static final String TEST_DATE = "test_date";
+        public static final String AVERAGE_SPEED = "average_speed";
     }
 }

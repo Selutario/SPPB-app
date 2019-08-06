@@ -28,6 +28,8 @@ public class TestActivity extends FragmentActivity {
     public int gaitScore = 0;
     public int chairScore = 0;
 
+    public double averageSpeed = 0;
+
     public TextToSpeech tts;
     public boolean isMuted = false;
     public String mostRecentUtteranceID;
@@ -254,5 +256,9 @@ public class TestActivity extends FragmentActivity {
         }
 
         return score;
+    }
+
+    public double getAverageSpeed() {
+        return averageSpeed;
     }
 }

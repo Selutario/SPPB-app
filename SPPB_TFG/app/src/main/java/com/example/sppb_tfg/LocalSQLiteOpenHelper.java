@@ -19,8 +19,8 @@ public class LocalSQLiteOpenHelper extends SQLiteOpenHelper {
                 + UsersDB.UserEntry.BALANCE_SCORE + " INTEGER,"
                 + UsersDB.UserEntry.SPEED_SCORE+ " INTEGER,"
                 + UsersDB.UserEntry.CHAIR_SCORE + " INTEGER,"
-                + UsersDB.UserEntry.TEST_DATE + " TEXT )");
-
+                + UsersDB.UserEntry.TEST_DATE + " TEXT, "
+                + UsersDB.UserEntry.AVERAGE_SPEED + " REAL)");
     }
 
     @Override

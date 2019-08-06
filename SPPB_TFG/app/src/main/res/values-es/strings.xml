@@ -205,6 +205,7 @@
     <string name="points">Puntos</string>
     <string name="save_as">Guardar como %1$s</string>
     <string name="saved">Guardado</string>
+    <string name="average_speed">Velocidad media de marcha</string>
 
     <string name="severe">Limitación severa</string>
     <string name="moderate">Limitación moderada</string>

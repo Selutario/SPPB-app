@@ -202,6 +202,7 @@
     <string name="points">Points</string>
     <string name="save_as">Save as %1$s</string>
     <string name="saved">Saved</string>
+    <string name="average_speed">Average walking speed</string>
 
     <string name="severe">Severe limitation</string>
     <string name="moderate">Moderate limitation</string>

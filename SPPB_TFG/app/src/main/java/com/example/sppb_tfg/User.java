@@ -17,6 +17,7 @@ public class User {
     int speedScore;
     int chairScore;
     String testDate;
+    double averageSpeed;
     /*String[] scores;
     String[] testDates;*/
 
@@ -27,6 +28,7 @@ public class User {
         speedScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.SPEED_SCORE));
         chairScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.CHAIR_SCORE));
         testDate = cursor.getString(cursor.getColumnIndex(UsersDB.UserEntry.TEST_DATE));
+        averageSpeed = cursor.getDouble(cursor.getColumnIndex(UsersDB.UserEntry.AVERAGE_SPEED));
 /*      scores = cursor.getString(cursor.getColumnIndex("scores")).split(";");
         testDates = cursor.getString(cursor.getColumnIndex("test_dates")).split(";")*/
     };
@@ -36,6 +38,7 @@ public class User {
         setBalanceScore(0);
         setSpeedScore(0);
         setChairScore(0);
+
         setTestDate("11/07/2019");
     }
 
@@ -87,6 +90,14 @@ public class User {
         this.chairScore = chairScore;
     }
 
+    public void setAverageSpeed(double averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
+
+    public double getAverageSpeed() {
+        return averageSpeed;
+    }
+
     public String getTestDate() {
         return testDate;
     }
@@ -110,7 +121,8 @@ public class User {
                         UsersDB.UserEntry.BALANCE_SCORE,
                         UsersDB.UserEntry.SPEED_SCORE,
                         UsersDB.UserEntry.CHAIR_SCORE,
-                        UsersDB.UserEntry.TEST_DATE},
+                        UsersDB.UserEntry.TEST_DATE,
+                        UsersDB.UserEntry.AVERAGE_SPEED},
                 null, null, null, null, "name", null);
 
 
@@ -134,7 +146,8 @@ public class User {
                         UsersDB.UserEntry.BALANCE_SCORE,
                         UsersDB.UserEntry.SPEED_SCORE,
                         UsersDB.UserEntry.CHAIR_SCORE,
-                        UsersDB.UserEntry.TEST_DATE},
+                        UsersDB.UserEntry.TEST_DATE,
+                        UsersDB.UserEntry.AVERAGE_SPEED},
                 null, null, null, null, "name", null);
 
 
@@ -161,7 +174,8 @@ public class User {
                         UsersDB.UserEntry.BALANCE_SCORE,
                         UsersDB.UserEntry.SPEED_SCORE,
                         UsersDB.UserEntry.CHAIR_SCORE,
-                        UsersDB.UserEntry.TEST_DATE},
+                        UsersDB.UserEntry.TEST_DATE,
+                        UsersDB.UserEntry.AVERAGE_SPEED},
                 where, null, null, null, "name", null);
 
         if(cursor.moveToFirst())
@@ -180,6 +194,7 @@ public class User {
         values.put(UsersDB.UserEntry.SPEED_SCORE, this.speedScore);
         values.put(UsersDB.UserEntry.CHAIR_SCORE, this.chairScore);
         values.put(UsersDB.UserEntry.TEST_DATE, this.testDate);
+        values.put(UsersDB.UserEntry.AVERAGE_SPEED, this.averageSpeed);
 
 /*        if(this.scores!=null) {
             StringBuilder listScores = new StringBuilder();
@@ -212,6 +227,7 @@ public class User {
         values.put(UsersDB.UserEntry.SPEED_SCORE, this.speedScore);
         values.put(UsersDB.UserEntry.CHAIR_SCORE, this.chairScore);
         values.put(UsersDB.UserEntry.TEST_DATE, this.testDate);
+        values.put(UsersDB.UserEntry.AVERAGE_SPEED, this.averageSpeed);
 
         String whereClause = "_id=?" ;
         String[] whereArgs = new String[1];
@@ -225,8 +241,6 @@ public class User {
 
     // Delete user
     public void delete(Context context) {
-
-
         String whereClause = "_id=?" ;
         String[] whereArgs = new String[1];
         whereArgs[0] = String.valueOf(this.id);

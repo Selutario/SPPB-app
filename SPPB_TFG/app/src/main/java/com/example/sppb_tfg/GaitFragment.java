@@ -328,7 +328,9 @@ public class GaitFragment extends Fragment implements SensorEventListener {
     public void showResult(double time) {
         test_name.setText(getString(R.string.score));
         chronometer.setVisibility(View.GONE);
+
         int score = 0;
+        double averageSpeed = 4/time;
 
         if (time < 4.82) {
             score = 4;
@@ -341,6 +343,8 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         }
 
         testActivity.gaitScore = score;
+        testActivity.averageSpeed = averageSpeed;
+
         tv_result.setText(Integer.toString(score));
         tv_result.setVisibility(View.VISIBLE);
         tv_result_label.setVisibility(View.VISIBLE);
