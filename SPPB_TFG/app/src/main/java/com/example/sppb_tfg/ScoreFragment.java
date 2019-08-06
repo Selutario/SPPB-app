@@ -134,6 +134,7 @@ public class ScoreFragment extends Fragment {
         } else { // if not full test, show only the corresponding items.
             pb_score = 25*score;
             constraing_explaining.setVisibility(View.GONE);
+            constraing_average_speed.setVisibility(View.GONE);
 
             if (mCurrentTest == 1){
                 iv_gait_color.setVisibility(View.GONE);
