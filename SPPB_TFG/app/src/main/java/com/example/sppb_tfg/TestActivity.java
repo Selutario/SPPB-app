@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Random;
 
 public class TestActivity extends FragmentActivity {
 

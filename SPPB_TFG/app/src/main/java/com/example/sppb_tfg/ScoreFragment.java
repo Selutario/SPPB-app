@@ -170,13 +170,13 @@ public class ScoreFragment extends Fragment {
             @Override
             public void run() {
                 ValueAnimator animator = new ValueAnimator();
-                animator.setObjectValues(0, score);// here you set the range, from 0 to "count" value
+                animator.setObjectValues(0, score);
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     public void onAnimationUpdate(ValueAnimator animation) {
                         tv_score.setText(String.valueOf(animation.getAnimatedValue()));
                     }
                 });
-                animator.setDuration(2000); // here you set the duration of the anim
+                animator.setDuration(2000);
                 animator.start();
 
                 ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", pb_score);

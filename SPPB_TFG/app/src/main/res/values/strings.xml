@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">SPPB</string>
     <string name="title_home">Home</string>
     <string name="title_users">Users</string>
@@ -211,9 +211,11 @@
 
     <!-- Content Description -->
     <string name="play">Play</string>
-    <string name="mute">Mute</string>
+    <string name="mute">Mute sound</string>
+    <string name="unmute">Unmute sound</string>
     <string name="info">Information</string>
     <string name="unable">Unable to perform test</string>
+    <string name="repeat">Repeat test</string>
     <string name="chest">Chest</string>
     <string name="thigh">Thigh</string>
 

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 /*
 * Show two options, so the user can choose to perform Chair test with device on the chest or leg.

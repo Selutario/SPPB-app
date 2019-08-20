@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/colorTextOverBlue">
+    android:color="@color/colorBalance">
 
     <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
-            <solid android:color="@color/colorGaitSpeed" />
+            <solid android:color="@color/colorBalance" />
             <corners android:radius="12dp" />
         </shape>
     </item>
 
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
+            <stroke
+                android:width="3dp"
+                android:color="@color/colorBalance"/>
             <gradient
                 android:angle="180"
-                android:startColor="@color/colorGaitSpeedLighter"
-                android:endColor="@color/colorGaitSpeedLight"
-                android:centerY="00%p"
+                android:startColor="@color/colorBackground"
+                android:endColor="@color/colorBackground"
                 android:type="linear" />
             <corners android:radius="12dp" />
         </shape>
     </item>
 </ripple>
-
-    <!---->
-
-
-    <!-- COLOR FILLED BUTTONS -->
-
-
-

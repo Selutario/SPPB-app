@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.TooltipCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,6 +96,10 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         drawable = (GradientDrawable)cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
 
+        TooltipCompat.setTooltipText(btn_info, getString(R.string.info));
+        TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
+        TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
+
         // Start test
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,8 +114,10 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             public void onClick(View view) {
                 if (testActivity.switchMute()) {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_off);
+                    TooltipCompat.setTooltipText(btn_mute, getString(R.string.unmute));
                 } else {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_up);
+                    TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
                 }
             }
         });
@@ -129,7 +136,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             public void onClick(View view) {
                 testActivity.tts.stop();
 
-                if(calibrated){
+                if(calibrated && currentStep != 3 && currentStep != 5 && currentStep != 7){
                     currentStep = 0;
 
                     sample_index = 0;
@@ -144,6 +151,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                     iv_person.setImageResource(R.drawable.ic_person);
 
                     btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                    TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
                     chronometer.setVisibility(View.GONE);
                     btn_play.setImageResource(R.drawable.ic_round_play_arrow);
                     btn_play.setVisibility(View.VISIBLE);
@@ -151,6 +159,11 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                     tv_result.setVisibility(View.GONE);
                     tv_result_label.setVisibility(View.GONE);
                 } else {
+                    if(currentStep == 5) {
+                        testActivity.balanceScore = 1;
+                    } else if (currentStep == 7) {
+                        testActivity.balanceScore = 2;
+                    }
                     testActivity.fragmentTestCompleted();
                 }
             }
@@ -203,7 +216,6 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 test_name.setText(getString(R.string.balance_name1));
                 testActivity.readText(getString(R.string.balance_step3));
                 onClickWholeScreen(true);
-                btn_replay.setImageResource(R.drawable.ic_round_replay);
                 btn_play.setVisibility(View.GONE);
                 chronometer.setVisibility(View.VISIBLE);
                 break;
@@ -212,6 +224,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 testActivity.tts.stop();
                 testActivity.readText(getString(R.string.start));
                 onClickWholeScreen(false);
+                btn_replay.setImageResource(R.drawable.ic_round_replay);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.repeat));
                 inProgress = true;
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.start();
@@ -221,6 +235,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 testActivity.tts.stop();
                 test_name.setText(getString(R.string.balance_name2));
                 testActivity.readText(getString(R.string.balance_step4));
+                btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
                 onClickWholeScreen(true);
                 inProgress = false;
                 break;
@@ -230,6 +246,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 testActivity.readText(getString(R.string.start));
                 iv_person.setImageResource(R.drawable.ic_person_balan_2);
                 onClickWholeScreen(false);
+                btn_replay.setImageResource(R.drawable.ic_round_replay);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.repeat));
                 inProgress = true;
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.start();
@@ -240,6 +258,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 test_name.setText(getString(R.string.balance_name3));
                 testActivity.readText(getString(R.string.balance_step5));
                 onClickWholeScreen(true);
+                btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
                 inProgress = false;
                 break;
 
@@ -248,6 +268,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 testActivity.readText(getString(R.string.start));
                 iv_person.setImageResource(R.drawable.ic_person_balan_3);
                 onClickWholeScreen(false);
+                btn_replay.setImageResource(R.drawable.ic_round_replay);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.repeat));
                 inProgress = true;
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.start();
@@ -327,7 +349,6 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                         measured_y[sample_index % MAX_INDEX] = y;
                         measured_z[sample_index % MAX_INDEX] = z;
                         sample_index++;
-
                     }
                 }
             }

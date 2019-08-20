@@ -11,7 +11,7 @@ import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.support.v7.widget.TooltipCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +78,10 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
 
         testActivity = ((TestActivity)getActivity());
 
+        TooltipCompat.setTooltipText(btn_info, getString(R.string.info));
+        TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
+        TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
+
         // Start test
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,8 +96,10 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
             public void onClick(View view) {
                 if (testActivity.switchMute()) {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_off);
+                    TooltipCompat.setTooltipText(btn_mute, getString(R.string.unmute));
                 } else {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_up);
+                    TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
                 }
             }
         });
@@ -111,9 +117,10 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
             @Override
             public void onClick(View view) {
                 testActivity.tts.stop();
-                if (currentStep < 2) {
+                /*if (currentStep < 2) {
                     testActivity.fragmentTestCompleted();
-                } else {
+                } else {*/
+                if (currentStep >= 2){
                     currentStep = 0;
                     inProgress = false;
                     last_direction = "DOWN";
@@ -123,12 +130,15 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
                     iv_person.setImageResource(R.drawable.ic_person_sitting);
                     tv_result.setText("0");
                     btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                    TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
                     tv_result.setVisibility(View.GONE);
                     tv_result_label.setVisibility(View.GONE);
                     btn_play.setVisibility(View.VISIBLE);
 
                     SelectPositionFragment selectPositionFragment = new SelectPositionFragment();
                     testActivity.openFragment(selectPositionFragment, true);
+                } else {
+                    testActivity.fragmentTestCompleted();
                 }
             }
         });
@@ -170,6 +180,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
                 onClickWholeScreen(false);
                 testActivity.readText(getString(R.string.chair_thigh_step1));
                 btn_replay.setImageResource(R.drawable.ic_round_replay);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.repeat));
                 inProgress = true;
                 break;
 

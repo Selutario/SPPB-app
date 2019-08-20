@@ -17,4 +17,10 @@ public class Constants {
 
     // Time between each execution of onSensorChanged functions.
     public static final int ACCE_FILTER_DATA_MIN_TIME = 100; // 100 ms
+
+    // Tags for buttons
+    public static final String MUTE = "mute";
+    public static final String UNMUTE = "unmute";
+    public static final String UNABLE = "unable";
+    public static final String REPEAT = "repeat";
 }

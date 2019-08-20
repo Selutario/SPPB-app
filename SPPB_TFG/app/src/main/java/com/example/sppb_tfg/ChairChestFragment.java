@@ -11,7 +11,7 @@ import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.support.v7.widget.TooltipCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +107,10 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
 
         testActivity = ((TestActivity)getActivity());
 
+        TooltipCompat.setTooltipText(btn_info, getString(R.string.info));
+        TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
+        TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
+
         // Start test
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,8 +125,10 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
             public void onClick(View view) {
                 if (testActivity.switchMute()) {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_off);
+                    TooltipCompat.setTooltipText(btn_mute, getString(R.string.unmute));
                 } else {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_up);
+                    TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
                 }
             }
         });
@@ -171,6 +176,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                     drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
                     tv_result.setText("0");
                     btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                    TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
                     tv_result.setVisibility(View.GONE);
                     tv_result_label.setVisibility(View.GONE);
                     btn_play.setEnabled(true);
@@ -237,6 +243,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                 onClickWholeScreen(false);
                 btn_play.setEnabled(false);
                 btn_replay.setImageResource(R.drawable.ic_round_replay);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.repeat));
                 inProgress = true;
                 btn_play.animate().rotation(360).setDuration(2000).start();
                 break;

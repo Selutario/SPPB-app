@@ -11,7 +11,7 @@ import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.support.v7.widget.TooltipCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +83,10 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
         testActivity = ((TestActivity)getActivity());
 
+        TooltipCompat.setTooltipText(btn_info, getString(R.string.info));
+        TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
+        TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
+
         // Start test
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,8 +101,10 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             public void onClick(View view) {
                 if (testActivity.switchMute()) {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_off);
+                    TooltipCompat.setTooltipText(btn_mute, getString(R.string.unmute));
                 } else {
                     btn_mute.setImageResource(R.drawable.ic_round_volume_up);
+                    TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
                 }
             }
         });
@@ -117,7 +123,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             public void onClick(View view) {
                 testActivity.tts.stop();
 
-                if(currentStep >= 1){
+                if(currentStep >= 1 && currentStep != 3){
                     onClickWholeScreen(false);
 
                     currentStep = 0;
@@ -132,6 +138,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
 
                     drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
                     btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                    TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
                     tv_result.setVisibility(View.GONE);
                     tv_result_label.setVisibility(View.GONE);
                     chronometer.setVisibility(View.GONE);
@@ -139,6 +146,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                     btn_play.setVisibility(View.VISIBLE);
                     iv_person.setImageResource(R.drawable.ic_person);
                 } else {
+                    showResult(min_walkingTime);
                     testActivity.fragmentTestCompleted();
                 }
             }
@@ -178,6 +186,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 testActivity.readText(getString(R.string.gait_step1));
                 onClickWholeScreen(true);
                 btn_replay.setImageResource(R.drawable.ic_round_replay);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.repeat));
                 chronometer.setVisibility(View.VISIBLE);
                 btn_play.setVisibility(View.GONE);
                 break;
@@ -196,8 +205,10 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 testActivity.tts.stop();
                 test_name.setText(getString(R.string.gait_name2));
                 testActivity.readText(getString(R.string.gait_step2));
-                chronometer.setBase(SystemClock.elapsedRealtime());
                 onClickWholeScreen(true);
+                btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
+                chronometer.setBase(SystemClock.elapsedRealtime());
                 break;
 
             case 3:
@@ -205,6 +216,8 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 testActivity.readText(getString(R.string.start));
                 iv_person.setImageResource(R.drawable.ic_person_gait);
                 onClickWholeScreen(false);
+                btn_replay.setImageResource(R.drawable.ic_round_replay);
+                TooltipCompat.setTooltipText(btn_replay, getString(R.string.repeat));
                 inProgress = true;
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.start();
@@ -274,8 +287,6 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                     yChange =  yHistory - event.values[1];
                     yHistory = event.values[1];
                 }
-
-
 
 
                 if (yChange > max_change/3f){
