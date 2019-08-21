@@ -146,7 +146,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                     btn_play.setVisibility(View.VISIBLE);
                     iv_person.setImageResource(R.drawable.ic_person);
                 } else {
-                    showResult(min_walkingTime);
+                    calculateScore(min_walkingTime);
                     testActivity.fragmentTestCompleted();
                 }
             }
@@ -334,14 +334,8 @@ public class GaitFragment extends Fragment implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-
-    // Calculate, show score and store score on TestActivity
-    public void showResult(double time) {
-        test_name.setText(getString(R.string.score));
-        chronometer.setVisibility(View.GONE);
-
+    public int calculateScore(double time){
         int score = 0;
-        double averageSpeed = 4/time;
 
         if (time < 4.82) {
             score = 4;
@@ -353,8 +347,19 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             score = 1;
         }
 
+        testActivity.averageSpeed = 4/time;
         testActivity.gaitScore = score;
-        testActivity.averageSpeed = averageSpeed;
+
+        return score;
+    }
+
+
+    // Calculate, show score and store score on TestActivity
+    public void showResult(double time) {
+        test_name.setText(getString(R.string.score));
+        chronometer.setVisibility(View.GONE);
+
+        int score = calculateScore(time);
 
         tv_result.setText(Integer.toString(score));
         tv_result.setVisibility(View.VISIBLE);
