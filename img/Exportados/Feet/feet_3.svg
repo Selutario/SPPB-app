@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 352.61 352.61" style="enable-background:new 0 0 352.61 352.61;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#F2F2F2;}
+</style>
+<g id="Capa_3">
+	<circle class="st0" cx="176" cy="177" r="175.31"/>
+</g>
+<g id="Pie_derecho">
+	<circle cx="203.81" cy="230.81" r="35.5"/>
+	<circle cx="198.81" cy="322.81" r="23.5"/>
+	<path d="M171.31,245.31c0,0,9.76,10.13,11,28c0.74,10.72-4.22,23.5-7,46l47,1c0,0-0.5-9.17,4-22c3.16-9,7.8-18.35,12-32
+		c4-13,6-19,1-41L171.31,245.31z"/>
+	<ellipse transform="matrix(0.9829 -0.1842 0.1842 0.9829 -31.6065 35.5587)" cx="175.57" cy="187.88" rx="8" ry="14"/>
+	<ellipse transform="matrix(0.1494 -0.9888 0.9888 0.1494 -3.0456 365.4146)" cx="210.87" cy="184.48" rx="8.5" ry="6"/>
+	<ellipse transform="matrix(1 -7.550380e-03 7.550380e-03 1 -1.3747 1.4675)" cx="193.67" cy="182.81" rx="6" ry="8.5"/>
+	<ellipse transform="matrix(0.1318 -0.9913 0.9913 0.1318 9.0525 390.7753)" cx="227.61" cy="190.22" rx="8.5" ry="6"/>
+	<ellipse transform="matrix(0.2673 -0.9636 0.9636 0.2673 -17.2872 379.3226)" cx="240.8" cy="201.03" rx="8.05" ry="5.68"/>
+</g>
+<g id="Pie_izquierdo_1_">
+	<circle cx="145.17" cy="66.81" r="35.5"/>
+	<circle cx="150.17" cy="158.81" r="23.5"/>
+	<path d="M177.67,81.31c0,0-9.76,10.13-11,28c-0.74,10.72,4.22,23.5,7,46l-47,1c0,0,0.5-9.17-4-22c-3.16-9-7.8-18.35-12-32
+		c-4-13-6-19-1-41L177.67,81.31z"/>
+	<ellipse transform="matrix(0.1842 -0.9829 0.9829 0.1842 117.9871 189.9224)" cx="173.41" cy="23.88" rx="14" ry="8"/>
+	<ellipse transform="matrix(0.9888 -0.1494 0.1494 0.9888 -1.5094 20.8688)" cx="138.1" cy="20.48" rx="6" ry="8.5"/>
+	<ellipse transform="matrix(7.550380e-03 -1 1 7.550380e-03 135.3282 173.9684)" cx="155.31" cy="18.81" rx="8.5" ry="6"/>
+	<ellipse transform="matrix(0.9913 -0.1318 0.1318 0.9913 -2.3967 16.2222)" cx="121.37" cy="26.22" rx="6" ry="8.5"/>
+	<ellipse transform="matrix(0.9636 -0.2673 0.2673 0.9636 -5.962 30.2675)" cx="108.18" cy="37.03" rx="5.68" ry="8.05"/>
+</g>
+</svg>

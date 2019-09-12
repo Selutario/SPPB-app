@@ -1,0 +1,196 @@
+\chapter{Análisis}
+
+En esta sección vamos a detallar toda la especificación que hay que realizar antes de comenzar a trabajar en cualquier proyecto software. Para ello, detallaremos los actores que participan, los requisitos funcionales, no funcionales y de información, entre otros aspectos.
+
+\section{Descripción de los actores}
+
+Debido a que la aplicación está orientada al uso local y exclusivo en el teléfono en el que sea instalada y que no hay necesidad de gestionarla de forma externa, habrá solo dos actores, uno principal al que llamaremos \textbf{usuario}, y un segundo actor, el \textbf{administrador}.
+
+El \textbf{usuario} será la persona que se descargue la aplicación con el objetivo de realizar (él mismo o una tercera persona) el test SPPB. En principio, puesto que se buscará diseñar la aplicación para que sea lo más simple y explicativa posible, el usuario no debería necesitar de ninguna experiencia previa. 
+
+El \textbf{administrador} se encargará únicamente de detectar, analizar y corregir errores que se puedan ir apareciendo en la aplicación, así como actualizarla regularmente con nuevas opciones y cambios que la mejoren.
+
+\section{Análisis de requisitos}
+
+Podemos encontrar tres tipos de requisitos, los \textbf{requisitos funcionales (RF)} que trazarán la interacción producida entre el sistema y el entorno, los \textbf{requisitos no funcionales (RNF)} que describirán características de la aplicación que no tienen relación con el comportamiento de la misma y \textbf{requisitos de información (RI)}, aquellos relacionados con la gestión y almacenamiento de información en el sistema.
+
+\subsection{Requisitos funcionales}
+
+\begin{itemize}
+    \item \textbf{RF 1: Registro/creación de usuario.}
+    \begin{itemize}
+        \item El sistema permitirá al usuario escribir un nombre identificativo.
+        \item El sistema creará la entrada correspondiente en la base de datos y lo almacenará.
+        \item Se marcará el usuario recién creado como seleccionado.
+    \end{itemize}
+    
+    \item \textbf{RF 2: Eliminación de usuario.} 
+    \begin{itemize}
+        \item Se podrá elegir un usuario a borrar mediante gesto de arrastre hacia la izquierda.
+        \item El sistema comprobará la existencia del usuario a borrar.
+        \item El sistema lo buscará y eliminará de la base de datos.
+        \item En caso de que el usuario estuviera seleccionado para guardar resultados de test, el sistema lo deseleccionará antes del borrado.
+    \end{itemize}
+    
+    \item \textbf{RF 3: Visualización de usuarios.} 
+    \begin{itemize}
+        \item El sistema mostrará una lista con todos los usuarios creados.
+        \item Se mostrará información básica de cada uno de los usuarios de la lista (nombre y puntuación).
+    \end{itemize}
+    
+    \item \textbf{RF 4: Selección/deselección de usuario.} 
+    \begin{itemize}
+        \item Se podrá seleccionar alguno de los usuarios guardados mediante una pulsación larga.
+        \item El sistema mostrará y almacenará qué usuario está seleccionado desde ese momento en adelante.
+        \item El usuario que se muestre como seleccionado almacenará los resultados de los futuros tests realizados previa confirmación.
+        \item Se podrá deseleccionar un usuario previamente seleccionado mediante una pulsación larga.
+    \end{itemize}
+    
+    \item \textbf{RF 5: Pantalla principal.} 
+    \begin{itemize}
+        \item Contará con cuatro botones, tres de ellos permitirán elegir una de las pruebas SPPB, el cuarto permitirá realizar las tres pruebas seguidas.
+        \item Al pulsar uno de los botones, se abrirá una nueva actividad que permitirá realizar la acción deseada.
+    \end{itemize}
+    
+    \item \textbf{RF 6: Instrucciones escritas.} 
+    \begin{itemize}
+        \item Si es la primera vez que el usuario abre un determinado test, se mostrará de forma automática una actividad con instrucciones escritas y visuales para su realización.
+        \item Existirá un botón que permita volver a abrir las instrucciones cuando el usuario desee.
+        \item Las instrucciones podrán cerrarse en cualquier momento.
+        \item Las instrucciones mostradas serán distintas según el test desde el que se abran.
+    \end{itemize}
+    
+    \item \textbf{RF 7: Instrucciones sonoras.} 
+    \begin{itemize}
+        \item Tras pulsar el botón de inicio (Play), se dictarán instrucciones de voz para guiar al usuario a través de la prueba.
+        \item Las instrucciones de voz serán diferentes según el test seleccionado.
+    \end{itemize}
+    
+    \item \textbf{RF 8: Silenciar instrucciones sonoras.} 
+    \begin{itemize}
+        \item Habrá un botón que permita silenciar las instrucciones sonoras al pulsarlo.
+        \item Las instrucciones sonoras podrán volver a ser activadas tras pulsar el botón de nuevo.
+    \end{itemize}
+    
+    \item \textbf{RF 9: Incapacidad para realizar la prueba.} 
+    \begin{itemize}
+        \item Habrá un botón que permita marcar la prueba como incapaz de realizarse.
+        \item El sistema llevará automáticamente al usuario a la siguiente prueba (si procede) tras pulsar el botón.
+    \end{itemize}
+    
+    \item \textbf{RF 10: Implementación pruebas SPPB.} 
+    \begin{itemize}
+        \item Deberán poder ejecutarse todas las pruebas que componen el test SPPB.
+        \item Cada una de las pruebas debe realizarse conforme su diseño clínico.
+    \end{itemize}
+    
+    \item \textbf{RF 11: Ejecución de la prueba.} 
+    \begin{itemize}
+        \item Cada prueba contará con distintos pasos por los que el sistema hará avanzar al usuario automáticamente.
+        \item El usuario podrá tocar cualquier parte de la pantalla para continuar con la prueba.
+    \end{itemize}
+    
+    \item \textbf{RF 12: Información del estado de ejecución de la prueba.} 
+    \begin{itemize}
+        \item En cada prueba, habrá un indicador que mostrará con texto el tiempo transcurrido en segundos o las repeticiones realizadas.
+        \item Al finalizar la prueba, se mostrará una vista previa de los puntos obtenidos en dicha prueba.
+    \end{itemize}
+    
+    \item \textbf{RF 13: Cambio automático de imágenes.} 
+    \begin{itemize}
+        \item La prueba irá acompañada con una explicación visual del estado actual de la misma.
+        \item La explicación visual mostrará automáticamente en qué posición de equilibrio se encuentra el usuario, si se ha movido, si está caminando o parado, y si está de pie o sentado.
+    \end{itemize}
+    
+    \item \textbf{RF 14: Tratado de datos procedentes del sensor acelerómetro.} 
+    \begin{itemize}
+        \item Se obtendrán datos del acelerómetro presente en el teléfono durante la ejecución de cada test.
+        \item Se validarán y compararán los datos para comprobar los movimientos del usuario.
+        \item El sistema determinará la duración de los movimientos del usuario y establecerá una puntuación en función de la misma.
+    \end{itemize}
+    
+    \item \textbf{RF 15: Pantalla con puntuación.} 
+    \begin{itemize}
+        \item Se mostrará la puntuación total obtenida.
+        \item Se mostrará la puntuación individual de cada una de las pruebas realizadas.
+        \item Se indicará el nivel de limitación del usuario en base al resultado alcanzado.
+        \item De haber realizado la prueba de velocidad de marcha, se mostrará el cálculo de velocidad media a parte de la puntuación.
+        \item De haber algún usuario seleccionado antes de comenzar los tests, se dará la posibilidad de guardar el resultado en dicho usuario.
+    \end{itemize}
+    
+    \item \textbf{RF 16: Elegir posición del teléfono para test de silla.} 
+    \begin{itemize}
+        \item Se dará la posibilidad al usuario de elegir colocar el dispositivo en el pecho o en el muslo antes de realizar el test de levantarse de la silla.
+        \item Los datos del acelerómetro se interpretarán de forma distinta según la elección del usuario.
+    \end{itemize}
+\end{itemize}
+
+\newpage
+
+\subsection{Requisitos no funcionales}
+
+\begin{itemize}
+    \item \textbf{RNF 1:} La aplicación funcionará correctamente en la mayoría de teléfonos con API Android igual o superior a 21.
+    \item \textbf{RNF 2:} \label{RNF:2} El peso de la aplicación no debe ser superior a los 7MB para poder ser usada en teléfonos con pocos recursos.
+    \item \textbf{RNF 3:} La navegación entre las distintas pestañas y actividades debe ser fluida y rápida.
+    \item \textbf{RNF 4:} El diseño ha de ser sencillo e intuitivo, y seguir la doctrina Material Theming en la medida de lo posible.
+    \item \textbf{RNF 5:} \label{RNF:5} Todas las imágenes e iconos utilizados deben ser libres de derechos de autor o ser creadas ad hoc por los desarrolladores de la aplicación con el propósito de usarse en ella.
+    \item \textbf{RNF 6:} La lista de usuarios almacenados ha de organizarse por orden alfabético del nombre.
+    \item \textbf{RNF 7:} La pantalla ha de mantenerse encendida de forma continua durante la ejecución de los tests, pero no una vez finalizan.
+    \item \textbf{RNF 8:} Se debe evitar un gasto desproporcionado de la batería suprimiendo el uso del acelerómetro una vez fuera de la actividad de los tests.
+    \item \textbf{RNF 9:} No se han de requerir permisos especiales para el uso de la primera versión de la aplicación.
+    \item \textbf{RNF 10:} Se evitará el uso del sensor giroscopio para permitir que teléfonos de baja gama utilicen la aplicación.
+\end{itemize}
+
+\subsection{Requisitos de información}
+
+\begin{itemize}
+    \item \textbf{RI 1: Información de usuarios.}
+    \begin{itemize}
+        \item Información sobre el nombre elegido, resultados del test y fecha de realización.
+        \item Información sobre el usuario seleccionado actualmente.
+    \end{itemize}
+    
+    \item \textbf{RI 2: Información de estado de la aplicación.}
+    \begin{itemize}
+        \item Se guarda la pestaña abierta antes de poner en pausa la aplicación, para abrirla de nuevo al continuar.
+    \end{itemize}
+\end{itemize}
+
+\newpage
+
+\section{Análisis de las soluciones}
+
+Debido a que la aplicación por el momento no necesitará de conexión a internet ni de uso de una base de datos externa, no será necesario estudiar varios aspectos como la elección de un servidor, de una estructura del mismo o la seguridad de la conexión.
+
+\subsection{Bases de datos}
+
+Es posible encontrar distintos gestores de de bases de datos para usar en una aplicación para android. Algunos de los más importantes son\cite{databases}: 
+
+\begin{itemize}
+    \item \textbf{SQLite:} Se trata de un motor de bases de datos muy liviano y de código abierto. Algunas de sus principales ventajas es que no requiere de un servidor, puede trabajar de forma local, es sencillo de utilizar y no necesita ninguna clase de personalización o configuración. Su mayor problema se presenta cuando lo que buscamos es trabajar con bases de datos grandes.
+    
+    \item \textbf{CouchDB:} En este caso sí nos encontramos ante un \textbf{gestor} de bases de datos, también de código abierto. Está principalmente orientado a dar soporte a aplicaciones web y usa la estructura clave/valor de JSON para almacenar la información en documentos. Una de sus principales ventajas es que da la posibilidad de hacer copias de seguridad de los datos de forma sencilla, lo que puede ser muy útil en móviles para mostrar información cuando no disponen de conexión. 
+    
+    \item \textbf{FireBird:} FireBird es también un administrador de bases de datos de código abierto que hace uso del lenguaje de consultas SQL. Alguna de sus características principales es la gran escalabilidad que presenta (pudiendo trabajar bien ante un gran crecimiento sin perder eficiencia), interoperabilidad, seguridad, o una arquitectura cliente/servidor mediante conexiones TCP/IP.
+    
+    \item \textbf{MySQL:} Uno de los sistemas de gestión de bases de datos relacionales más conocidos. Es multiusuario y multihilo, open source, permite la arquitectura cliente/servidor,  etc.
+    
+    \item \textbf{PostgreSQL:} Por último, PostgreSQL es un gestor de BBDD relacional que también usa la arquitectura de cliente/servidor. Una de sus mejores características es el uso de multiprocesos que, a diferencia de los multihilos, evita que un problema causado en uno de los procesos perjudique al resto. Algunas otras características son su alta concurrencia o el acceso mediante SSL para una mayor seguridad.
+\end{itemize}
+
+\section{Solución propuesta}
+
+La solución propuesta finalmente será utilizar el motor de bases de datos SQLite. Entre las razones principales podemos destacar el hecho de que no necesita un servidor, lo cual se ajusta a nuestras necesidades de almacenar la información de forma local. Además, al ser liviano, contribuimos al requisito no funcional 2 (\ref{RNF:2}) de no superar los 7 MB. Por otra parte, el problema de no ser bueno trabajando con bases de datos grandes no afectará a este proyecto ya que las necesidades son muy pequeñas.
+
+\section{Análisis de seguridad}
+
+En el aspecto de la seguridad no hemos visto la necesidad de prestar atención especial a ningún elemento concreto, puesto que la aplicación no cuenta ni requiere de conexión a internet, no se envían datos a ningún servidor o servicio externo, no es necesario el acceso a otros directorios del teléfono y la información que almacena de forma local no es sensible.
+
+\section{Protección de datos}
+
+El correcto tratamiento de los datos generados por los usuarios mediante la utilización de la aplicación no es sólo de vital importancia en el marco del proyecto, sino de obligado cumplimiento si nos atenemos al \textbf{Reglamento General de Protección de Datos} (GDPR por sus siglas en inglés) de la Unión Europea.
+
+Este reglamento tiene como objetivo otorgar un mayor control a los usuarios sobre sus datos personales, entre los que se encuentra cualquier información que permita identificar a una persona, como por ejemplo la dirección IP, información económica, cultural, de salud mental, etc\cite{gdpr_eu, gdpr_powerdata}. 
+
+Como los datos en ningún momento son enviados fuera de la aplicación ni procesados por terceras personas, el desarrollador de la aplicación no es controlador ni procesador de la información. Esta característica tiene como resultado que el \textbf{reglamento GDPR no afecta a esta aplicación}\cite{gdpr_stackexchange}. Por otra parte, el registro se hace de forma anónima ya que contiene datos sensibles relacionados con la salud, a lo que se añade que el usuario siempre cuenta con poder absoluto, pudiendo eliminar todos los datos sin que dejen rastro si así lo desea.

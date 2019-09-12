@@ -1,0 +1,31 @@
+<svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 222">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        fill: none;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-width: 40px;
+      }
+
+      .cls-1 {
+        stroke: #388e3c;
+      }
+
+      .cls-2 {
+        stroke: #e64a19;
+      }
+
+      .cls-3 {
+        stroke: #7c4dff;
+      }
+    </style>
+  </defs>
+  <title>icon_foreground_2</title>
+  <path class="cls-1" d="M100.75,74.84l4-4A41.13,41.13,0,1,1,163,129l-8.77,8.77"/>
+  <path class="cls-2" d="M47.32,137.75,38.55,129A41.13,41.13,0,0,1,96.72,70.81l4,4"/>
+  <polyline class="cls-3" points="154.19 137.75 100.75 191.19 47.31 137.75"/>
+  <g id="Capa_2" data-name="Capa 2">
+    <path class="cls-1" d="M168.34,122.35A41.07,41.07,0,0,1,163,129l-8.77,8.77"/>
+  </g>
+</svg>

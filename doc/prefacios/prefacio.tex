@@ -1,0 +1,138 @@
+\chapter*{}
+%\thispagestyle{empty}
+%\cleardoublepage
+
+%\thispagestyle{empty}
+
+\input{portada/portada_2}
+
+
+
+\cleardoublepage
+\thispagestyle{empty}
+
+\begin{center}
+{\large\bfseries Desarrollo de un test de condición física mediante plataforma móvil}\\
+\end{center}
+\begin{center}
+José Luis López Sánchez\\
+\end{center}
+
+%\vspace{0.7cm}
+\noindent{\textbf{Palabras clave}: android, app, java, acelerómetro, salud, Short Physical
+Battery Test, SPPB, condición física, base de datos, fragilidad}\\
+
+\vspace{0.7cm}
+\noindent{\textbf{Resumen}}\\
+
+Este proyecto consiste en el desarrollo de una aplicación móvil dirigida a la plataforma Android, que permitirá calcular la condición física de cualquier persona, especialmente de adultos mayores.
+
+Para ello, se implementará un test conocido como "Batería reducida para la valoración del rendimiento físico", o SPPB por sus siglas en inglés, que cuenta con tres pruebas distintas: equilibrio, velocidad y levantarse repetidamente de una silla. 
+
+La detección y medición del desarrollo de la prueba se llevará a cabo utilizando uno de los sensores de los que disponen los teléfonos actuales, en este caso el acelerómetro. El usuario podrá olvidarse de medir el tiempo que invierte en cada prueba, así como el número de repeticiones o la velocidad, centrándose exclusivamente en ejecutar las instrucciones correctamente. Esta será por tanto la característica diferenciadora del proyecto.
+
+Habrá también una sección donde el usuario pueda guardar los resultados de cada prueba bajo el nombre que elija, datos que serán almacenados en una base de datos local para poder ser consultada posteriormente.
+
+Como hemos mencionado anteriormente, la aplicación estará especialmente orientada a adultos mayores/ancianos, con lo que la interfaz debe de ser lo más intuitiva y sencilla posible, el tamaño de fuente de los textos ha de ajustarse a las preferencias establecidas en el dispositivo y los pasos para la ejecución de las pruebas deben ser claros y fáciles de entender.
+
+En esta documentación trataremos además asuntos como el envejecimiento de la población, qué es la fragilidad, detección de la misma y consecuencias. También hablaremos sobre la plataforma Android y describiremos brevemente el funcionamiento del sistema operativo y su distribución o fragmentación. Por último, analizaremos los actores, requisitos, tecnologías, diseño y planificación que facilitarán el camino para la implementación y desarrollo de la aplicación final.
+\cleardoublepage
+
+
+\thispagestyle{empty}
+
+
+\begin{center}
+{\large\bfseries Development of a fitness test through mobile platform}\\
+\end{center}
+\begin{center}
+Jose Luis López Sánchez\\
+\end{center}
+
+%\vspace{0.7cm}
+\noindent{\textbf{Keywords}:  android, app, java, accelerometer, health, Short Physical
+Battery Test, SPPB, physical condition, database, fragility}\\
+
+\vspace{0.7cm}
+\noindent{\textbf{Abstract}}\\
+
+This project involves the development of a mobile application aimed at the Android platform, which will allow the calculation of the physical condition of any person, especially older adults.
+
+To do this, a test known as "Short Physical Battery Test", or SPPB for its acronym, which has three different tests: balance, speed and repeatedly getting up from a chair.
+
+The detection and measurement of the test development will be carried out using one of the sensors available on current phones, in this case the accelerometer. The user can forget about measuring the time spent in each test, as well as the number of repetitions or speed, focusing exclusively on executing the instructions correctly. This will therefore be the distinguishing feature of the project.
+
+There will also be a section where the user can save the results of each test under the name he chooses, data that will be stored in a local database for later reference.
+
+As we mentioned above, the application will be especially aimed at older adults / elders, so the interface must be as intuitive and simple as possible, the font size of the texts must conform to the preferences established in the device and the steps for the execution of the tests should be clear and easy to understand.
+
+In this documentation we will also discuss issues such as the aging of the population, what is fragility, its detection and consequences. We also talk about the Android platform and briefly describe how the operating system works and its distribution or fragmentation. Finally, we will analyze the actors, requirements, technologies, design and planning that will facilitate the path for the implementation and development of the final application.
+
+\chapter*{}
+\thispagestyle{empty}
+
+\noindent\rule[-1ex]{\textwidth}{2pt}\\[4.5ex]
+
+Yo, \textbf{José Luis López Sánchez}, alumno de la titulación INGENIERÍA INFORMÁTICA de la \textbf{Escuela Técnica Superior
+de Ingenierías Informática y de Telecomunicación de la Universidad de Granada}, con DNI 77392285E, autorizo la
+ubicación de la siguiente copia de mi Trabajo Fin de Grado en la biblioteca del centro para que pueda ser
+consultada por las personas que lo deseen.
+
+\vspace{6cm}
+
+\noindent Fdo: José Luis López Sánchez
+
+\vspace{2cm}
+
+\begin{flushright}
+Granada a 22 de agosto de 2019.
+\end{flushright}
+
+
+\chapter*{}
+\thispagestyle{empty}
+
+\noindent\rule[-1ex]{\textwidth}{2pt}\\[4.5ex]
+
+Dña. \textbf{Raquel Ureña}, Institute of Artificial Intelligence, De Montfort University Leicester, UK.
+
+\vspace{0.5cm}
+
+D. \textbf{Enrique Herrera Viedma}, Vicerrector de Investigación y Transferencia de la Universidad de Granada.
+
+
+\vspace{0.5cm}
+
+\textbf{Informan:}
+
+\vspace{0.5cm}
+
+Que el presente trabajo, titulado \textit{\textbf{Desarrollo de un test de condición física mediante plataforma móvil}}, ha sido realizado bajo su supervisión por \textbf{José Luis López Sánchez}, y autorizamos la defensa de dicho trabajo ante el tribunal
+que corresponda.
+
+\vspace{0.5cm}
+
+Y para que conste, expiden y firman el presente informe en Granada a 2 de Septiembre de 2019.
+
+\vspace{1cm}
+
+\textbf{Los directores:}
+
+\vspace{5cm}
+
+\noindent \textbf{Raquel Ureña \ \ \ \ \ Enrique Herrera Viedma}
+
+\chapter*{Agradecimientos}
+\thispagestyle{empty}
+
+       \vspace{1cm}
+
+
+Este proyecto no es más que el broche final al trabajo realizado durante dos décadas para conseguir la formación de la que ahora dispongo, y en la que decenas o incluso cientos de personas han contribuido. No estaría aquí sin los valores, conocimientos y experiencias de incalculable valor que me han transmitido todos los profesores que tuve en todas y cada una de las etapas académicas que he atravesado. Me llevo un bonito recuerdo de cada uno, y espero algún día poder contribuir a la sociedad de la misma forma que ellos lo han hecho.
+
+Gracias a todos esos profesores de la carrera que se implican al máximo en su trabajo, y que con su dedicación y compromiso, están formando auténticos profesionales. Nada de esto sería posible sin los conocimientos adquiridos estos últimos cuatro años.
+
+Mil gracias a los amigos que he conocido en la carrera. Personas increíbles que han hecho fáciles los momentos difíciles, alegres los tristes y amenos los aburridos. Sé que las tardes de estudio habrían sido mucho más largas sin vuestras bromas, los exámenes mucho más difíciles sin vuestras explicaciones y las fiestas mucho más vacías sin vosotros. Os habéis convertido en la mejor parte de la mejor etapa.
+
+Y como no podía ser de otro modo, un millón de gracias a mi pareja Marta, mi madre Virtudes, mi padre José Antonio, toda mi familia y mis amigos de siempre por aguantarme todos estos años, en los buenos momentos y (sobre todo) en los malos. Por creer siempre en mí y apoyarme. Por hacérmelo más fácil. Esta carrera es en parte de todos vosotros. 
+
