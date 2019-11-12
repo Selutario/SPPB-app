@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.example.sppb_tfg"
         minSdkVersion 21
@@ -31,4 +35,7 @@ dependencies {
     // Button border
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
+
+    // To write csv files
+    implementation "com.opencsv:opencsv:5.0"
 }

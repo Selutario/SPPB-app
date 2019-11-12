@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 import static com.example.sppb_tfg.Constants.ACCE_FILTER_DATA_MIN_TIME;
 
 /*
@@ -324,7 +326,6 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             float y = event.values[1];
             float z = event.values[2];
 
-
             // Calibration process
             if(ready_to_calibrate) {
                 if (!calibrated) {
@@ -361,6 +362,9 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 change_y = Math.abs(y - mean_y);
                 change_z = Math.abs(z - mean_z);
 
+                testActivity.excelData.storeData(Constants.BALANCE_TEST, System.currentTimeMillis(),
+                        x, y, z);
+
                 long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
 
                 if(change_x > move_allowed || change_z > move_allowed || change_y > 1) {
@@ -395,6 +399,11 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     // If user is desbalanced, this function is called to calculate score and store it on TestActivity
     public void desbalanced(long elapsedTime) {
         testActivity.readText(getString(R.string.desbalanced));
+        try {
+            testActivity.excelData.makeCSV();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         chronometer.stop();
         inProgress = false;

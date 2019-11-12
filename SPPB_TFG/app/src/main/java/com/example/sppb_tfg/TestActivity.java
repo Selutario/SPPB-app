@@ -1,16 +1,20 @@
 package com.example.sppb_tfg;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -26,8 +30,9 @@ public class TestActivity extends FragmentActivity {
     public int balanceScore = 0;
     public int gaitScore = 0;
     public int chairScore = 0;
-
     public double averageSpeed = 0;
+
+    public AccData excelData;
 
     public TextToSpeech tts;
     public boolean isMuted = false;
@@ -55,11 +60,40 @@ public class TestActivity extends FragmentActivity {
             mCurrentTest = Constants.CHAIR_TEST;
         } else {
             mCurrentTest = getIntent().getIntExtra("test_number", mCurrentTest);
+
+            // Create a matrix of required size depending on the number of tests to perform.
+            excelData = new AccData(TestActivity.this, mCurrentTest == 0);
         }
 
         settings = getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
 
         initTTS();
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(TestActivity.this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(TestActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(TestActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        30);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+        }
     }
 
     @Override
@@ -90,8 +124,7 @@ public class TestActivity extends FragmentActivity {
     public void startTest() {
         switch (mCurrentTest) {
             case 0:
-                boolean animate;
-                full_test = animate = true;
+                full_test = true;
                 mCurrentTest = 1;
             case Constants.BALANCE_TEST:
                 // Show info/instructions if first time user open this test
@@ -101,6 +134,8 @@ public class TestActivity extends FragmentActivity {
                     editor.apply();
                     slider_activity(Constants.BALANCE_TEST);
                 }
+
+
                 BalanceFragment balanceFragment = new BalanceFragment();
                 openFragment(balanceFragment, false);
                 break;
