@@ -33,7 +33,12 @@
         Are you sure you want to delete this user?
     </string>
 
-    <string name="dialog_add_user">Enter the username</string>
+    <string name="dialog_add_user">Username</string>
+    <string name="add_age">Age</string>
+    <string name="add_weight">Weight</string>
+    <string name="add_height">Height</string>
+    <string name="add_male">Male</string>
+    <string name="add_female">Female</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
 

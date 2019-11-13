@@ -22,6 +22,9 @@
             android:label="@string/title_activity_test"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>
+        <activity android:name=".AddUserActivity"
+            android:theme="@style/SliderStyle"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

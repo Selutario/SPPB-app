@@ -3,6 +3,7 @@ package com.example.sppb_tfg;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import static com.example.sppb_tfg.Constants.SELECTED_USER;
 
 
-public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.RecyclerUserTouchHelperListener, UserAdapter.clickListener {
+public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.RecyclerUserTouchHelperListener, UserAdapter.clickListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -40,7 +41,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
     SharedPreferences settings;
     SharedPreferences.Editor editor;
 
-    public UsersFragment() {
+    public FragmentUsers() {
         // Required empty public constructor
     }
 
@@ -148,6 +149,10 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
 
     // Open AlertDialog to write name of new user
     public void addUserAlertDialog() {
+        /*Intent intent = new Intent(getActivity(), AddUserActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);*/
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.add_user_dialog, null);
@@ -207,13 +212,7 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         Bundle bundle = new Bundle();
         bundle.putLong(SELECTED_USER, userId);
         scoreFragment.setArguments(bundle);
-
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-        transaction.replace(R.id.main_placeHolder, scoreFragment);
-        //transaction.addToBackStack(null);
-        transaction.commit();
+        openFragment(scoreFragment);
     }
 
     // Open user details when clicked
@@ -239,6 +238,15 @@ public class UsersFragment extends Fragment implements RecyclerUserTouchHelper.R
         showUsersList();
 
         return true;
+    }
+
+    private  void openFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+        transaction.replace(R.id.main_placeHolder, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
 

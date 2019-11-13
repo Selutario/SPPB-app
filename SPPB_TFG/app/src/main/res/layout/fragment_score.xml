@@ -18,8 +18,9 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="16dp">
+            android:layout_height="match_parent">
+
+        <!--android:paddingBottom="16dp"-->
 
             <TextView
                 android:id="@+id/tv_final_score"
@@ -215,7 +216,7 @@
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/constraing_average_speed"
                 android:layout_width="0dp"
-                android:layout_height="169dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -314,16 +315,18 @@
         tools:context=".LayoutActivity">
 
         <LinearLayout
+            android:id="@+id/btn_save_score"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_weight="0.5"
+            tools:visibility="visible"
+            android:clickable="true">
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/btn_save_score"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/shape_gradient_background"
-                android:clickable="true"
+
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -351,16 +354,16 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/btn_save_csv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5" >
+            android:layout_weight="0.5"
+            android:clickable="true" >
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/btn_save_csv"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/shape_gradient_background2"
-                android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

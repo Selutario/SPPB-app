@@ -1,19 +1,24 @@
 package com.example.sppb_tfg;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,8 +32,8 @@ public class ScoreFragment extends Fragment {
     ConstraintLayout constraing_average_speed;
 
     ProgressBar progressBar;
-    ConstraintLayout btn_save;
-    ConstraintLayout btn_download;
+    LinearLayout btn_save;
+    LinearLayout btn_download;
     TextView tv_save_as;
     SharedPreferences sharedPreferences;
 
@@ -210,12 +215,11 @@ public class ScoreFragment extends Fragment {
             Resources res = getResources();
             String text = String.format(res.getString(R.string.save_as), mUser.getName());
             tv_save_as.setText(text);
-        } /*else if (id != -1){ // else, hide it.
+        } else if (id != -1){ // else, hide it.
             btn_save.setVisibility(View.INVISIBLE);
             btn_download.setVisibility(View.INVISIBLE);
-        }*/ else {
+        } else {
             btn_save.setVisibility(View.GONE);
-            btn_download.setVisibility(View.GONE);
         }
 
         // Save data in local db
@@ -235,11 +239,34 @@ public class ScoreFragment extends Fragment {
         });
 
         btn_download.setOnClickListener(v -> {
+
+            // Here, thisActivity is the current activity
+            if (ContextCompat.checkSelfPermission(testActivity,
+                    Manifest.permission.READ_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Permission is not granted
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(testActivity,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+                } else {
+                    // No explanation needed; request the permission
+                    ActivityCompat.requestPermissions(testActivity,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            30);
+                }
+            }
+
+            // Make CSV file and share it
             try {
                 testActivity.excelData.makeCSV("accelerometer_data");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         });
 
 

@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -68,38 +69,13 @@ public class TestActivity extends FragmentActivity {
         settings = getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
 
         initTTS();
+        startTest();
 
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(TestActivity.this,
-                Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(TestActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(TestActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        30);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startTest();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
@@ -135,7 +111,6 @@ public class TestActivity extends FragmentActivity {
                     slider_activity(Constants.BALANCE_TEST);
                 }
 
-
                 BalanceFragment balanceFragment = new BalanceFragment();
                 openFragment(balanceFragment, false);
                 break;
@@ -148,6 +123,7 @@ public class TestActivity extends FragmentActivity {
                     editor.apply();
                     slider_activity(Constants.GAIT_TEST);
                 }
+
                 GaitFragment gaitFragment = new GaitFragment();
                 openFragment(gaitFragment, full_test);
                 break;

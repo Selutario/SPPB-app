@@ -147,7 +147,6 @@ public class AccData {
         sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filename));
         sharingIntent.setType("text/csv");
         mContext.startActivity(Intent.createChooser(sharingIntent, "share file with"));
-
     }
 
 }

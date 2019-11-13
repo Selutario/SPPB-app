@@ -28,8 +28,8 @@ public class MainActivity extends FragmentActivity {
                     return true;
                 case R.id.navigation_dashboard:
                     currentFragment = 1;
-                    UsersFragment usersFragment = new UsersFragment();
-                    openFragment(usersFragment);
+                    FragmentUsers fragmentUsers = new FragmentUsers();
+                    openFragment(fragmentUsers);
                     return true;
             }
             return false;
@@ -56,8 +56,8 @@ public class MainActivity extends FragmentActivity {
                 openFragment(mainFragment);
                 break;
             case 1:
-                UsersFragment usersFragment = new UsersFragment();
-                openFragment(usersFragment);
+                FragmentUsers fragmentUsers = new FragmentUsers();
+                openFragment(fragmentUsers);
                 break;
         }
     }
@@ -85,15 +85,15 @@ public class MainActivity extends FragmentActivity {
         transaction.commit();
     }
 
-    // Close app if backpressed on MainFragment or UsersFragment, go back if on ScoreFragment
+    // Close app if backpressed on MainFragment or FragmentUsers, go back if on ScoreFragment
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_placeHolder);
-        if ((fragment instanceof MainFragment) || (fragment instanceof UsersFragment)) {
+        if ((fragment instanceof MainFragment) || (fragment instanceof FragmentUsers)) {
             super.onBackPressed();
         } else if ((fragment instanceof ScoreFragment)) {
-            UsersFragment usersFragment = new UsersFragment();
-            openFragment(usersFragment);
+            FragmentUsers fragmentUsers = new FragmentUsers();
+            openFragment(fragmentUsers);
         }
     }
 }

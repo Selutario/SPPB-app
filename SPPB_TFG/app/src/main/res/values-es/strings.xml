@@ -35,6 +35,11 @@
     </string>
 
     <string name="dialog_add_user">Introduzca nombre de usuario</string>
+    <string name="add_age">Edad</string>
+    <string name="add_weight">Peso</string>
+    <string name="add_height">Altura</string>
+    <string name="add_male">Hombre</string>
+    <string name="add_female">Mujer</string>
     <string name="done">Hecho</string>
     <string name="cancel">Cancelar</string>
 
