@@ -204,6 +204,7 @@
     <string name="score">Puntos</string>
     <string name="points">Puntos</string>
     <string name="save_as">Guardar como %1$s</string>
+    <string name="save_csv">Descargar</string>
     <string name="saved">Guardado</string>
     <string name="average_speed">Velocidad media de marcha</string>
 

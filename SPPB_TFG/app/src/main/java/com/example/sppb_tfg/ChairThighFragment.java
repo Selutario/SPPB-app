@@ -221,9 +221,12 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
 
             if (inProgress) {
 
-                float x = event.values[0];
                 float y = event.values[1];
                 float z = event.values[2];
+
+                // Store accelerometer data in csv file
+                testActivity.excelData.storeData(Constants.CHAIR_TEST, System.currentTimeMillis(),
+                        event.values[0], event.values[1], event.values[2]);
 
                 // If z axis is bigger than y axis, it means that the device is lying down, which
                 // means that the person must be sitting.

@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 import static com.example.sppb_tfg.Constants.SELECTED_USER;
 
 public class ScoreFragment extends Fragment {
@@ -26,6 +28,7 @@ public class ScoreFragment extends Fragment {
 
     ProgressBar progressBar;
     ConstraintLayout btn_save;
+    ConstraintLayout btn_download;
     TextView tv_save_as;
     SharedPreferences sharedPreferences;
 
@@ -64,8 +67,10 @@ public class ScoreFragment extends Fragment {
         constraing_explaining = view.findViewById(R.id.constraing_explaining);
         constraing_average_speed = view.findViewById(R.id.constraing_average_speed);
         progressBar = (ProgressBar) view.findViewById(R.id.score_progressbar);
-        btn_save = view.findViewById(R.id.btn_save);
+
+        btn_save = view.findViewById(R.id.btn_save_score);
         tv_save_as = (TextView) view.findViewById(R.id.tv_save_as);
+        btn_download = view.findViewById(R.id.btn_save_csv);
 
         tv_score = (TextView) view.findViewById(R.id.tv_final_score);
         tv_explaining_label = (TextView) view.findViewById(R.id.tv_explaining_label);
@@ -199,33 +204,41 @@ public class ScoreFragment extends Fragment {
         // Show save button if there is a selected user
         if(selectedId != -1 && id == -1) {
             btn_save.setVisibility(View.VISIBLE);
+            btn_download.setVisibility(View.VISIBLE);
             mUser = User.getUser(getActivity(), selectedId);
 
             Resources res = getResources();
             String text = String.format(res.getString(R.string.save_as), mUser.getName());
             tv_save_as.setText(text);
-        } else if (id != -1){ // else, hide it.
+        } /*else if (id != -1){ // else, hide it.
             btn_save.setVisibility(View.INVISIBLE);
-        } else {
+            btn_download.setVisibility(View.INVISIBLE);
+        }*/ else {
             btn_save.setVisibility(View.GONE);
+            btn_download.setVisibility(View.GONE);
         }
 
         // Save data in local db
-        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tv_save_as.setText(getString(R.string.saved));
-                btn_save.setEnabled(false);
+        btn_save.setOnClickListener(v -> {
+            tv_save_as.setText(getString(R.string.saved));
+            btn_save.setEnabled(false);
 
-                if (tv_balance_score.getVisibility() == View.VISIBLE)
-                    mUser.setBalanceScore(mBalanceScore);
-                if (tv_gait_score.getVisibility() == View.VISIBLE){
-                    mUser.setSpeedScore(mGaitScore);
-                    mUser.setAverageSpeed(mAverageSpeed);
-                }
-                if (tv_chair_score.getVisibility() == View.VISIBLE)
-                    mUser.setChairScore(mChairScore);
-                mUser.update(getActivity());
+            if (tv_balance_score.getVisibility() == View.VISIBLE)
+                mUser.setBalanceScore(mBalanceScore);
+            if (tv_gait_score.getVisibility() == View.VISIBLE){
+                mUser.setSpeedScore(mGaitScore);
+                mUser.setAverageSpeed(mAverageSpeed);
+            }
+            if (tv_chair_score.getVisibility() == View.VISIBLE)
+                mUser.setChairScore(mChairScore);
+            mUser.update(getActivity());
+        });
+
+        btn_download.setOnClickListener(v -> {
+            try {
+                testActivity.excelData.makeCSV("accelerometer_data");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 

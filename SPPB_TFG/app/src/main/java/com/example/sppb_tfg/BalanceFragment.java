@@ -362,6 +362,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                 change_y = Math.abs(y - mean_y);
                 change_z = Math.abs(z - mean_z);
 
+                // Store accelerometer data in csv file
                 testActivity.excelData.storeData(Constants.BALANCE_TEST, System.currentTimeMillis(),
                         x, y, z);
 

@@ -316,6 +316,10 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
             zHistory = event.values[2];
 
             if (!calibrating){
+                // Store accelerometer data in csv file
+                testActivity.excelData.storeData(Constants.CHAIR_TEST, System.currentTimeMillis(),
+                        event.values[0], event.values[1], event.values[2]);
+
                 // If the movement has already begun, it only accepts the
                 // deceleration value that confirms the end of it.
                 if (movStarted) {

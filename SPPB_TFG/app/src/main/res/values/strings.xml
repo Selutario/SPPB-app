@@ -201,6 +201,7 @@
     <string name="score">Score</string>
     <string name="points">Points</string>
     <string name="save_as">Save as %1$s</string>
+    <string name="save_csv">Donwload</string>
     <string name="saved">Saved</string>
     <string name="average_speed">Average walking speed</string>
 

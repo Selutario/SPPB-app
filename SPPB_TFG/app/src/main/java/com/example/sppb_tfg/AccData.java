@@ -1,7 +1,11 @@
 package com.example.sppb_tfg;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import com.opencsv.CSVWriter;
@@ -13,6 +17,7 @@ import java.util.ArrayList;
 
 public class AccData {
 
+    Context mContext;
     private ArrayList<ArrayList<String>> data_matrix = new ArrayList<>();
 
     private boolean full_test;
@@ -25,6 +30,7 @@ public class AccData {
 
     public AccData(Context context, boolean full_test){
         this.full_test = full_test;
+        mContext = context;
 
         // Add the headers for each column depending on the number of tests that will be performed.
         if (full_test){
@@ -44,26 +50,6 @@ public class AccData {
             for(int i = 0; i < n_columns; i++) {
                 data_matrix.add(new ArrayList<String>());
                 data_matrix.get(i).add(headers[i]);
-            }
-        }
-
-        // NOT DEFINITIVE - Creating file
-        pathfile = new File(Environment.getExternalStorageDirectory()
-                .getAbsolutePath()
-                + File.separator
-                + "SPPB");
-        if (!pathfile.isDirectory()) {
-            pathfile.mkdir();
-        }
-
-        filename = new File(pathfile,
-                File.separator + "csvDataFile.csv");
-
-        if (!filename.exists()) {
-            try {
-                filename.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -106,7 +92,31 @@ public class AccData {
     return longest;
     }
 
-    public void makeCSV() throws IOException {
+    public void makeCSV(String name) throws IOException {
+        // NOT DEFINITIVE - Creating file
+        pathfile = new File(Environment.getExternalStorageDirectory()
+                .getAbsolutePath()
+                + File.separator
+                + "SPPB");
+        if (!pathfile.isDirectory()) {
+            pathfile.mkdir();
+        }
+
+        /*filename = new File(pathfile,
+                File.separator + "csvDataFile.csv");*/
+        filename = new File(pathfile,
+                File.separator + name + ".csv");
+
+        if (!filename.exists()) {
+            try {
+                filename.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        // Declaring file output writer
         FileWriter fw = new FileWriter(filename);
         fw.append("SEP=;\n");   // Set ; as delimiter in csv file
 
@@ -127,6 +137,17 @@ public class AccData {
             fw.append('\n');
         }
         fw.close();
+
+        // Open sharemenu to send the csv file
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        Intent sharingIntent = new Intent();
+        sharingIntent.setAction(Intent.ACTION_SEND);
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filename));
+        sharingIntent.setType("text/csv");
+        mContext.startActivity(Intent.createChooser(sharingIntent, "share file with"));
+
     }
 
 }

@@ -279,6 +279,8 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 lastSaved = System.currentTimeMillis();
 
                 float yChange = 0;
+
+                // Store accelerometer data in csv file
                 testActivity.excelData.storeData(Constants.GAIT_TEST, System.currentTimeMillis(),
                         event.values[0], event.values[1], event.values[2]);
 
