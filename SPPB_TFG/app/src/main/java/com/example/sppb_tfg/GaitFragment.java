@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 import static com.example.sppb_tfg.Constants.ACCE_FILTER_DATA_MIN_TIME;
 
 public class GaitFragment extends Fragment implements SensorEventListener {
@@ -277,6 +279,8 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                 lastSaved = System.currentTimeMillis();
 
                 float yChange = 0;
+                testActivity.excelData.storeData(Constants.GAIT_TEST, System.currentTimeMillis(),
+                        event.values[0], event.values[1], event.values[2]);
 
                 if (yHistory == 0) {
                     yHistory = event.values[1];

@@ -399,11 +399,11 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     // If user is desbalanced, this function is called to calculate score and store it on TestActivity
     public void desbalanced(long elapsedTime) {
         testActivity.readText(getString(R.string.desbalanced));
-        try {
+        /*try {
             testActivity.excelData.makeCSV();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         chronometer.stop();
         inProgress = false;

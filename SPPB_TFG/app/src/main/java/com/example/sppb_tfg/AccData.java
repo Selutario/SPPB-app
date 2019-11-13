@@ -6,35 +6,17 @@ import android.util.Log;
 
 import com.opencsv.CSVWriter;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AccData {
 
+    private ArrayList<ArrayList<String>> data_matrix = new ArrayList<>();
 
     private boolean full_test;
-    private ArrayList<String[]> data_matrix = new ArrayList<>();
-    //private ArrayList<ArrayList<String>> data_matrix = new ArrayList<ArrayList<String>>();
-    //private List<List<String>> data_matrix = new ArrayList<List<String>>();
-
-
-    private int n_rows = 0;
-    private int current_row = 0;
-
-    /*String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
-    String fileName = "AnalysisSPPB.csv";
-    String filePath = baseDir + File.separator + fileName;
-    File f = new File(filePath);*/
+    private int n_columns = 0;
 
     File pathfile;
     File filename;
@@ -43,40 +25,29 @@ public class AccData {
 
     public AccData(Context context, boolean full_test){
         this.full_test = full_test;
-        //data_matrix.add(new ArrayList<String[]>());
 
-        /*if (full_test){
-            data_matrix.get(0).add("Balance_timestamp");
-            data_matrix.get(0).add("B_x");
-            data_matrix.get(0).add("B_y");
-            data_matrix.get(0).add("B_z");
-
-            data_matrix.get(0).add("Gait_timestamp");
-            data_matrix.get(0).add("G_x");
-            data_matrix.get(0).add("G_y");
-            data_matrix.get(0).add("G_z");
-
-            data_matrix.get(0).add("Chair_timestamp");
-            data_matrix.get(0).add("C_x");
-            data_matrix.get(0).add("C_y");
-            data_matrix.get(0).add("C_z");
-        } else {
-            data_matrix.get(0).add("timestamp");
-            data_matrix.get(0).add("x");
-            data_matrix.get(0).add("y");
-            data_matrix.get(0).add("z");
-        }*/
-
-       if (full_test){
-           data_matrix.add(new String[] {"SEP=; " +
-                   "\nBalance_timestamp", "B_x", "B_y", "B_z",
+        // Add the headers for each column depending on the number of tests that will be performed.
+        if (full_test){
+            String[] headers = {"Balance_timestamp", "B_x", "B_y", "B_z",
                     "Gait_timestamp", "G_x", "G_y", "G_z",
-                    "Chair_timestamp", "C_x", "C_y", "C_z"});
+                    "Chair_timestamp", "C_x", "C_y", "C_z"};
+            n_columns = headers.length;
+
+            for(int i = 0; i < n_columns; i++){
+                data_matrix.add(new ArrayList<String>());
+                data_matrix.get(i).add(headers[i]);
+            }
         } else {
-            data_matrix.add(new String[] {"SEP=; \ntimestamp", "x", "y", "z"});
+            String[] headers = {"timestamp", "x", "y", "z"};
+            n_columns = headers.length;
+
+            for(int i = 0; i < n_columns; i++) {
+                data_matrix.add(new ArrayList<String>());
+                data_matrix.get(i).add(headers[i]);
+            }
         }
 
-
+        // NOT DEFINITIVE - Creating file
         pathfile = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath()
                 + File.separator
@@ -98,59 +69,63 @@ public class AccData {
     }
 
     public void storeData(int test, long t, float x, float y, float z){
-        /*if(current_row >= n_rows){
-            data_matrix.add(new ArrayList<String>());
-            current_row++;
-            n_rows++;
+        // Store the data of each test in its corresponding column (according to the number of test)
+        if (!full_test || test == 1){
+            data_matrix.get(0).add(Long.toString(t));
+            data_matrix.get(1).add(String.format ("%.5f", x));
+            data_matrix.get(2).add(String.format ("%.5f", y));
+            data_matrix.get(3).add(String.format ("%.5f", z));
+        } else if (test == 2){
+            data_matrix.get(4).add(Long.toString(t));
+            data_matrix.get(5).add(String.format ("%.5f", x));
+            data_matrix.get(6).add(String.format ("%.5f", y));
+            data_matrix.get(7).add(String.format ("%.5f", z));
+        } else if (test == 3){
+            data_matrix.get(8).add(Long.toString(t));
+            data_matrix.get(9).add(String.format ("%.5f", x));
+            data_matrix.get(10).add(String.format ("%.5f", y));
+            data_matrix.get(11).add(String.format ("%.5f", z));
         }
+    }
 
-        if (!full_test) {
-            data_matrix.get(current_row).add(Long.toString(t));
-            data_matrix.get(current_row).add(Float.toString(x));
-            data_matrix.get(current_row).add(Float.toString(y));
-            data_matrix.get(current_row).add(Float.toString(z));
-        }*/
+    // This function return the total number of rows in the longest column
+    public int getLongestColumn() {
+        int longest = data_matrix.get(0).size();
 
-        if(current_row >= n_rows){
-            data_matrix.add(new String[] {Long.toString(t),
-                    String.format ("%.5f", x),
-                    String.format ("%.5f", y),
-                    String.format ("%.5f", z)});
-            current_row++;
-            n_rows++;
+        if (full_test){
+            int gait = data_matrix.get(4).size();
+            int chair = data_matrix.get(8).size();
+
+            if (longest > gait && longest> chair){
+            } else if (gait > chair) {
+                longest = gait;
+            } else {
+                longest = chair;
+            }
         }
-
-        /*if (!full_test){
-            data_matrix.get(current_row) += {Long.toString(t),
-                    String.format ("%.5f", x),
-                    String.format ("%.5f", y),
-                    String.format ("%.5f", z)};
-        }*/
-
+    return longest;
     }
 
     public void makeCSV() throws IOException {
-        Log.d("EXEL", String.valueOf(filename));
-        //writer = new CSVWriter(new FileWriter(filename));
-        /*writer = new CSVWriter(new FileWriter(filename),
-                CSVWriter.DEFAULT_SEPARATOR,
-                CSVWriter.DEFAULT_QUOTE_CHARACTER,
-                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                CSVWriter.DEFAULT_LINE_END);*/
-
         FileWriter fw = new FileWriter(filename);
-        //writer.writeAll(data_matrix);
-        for(int i = 0; i < data_matrix.size(); i++){
-            for(int j = 0; j < data_matrix.get(i).length; j++){
-                fw.append(data_matrix.get(i)[j]);
-                fw.append(';');
-            }
-            fw.write('\n');
-            /*writer.writeNext(data_matrix.get(i));
-            //writer.writeNext(data_matrix.get(i));
-            Log.d("EXEL", data_matrix.get(i)[i%3]);*/
-        }
+        fw.append("SEP=;\n");   // Set ; as delimiter in csv file
 
+        int longestColumn = getLongestColumn();
+
+        // Fill the file from left to right and from top to bottom.
+        // If there is a column with no rows next to a column that is currently writing rows, it is
+        // filled with as many ; delimiters as necessary.
+        for(int i = 0; i < longestColumn; i++){
+            for(int j = 0; j < n_columns; j++){
+                if (data_matrix.get(j).size() > i){
+                    fw.append(data_matrix.get(j).get(i));
+                    fw.append(";");
+                } else {
+                    fw.append(";");
+                }
+            }
+            fw.append('\n');
+        }
         fw.close();
     }
 
