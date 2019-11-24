@@ -6,7 +6,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
@@ -28,8 +27,8 @@ import static com.example.sppb_tfg.Constants.SELECTED_USER;
 
 public class ScoreFragment extends Fragment {
     ConstraintLayout score_layout;
-    ConstraintLayout constraing_explaining;
-    ConstraintLayout constraing_average_speed;
+    ConstraintLayout constraint_explaining;
+    ConstraintLayout constraint_history;
 
     ProgressBar progressBar;
     LinearLayout btn_save;
@@ -49,6 +48,7 @@ public class ScoreFragment extends Fragment {
     TextView tv_gait_score_label;
     TextView tv_gait_score;
     TextView tv_average_speed;
+    TextView tv_average_label;
 
     ImageView iv_chair_color;
     TextView tv_chair_score;
@@ -70,8 +70,9 @@ public class ScoreFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_score, null);
         score_layout = view.findViewById(R.id.fragment_score);
-        constraing_explaining = view.findViewById(R.id.constraing_explaining);
-        constraing_average_speed = view.findViewById(R.id.constraing_average_speed);
+        constraint_explaining = view.findViewById(R.id.constraing_explaining);
+        constraint_history = view.findViewById(R.id.constraint_history);
+
         progressBar = (ProgressBar) view.findViewById(R.id.score_progressbar);
 
         tv_scorename = (TextView) view.findViewById(R.id.tv_scorename);
@@ -89,6 +90,7 @@ public class ScoreFragment extends Fragment {
         iv_gait_color = (ImageView) view.findViewById(R.id.iv_gait_color);
         tv_gait_score_label = (TextView) view.findViewById(R.id.tv_gait_score_label);
         tv_gait_score = (TextView) view.findViewById(R.id.tv_gait_score);
+        tv_average_label = (TextView) view.findViewById(R.id.tv_average_label);
         tv_average_speed = (TextView) view.findViewById(R.id.tv_average_speed);
 
         iv_chair_color = (ImageView) view.findViewById(R.id.iv_chair_color);
@@ -129,11 +131,10 @@ public class ScoreFragment extends Fragment {
         // Calculate how much progression bar have to advance and print explaining label if full test.
         if(mCurrentTest == 0){
             pb_score = 9*score - (9*score)/18;
-            constraing_explaining.setVisibility(View.VISIBLE);
-            constraing_average_speed.setVisibility(View.VISIBLE);
+            constraint_explaining.setVisibility(View.VISIBLE);
 
             if(score == 0) {
-                constraing_explaining.setVisibility(View.GONE);
+                constraint_explaining.setVisibility(View.GONE);
             } else if(score <= 3){
                 tv_explaining_label.setText(getString(R.string.severe));
             } else if (score <= 6) {
@@ -145,20 +146,19 @@ public class ScoreFragment extends Fragment {
             }
         } else { // if not full test, show only the corresponding items.
             pb_score = 25*score;
-            constraing_explaining.setVisibility(View.GONE);
-            constraing_average_speed.setVisibility(View.GONE);
+            constraint_explaining.setVisibility(View.GONE);
 
             if (mCurrentTest == 1){
                 iv_gait_color.setVisibility(View.GONE);
                 tv_gait_score_label.setVisibility(View.GONE);
                 tv_gait_score.setVisibility(View.GONE);
+                tv_average_label.setVisibility(View.GONE);
+                tv_average_speed.setVisibility(View.GONE);
 
                 iv_chair_color.setVisibility(View.GONE);
                 tv_chair_score_label.setVisibility(View.GONE);
                 tv_chair_score.setVisibility(View.GONE);
             } else if (mCurrentTest == 2){
-                constraing_average_speed.setVisibility(View.VISIBLE);
-
                 iv_balance_color.setVisibility(View.GONE);
                 tv_balance_score_label.setVisibility(View.GONE);
                 tv_balance_score.setVisibility(View.GONE);
@@ -170,6 +170,8 @@ public class ScoreFragment extends Fragment {
                 iv_balance_color.setVisibility(View.GONE);
                 tv_balance_score_label.setVisibility(View.GONE);
                 tv_balance_score.setVisibility(View.GONE);
+                tv_average_label.setVisibility(View.GONE);
+                tv_average_speed.setVisibility(View.GONE);
 
                 iv_gait_color.setVisibility(View.GONE);
                 tv_gait_score_label.setVisibility(View.GONE);
@@ -223,6 +225,7 @@ public class ScoreFragment extends Fragment {
         } else {
             tv_scorename.setVisibility(View.GONE);
             btn_save.setVisibility(View.GONE);
+            constraint_history.setVisibility(View.GONE);
         }
 
         // Save data in local db

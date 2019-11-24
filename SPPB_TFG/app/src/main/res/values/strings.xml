@@ -209,7 +209,7 @@
     <string name="save_as">Save</string>
     <string name="save_csv">Donwload</string>
     <string name="saved">Saved</string>
-    <string name="average_speed">Average walking speed</string>
+    <string name="average_speed">Average speed (m/s)</string>
 
     <string name="severe">Severe limitation</string>
     <string name="moderate">Moderate limitation</string>
