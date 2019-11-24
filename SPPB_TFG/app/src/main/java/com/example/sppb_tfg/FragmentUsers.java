@@ -149,11 +149,11 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
 
     // Open AlertDialog to write name of new user
     public void addUserAlertDialog() {
-        /*Intent intent = new Intent(getActivity(), AddUserActivity.class);
+        Intent intent = new Intent(getActivity(), AddUserActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);*/
+        startActivity(intent);
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        /*AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.add_user_dialog, null);
         dialogBuilder.setView(dialogView);
@@ -185,7 +185,7 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
         AlertDialog b = dialogBuilder.create();
         b.show();
 
-        b.getButton(b.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+        b.getButton(b.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));*/
     }
 
     // Update user list in recyclerview

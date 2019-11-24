@@ -34,9 +34,10 @@ public class ScoreFragment extends Fragment {
     ProgressBar progressBar;
     LinearLayout btn_save;
     LinearLayout btn_download;
-    TextView tv_save_as;
     SharedPreferences sharedPreferences;
 
+    TextView tv_scorename;
+    TextView tv_save_as;
     TextView tv_score;
     TextView tv_explaining_label;
 
@@ -53,7 +54,7 @@ public class ScoreFragment extends Fragment {
     TextView tv_chair_score;
     TextView tv_chair_score_label;
 
-    User mUser;
+    User selectedUser;
     int score = 0;
     int mCurrentTest = 0;
     int mBalanceScore = 0;
@@ -73,6 +74,7 @@ public class ScoreFragment extends Fragment {
         constraing_average_speed = view.findViewById(R.id.constraing_average_speed);
         progressBar = (ProgressBar) view.findViewById(R.id.score_progressbar);
 
+        tv_scorename = (TextView) view.findViewById(R.id.tv_scorename);
         btn_save = view.findViewById(R.id.btn_save_score);
         tv_save_as = (TextView) view.findViewById(R.id.tv_save_as);
         btn_download = view.findViewById(R.id.btn_save_csv);
@@ -93,16 +95,16 @@ public class ScoreFragment extends Fragment {
         tv_chair_score_label = (TextView) view.findViewById(R.id.tv_chair_score_label);
         tv_chair_score = (TextView) view.findViewById(R.id.tv_chair_score);
 
-        Long id = -1L;
+        Long currentUserID = -1L;
 
         // Determine if the fragment is called from UserFragment
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            id = bundle.getLong(SELECTED_USER);
+            currentUserID = bundle.getLong(SELECTED_USER);
         }
 
         // If is called from TestActivity, get data from it
-        if (id == -1) {
+        if (currentUserID == -1) {
             testActivity = ((TestActivity)getActivity());
 
             score = testActivity.getScore(mCurrentTest);
@@ -113,7 +115,7 @@ public class ScoreFragment extends Fragment {
             mChairScore = testActivity.getScore(3);
             mAverageSpeed = testActivity.getAverageSpeed();
         } else { // else, get data from local data base
-            User user = User.getUser(getActivity(), id);
+            User user = User.getUser(getActivity(), currentUserID);
 
             score = user.getScore();
             mBalanceScore = user.getBalanceScore();
@@ -204,21 +206,22 @@ public class ScoreFragment extends Fragment {
 
         // Get selected user if any
         sharedPreferences = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
-        long selectedId = sharedPreferences.getLong(SELECTED_USER, -1);
+        long selectedUserID = sharedPreferences.getLong(SELECTED_USER, -1);
 
         // Show save button if there is a selected user
-        if(selectedId != -1 && id == -1) {
+        if(selectedUserID != -1 && currentUserID == -1) {
             btn_save.setVisibility(View.VISIBLE);
             btn_download.setVisibility(View.VISIBLE);
-            mUser = User.getUser(getActivity(), selectedId);
+            selectedUser = User.getUser(getActivity(), selectedUserID);
 
-            Resources res = getResources();
-            String text = String.format(res.getString(R.string.save_as), mUser.getName());
-            tv_save_as.setText(text);
-        } else if (id != -1){ // else, hide it.
+            tv_scorename.setText(selectedUser.getName());
+        } else if (currentUserID != -1){ // else, if the user is not selected but comes from UserFragment, hide it.
+            User currentUser = User.getUser(getActivity(), currentUserID);
+            tv_scorename.setText(currentUser.getName());
             btn_save.setVisibility(View.INVISIBLE);
             btn_download.setVisibility(View.INVISIBLE);
         } else {
+            tv_scorename.setVisibility(View.GONE);
             btn_save.setVisibility(View.GONE);
         }
 
@@ -228,14 +231,14 @@ public class ScoreFragment extends Fragment {
             btn_save.setEnabled(false);
 
             if (tv_balance_score.getVisibility() == View.VISIBLE)
-                mUser.setBalanceScore(mBalanceScore);
+                selectedUser.setBalanceScore(mBalanceScore);
             if (tv_gait_score.getVisibility() == View.VISIBLE){
-                mUser.setSpeedScore(mGaitScore);
-                mUser.setAverageSpeed(mAverageSpeed);
+                selectedUser.setSpeedScore(mGaitScore);
+                selectedUser.setAverageSpeed(mAverageSpeed);
             }
             if (tv_chair_score.getVisibility() == View.VISIBLE)
-                mUser.setChairScore(mChairScore);
-            mUser.update(getActivity());
+                selectedUser.setChairScore(mChairScore);
+            selectedUser.update(getActivity());
         });
 
         btn_download.setOnClickListener(v -> {

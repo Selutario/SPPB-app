@@ -2,6 +2,7 @@ package com.example.sppb_tfg;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -12,7 +13,12 @@ import java.util.ArrayList;
 */
 public class User {
     long id;
+
     String name;
+    int age;
+    double weight;
+    double height;
+
     int balanceScore;
     int speedScore;
     int chairScore;
@@ -23,7 +29,12 @@ public class User {
 
     private User(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndex("_id"));
+
         name = cursor.getString(cursor.getColumnIndex(UsersDB.UserEntry.NAME));
+        age = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.AGE));
+        weight = cursor.getDouble(cursor.getColumnIndex(UsersDB.UserEntry.WEIGHT));
+        height = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.HEIGHT));
+
         balanceScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.BALANCE_SCORE));
         speedScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.SPEED_SCORE));
         chairScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.CHAIR_SCORE));
@@ -50,6 +61,13 @@ public class User {
         this.testDate = testDate;
     }
 
+    public User(String name, String age, String weight, String height){
+        setName(name);
+        setAge(age);
+        setWeight(weight);
+        setHeight(height);
+    }
+
     public long getId() {
         return id;
     }
@@ -64,6 +82,42 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        if (age.isEmpty()){
+            this.age = 0;
+        } else {
+            this.age = Integer.valueOf(age);
+        }
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        if (weight.isEmpty()) {
+            this.weight = 0;
+        } else {
+            this.weight = Double.valueOf(weight);
+        }
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        if (height.isEmpty()) {
+            this.weight = 0;
+        } else {
+            this.height = Integer.valueOf(height);
+        }
     }
 
     public int getBalanceScore() {
@@ -118,6 +172,9 @@ public class User {
 
         Cursor cursor = db.query(true, "USERS", new String[]{"_id",
                         UsersDB.UserEntry.NAME,
+                        UsersDB.UserEntry.AGE,
+                        UsersDB.UserEntry.WEIGHT,
+                        UsersDB.UserEntry.HEIGHT,
                         UsersDB.UserEntry.BALANCE_SCORE,
                         UsersDB.UserEntry.SPEED_SCORE,
                         UsersDB.UserEntry.CHAIR_SCORE,
@@ -143,6 +200,9 @@ public class User {
 
         Cursor cursor = db.query(true, "USERS", new String[]{"_id",
                         UsersDB.UserEntry.NAME,
+                        UsersDB.UserEntry.AGE,
+                        UsersDB.UserEntry.WEIGHT,
+                        UsersDB.UserEntry.HEIGHT,
                         UsersDB.UserEntry.BALANCE_SCORE,
                         UsersDB.UserEntry.SPEED_SCORE,
                         UsersDB.UserEntry.CHAIR_SCORE,
@@ -171,6 +231,9 @@ public class User {
         String where ="_id = " + String.valueOf(id);
         Cursor cursor = db.query(true, "USERS", new String[]{"_id",
                         UsersDB.UserEntry.NAME,
+                        UsersDB.UserEntry.AGE,
+                        UsersDB.UserEntry.WEIGHT,
+                        UsersDB.UserEntry.HEIGHT,
                         UsersDB.UserEntry.BALANCE_SCORE,
                         UsersDB.UserEntry.SPEED_SCORE,
                         UsersDB.UserEntry.CHAIR_SCORE,
@@ -190,6 +253,9 @@ public class User {
     public void insert(Context context) {
         ContentValues values = new ContentValues();
         values.put(UsersDB.UserEntry.NAME,this.name);
+        values.put(UsersDB.UserEntry.AGE, this.age);
+        values.put(UsersDB.UserEntry.WEIGHT, this.weight);
+        values.put(UsersDB.UserEntry.HEIGHT, this.height);
         values.put(UsersDB.UserEntry.BALANCE_SCORE, this.balanceScore);
         values.put(UsersDB.UserEntry.SPEED_SCORE, this.speedScore);
         values.put(UsersDB.UserEntry.CHAIR_SCORE, this.chairScore);
@@ -223,6 +289,9 @@ public class User {
     public void update(Context context) {
         ContentValues values = new ContentValues();
         values.put(UsersDB.UserEntry.NAME,this.name);
+        values.put(UsersDB.UserEntry.AGE, this.age);
+        values.put(UsersDB.UserEntry.WEIGHT, this.weight);
+        values.put(UsersDB.UserEntry.HEIGHT, this.height);
         values.put(UsersDB.UserEntry.BALANCE_SCORE, this.balanceScore);
         values.put(UsersDB.UserEntry.SPEED_SCORE, this.speedScore);
         values.put(UsersDB.UserEntry.CHAIR_SCORE, this.chairScore);

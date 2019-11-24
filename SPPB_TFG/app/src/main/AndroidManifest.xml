@@ -24,7 +24,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".AddUserActivity"
             android:theme="@style/SliderStyle"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
