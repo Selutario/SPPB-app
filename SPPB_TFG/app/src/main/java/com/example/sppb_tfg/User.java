@@ -2,9 +2,9 @@ package com.example.sppb_tfg;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -19,13 +19,12 @@ public class User {
     double weight;
     double height;
 
-    int balanceScore;
-    int speedScore;
-    int chairScore;
-    String testDate;
-    double averageSpeed;
-    /*String[] scores;
-    String[] testDates;*/
+    ArrayList<String> balanceScore = new ArrayList<>();
+    ArrayList<String>  speedScore = new ArrayList<>();
+    ArrayList<String>  chairScore = new ArrayList<>();
+    ArrayList<String>  testDate = new ArrayList<>();
+    ArrayList<String>  averageSpeed = new ArrayList<>();
+
 
     private User(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndex("_id"));
@@ -35,13 +34,26 @@ public class User {
         weight = cursor.getDouble(cursor.getColumnIndex(UsersDB.UserEntry.WEIGHT));
         height = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.HEIGHT));
 
-        balanceScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.BALANCE_SCORE));
-        speedScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.SPEED_SCORE));
-        chairScore = cursor.getInt(cursor.getColumnIndex(UsersDB.UserEntry.CHAIR_SCORE));
-        testDate = cursor.getString(cursor.getColumnIndex(UsersDB.UserEntry.TEST_DATE));
-        averageSpeed = cursor.getDouble(cursor.getColumnIndex(UsersDB.UserEntry.AVERAGE_SPEED));
-/*      scores = cursor.getString(cursor.getColumnIndex("scores")).split(";");
-        testDates = cursor.getString(cursor.getColumnIndex("test_dates")).split(";")*/
+
+        String[] b_scores = cursor.getString(cursor.getColumnIndex(
+                UsersDB.UserEntry.BALANCE_SCORE)).split(";");
+        String[] s_scores = cursor.getString(cursor.getColumnIndex(
+                UsersDB.UserEntry.SPEED_SCORE)).split(";");
+        String[] c_scores = cursor.getString(cursor.getColumnIndex(
+                UsersDB.UserEntry.CHAIR_SCORE)).split(";");
+        String[] d_scores = cursor.getString(cursor.getColumnIndex(
+                UsersDB.UserEntry.TEST_DATE)).split(";");
+        String[] as_scores = cursor.getString(cursor.getColumnIndex(
+                UsersDB.UserEntry.AVERAGE_SPEED)).split(";");
+
+
+        for(int i=0; i<b_scores.length; i++){
+            balanceScore.add(b_scores[i]);
+            speedScore.add(s_scores[i]);
+            chairScore.add(c_scores[i]);
+            testDate.add(d_scores[i]);
+            averageSpeed.add(as_scores[i]);
+        }
     };
 
     public User(String name) {
@@ -49,7 +61,7 @@ public class User {
         setBalanceScore(0);
         setSpeedScore(0);
         setChairScore(0);
-
+        setAverageSpeed(0);
         setTestDate("11/07/2019");
     }
 
@@ -58,7 +70,8 @@ public class User {
         setBalanceScore(balanceScore);
         setSpeedScore(speedScore);
         setChairScore(chairScore);
-        this.testDate = testDate;
+        setAverageSpeed(0);
+        setTestDate("11/07/2019");
     }
 
     public User(String name, String age, String weight, String height){
@@ -66,6 +79,12 @@ public class User {
         setAge(age);
         setWeight(weight);
         setHeight(height);
+
+        setBalanceScore(0);
+        setSpeedScore(0);
+        setChairScore(0);
+        setAverageSpeed(0);
+        setTestDate("11/07/2019");
     }
 
     public long getId() {
@@ -121,47 +140,87 @@ public class User {
     }
 
     public int getBalanceScore() {
-        return balanceScore;
+        return Integer.valueOf(balanceScore.get(0));
+    }
+
+    public int getBalanceScore(int pos) {
+        return Integer.valueOf(balanceScore.get(pos));
     }
 
     public void setBalanceScore(int balanceScore) {
-        this.balanceScore = balanceScore;
+        int score = 0;
+        if(balanceScore >= 0)
+            score = balanceScore;
+        else
+            score = getBalanceScore();
+
+        this.balanceScore.add(0, score + ";");
     }
 
     public int getSpeedScore() {
-        return speedScore;
+        return Integer.valueOf(speedScore.get(0));
+    }
+
+    public int getSpeedScore(int pos) {
+        return Integer.valueOf(speedScore.get(pos));
     }
 
     public void setSpeedScore(int speedScore) {
-        this.speedScore = speedScore;
+        int score = 0;
+        if(speedScore >= 0)
+            score = speedScore;
+        else
+            score = getSpeedScore();
+
+        this.speedScore.add(0, score + ";");
     }
 
     public int getChairScore() {
-        return chairScore;
+        return Integer.valueOf(chairScore.get(0));
+    }
+
+    public int getChairScore(int pos) {
+        return Integer.valueOf(chairScore.get(pos));
     }
 
     public void setChairScore(int chairScore) {
-        this.chairScore = chairScore;
-    }
+        int score = 0;
+        if(chairScore >= 0)
+            score = chairScore;
+        else
+            score = getChairScore();
 
-    public void setAverageSpeed(double averageSpeed) {
-        this.averageSpeed = averageSpeed;
+        this.chairScore.add(0, score + ";");
     }
 
     public double getAverageSpeed() {
-        return averageSpeed;
+        return Double.valueOf(averageSpeed.get(0));
+    }
+
+    public double getAverageSpeed(int pos) {
+        return Double.valueOf(averageSpeed.get(pos));
+    }
+
+    public void setAverageSpeed(double averageSpeed) {
+        double score = 0;
+        if(averageSpeed >= 0)
+            score = averageSpeed;
+        else
+            score = getAverageSpeed();
+
+        this.averageSpeed.add(0, score + ";");
     }
 
     public String getTestDate() {
-        return testDate;
+        return testDate.get(0);
     }
 
     public void setTestDate(String testDate) {
-        this.testDate = testDate;
+        this.testDate.add(0, testDate + ";");
     }
 
     public int getScore() {
-        return balanceScore + speedScore + chairScore;
+        return getBalanceScore() + getSpeedScore() + getChairScore();
     }
 
     // Get full list with all saved users
@@ -256,27 +315,33 @@ public class User {
         values.put(UsersDB.UserEntry.AGE, this.age);
         values.put(UsersDB.UserEntry.WEIGHT, this.weight);
         values.put(UsersDB.UserEntry.HEIGHT, this.height);
-        values.put(UsersDB.UserEntry.BALANCE_SCORE, this.balanceScore);
-        values.put(UsersDB.UserEntry.SPEED_SCORE, this.speedScore);
-        values.put(UsersDB.UserEntry.CHAIR_SCORE, this.chairScore);
-        values.put(UsersDB.UserEntry.TEST_DATE, this.testDate);
-        values.put(UsersDB.UserEntry.AVERAGE_SPEED, this.averageSpeed);
 
-/*        if(this.scores!=null) {
-            StringBuilder listScores = new StringBuilder();
-            StringBuilder listTestDates = new StringBuilder();
-            for(int i =0;i<this.scores.length;i++) {
-                listScores.append(this.scores[i]);
-                listTestDates.append(this.testDates[i]);
+        if(this.balanceScore != null){
+            StringBuilder listBalance = new StringBuilder();
+            StringBuilder listSpeed = new StringBuilder();
+            StringBuilder listChair = new StringBuilder();
+            StringBuilder listAverage = new StringBuilder();
+            StringBuilder listDates = new StringBuilder();
 
-                if(i < this.scores.length-1){
-                    listScores.append(";");
-                    listTestDates.append(";");
-                }
+            for(int i=0; i < this.balanceScore.size(); i++){
+                listBalance.append(this.balanceScore.get(i));
+                listBalance.append(";");
+                listSpeed.append(this.speedScore.get(i));
+                listSpeed.append(";");
+                listChair.append(this.chairScore.get(i));
+                listChair.append(";");
+                listAverage.append(this.averageSpeed.get(i));
+                listAverage.append(";");
+                listDates.append(this.testDate.get(i));
+                listDates.append(";");
             }
-            values.put("listScores", listScores.toString());
-            values.put("listTestDates", listTestDates.toString());
-        }*/
+
+            values.put(UsersDB.UserEntry.BALANCE_SCORE, listBalance.toString());
+            values.put(UsersDB.UserEntry.SPEED_SCORE, listSpeed.toString());
+            values.put(UsersDB.UserEntry.CHAIR_SCORE, listChair.toString());
+            values.put(UsersDB.UserEntry.TEST_DATE, listDates.toString());
+            values.put(UsersDB.UserEntry.AVERAGE_SPEED, listAverage.toString());
+        }
 
         LocalSQLiteOpenHelper helper = new
                 LocalSQLiteOpenHelper(context);
@@ -292,11 +357,33 @@ public class User {
         values.put(UsersDB.UserEntry.AGE, this.age);
         values.put(UsersDB.UserEntry.WEIGHT, this.weight);
         values.put(UsersDB.UserEntry.HEIGHT, this.height);
-        values.put(UsersDB.UserEntry.BALANCE_SCORE, this.balanceScore);
-        values.put(UsersDB.UserEntry.SPEED_SCORE, this.speedScore);
-        values.put(UsersDB.UserEntry.CHAIR_SCORE, this.chairScore);
-        values.put(UsersDB.UserEntry.TEST_DATE, this.testDate);
-        values.put(UsersDB.UserEntry.AVERAGE_SPEED, this.averageSpeed);
+
+        if(this.balanceScore != null){
+            StringBuilder listBalance = new StringBuilder();
+            StringBuilder listSpeed = new StringBuilder();
+            StringBuilder listChair = new StringBuilder();
+            StringBuilder listAverage = new StringBuilder();
+            StringBuilder listDates = new StringBuilder();
+
+            for(int i=0; i < this.balanceScore.size(); i++){
+                listBalance.append(this.balanceScore.get(i));
+                listBalance.append(";");
+                listSpeed.append(this.speedScore.get(i));
+                listSpeed.append(";");
+                listChair.append(this.chairScore.get(i));
+                listChair.append(";");
+                listAverage.append(this.averageSpeed.get(i));
+                listAverage.append(";");
+                listDates.append(this.testDate.get(i));
+                listDates.append(";");
+            }
+
+            values.put(UsersDB.UserEntry.BALANCE_SCORE, listBalance.toString());
+            values.put(UsersDB.UserEntry.SPEED_SCORE, listSpeed.toString());
+            values.put(UsersDB.UserEntry.CHAIR_SCORE, listChair.toString());
+            values.put(UsersDB.UserEntry.TEST_DATE, listDates.toString());
+            values.put(UsersDB.UserEntry.AVERAGE_SPEED, listAverage.toString());
+        }
 
         String whereClause = "_id=?" ;
         String[] whereArgs = new String[1];

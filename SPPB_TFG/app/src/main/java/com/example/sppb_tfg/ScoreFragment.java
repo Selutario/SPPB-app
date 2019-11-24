@@ -12,6 +12,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,13 +110,29 @@ public class ScoreFragment extends Fragment {
         if (currentUserID == -1) {
             testActivity = ((TestActivity)getActivity());
 
-            score = testActivity.getScore(mCurrentTest);
             mCurrentTest = testActivity.getmCurrentTest();
 
-            mBalanceScore = testActivity.getScore(1);
-            mGaitScore = testActivity.getScore(2);
-            mChairScore = testActivity.getScore(3);
-            mAverageSpeed = testActivity.getAverageSpeed();
+            if(testActivity.getScore(1) >= 0){
+                mBalanceScore = testActivity.getScore(1);
+                mAverageSpeed = testActivity.getAverageSpeed();
+            } else {
+                mBalanceScore = 0;
+                mAverageSpeed = 0;
+            }
+
+            if(testActivity.getScore(2) >= 0){
+                mGaitScore = testActivity.getScore(2);
+            } else {
+                mGaitScore = 0;
+            }
+
+            if(testActivity.getScore(3) >= 0) {
+                mChairScore = testActivity.getScore(3);
+            } else {
+                mChairScore = 0;
+            }
+
+            score = mBalanceScore + mGaitScore + mChairScore;
         } else { // else, get data from local data base
             User user = User.getUser(getActivity(), currentUserID);
 
@@ -233,14 +250,14 @@ public class ScoreFragment extends Fragment {
             tv_save_as.setText(getString(R.string.saved));
             btn_save.setEnabled(false);
 
-            if (tv_balance_score.getVisibility() == View.VISIBLE)
-                selectedUser.setBalanceScore(mBalanceScore);
-            if (tv_gait_score.getVisibility() == View.VISIBLE){
-                selectedUser.setSpeedScore(mGaitScore);
-                selectedUser.setAverageSpeed(mAverageSpeed);
-            }
-            if (tv_chair_score.getVisibility() == View.VISIBLE)
-                selectedUser.setChairScore(mChairScore);
+            selectedUser.setBalanceScore(testActivity.getScore(1));
+            selectedUser.setSpeedScore(testActivity.getScore(2));
+            Log.e("CHAIR", "SPEED " + String.valueOf(testActivity.getScore(2)));
+            selectedUser.setChairScore(testActivity.getScore(3));
+            Log.e("CHAIR", String.valueOf(testActivity.getScore(3)));
+            selectedUser.setAverageSpeed(testActivity.getAverageSpeed());
+            selectedUser.setTestDate("11/07/2019");
+
             selectedUser.update(getActivity());
         });
 

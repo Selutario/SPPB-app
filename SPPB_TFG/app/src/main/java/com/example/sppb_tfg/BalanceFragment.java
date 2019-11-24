@@ -165,6 +165,8 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                         testActivity.balanceScore = 1;
                     } else if (currentStep == 7) {
                         testActivity.balanceScore = 2;
+                    } else {
+                        testActivity.balanceScore = 0;
                     }
                     testActivity.fragmentTestCompleted();
                 }

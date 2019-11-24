@@ -28,10 +28,10 @@ public class TestActivity extends FragmentActivity {
     private boolean full_test = false;
     SharedPreferences settings;
 
-    public int balanceScore = 0;
-    public int gaitScore = 0;
-    public int chairScore = 0;
-    public double averageSpeed = 0;
+    public int balanceScore = -1;
+    public int gaitScore = -1;
+    public int chairScore = -1;
+    public double averageSpeed = -1;
 
     public AccData excelData;
 

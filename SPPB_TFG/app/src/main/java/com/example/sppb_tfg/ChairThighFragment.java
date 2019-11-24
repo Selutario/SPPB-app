@@ -138,6 +138,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
                     SelectPositionFragment selectPositionFragment = new SelectPositionFragment();
                     testActivity.openFragment(selectPositionFragment, true);
                 } else {
+                    testActivity.chairScore = 0;
                     testActivity.fragmentTestCompleted();
                 }
             }
