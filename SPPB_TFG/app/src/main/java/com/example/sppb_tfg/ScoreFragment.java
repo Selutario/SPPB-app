@@ -278,31 +278,32 @@ public class ScoreFragment extends Fragment {
         }
 
         btn_download_history.setOnClickListener(v -> {
-            Long id;
-            if (currentUserID != -1) {
-                id = currentUserID;
-            } else {
-                id = markedUserID;
-            }
-
             // Here, thisActivity is the current activity
-            if (ContextCompat.checkSelfPermission(testActivity,
-                    Manifest.permission.READ_CONTACTS)
+            if (ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
 
                 // Permission is not granted
                 // Should we show an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(testActivity,
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     // Show an explanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
                 } else {
                     // No explanation needed; request the permission
-                    ActivityCompat.requestPermissions(testActivity,
+                    ActivityCompat.requestPermissions(getActivity(),
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             30);
                 }
+            }
+
+
+            Long id;
+            if (currentUserID != -1) {
+                id = currentUserID;
+            } else {
+                id = markedUserID;
             }
 
             DownloadHistData downloadHistData = new DownloadHistData(getContext(),
@@ -332,20 +333,20 @@ public class ScoreFragment extends Fragment {
         btn_download.setOnClickListener(v -> {
 
             // Here, thisActivity is the current activity
-            if (ContextCompat.checkSelfPermission(testActivity,
-                    Manifest.permission.READ_CONTACTS)
+            if (ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
 
                 // Permission is not granted
                 // Should we show an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(testActivity,
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     // Show an explanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
                 } else {
                     // No explanation needed; request the permission
-                    ActivityCompat.requestPermissions(testActivity,
+                    ActivityCompat.requestPermissions(getActivity(),
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             30);
                 }

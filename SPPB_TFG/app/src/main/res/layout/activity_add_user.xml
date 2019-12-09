@@ -54,7 +54,6 @@
             android:hint="@string/dialog_add_user"
             android:inputType="textPersonName"
             android:textAlignment="center"
-            android:textColor="@color/colorText"
             android:textColorHint="@color/colorText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"

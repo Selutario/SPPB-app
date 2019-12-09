@@ -170,7 +170,7 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
     }
 
     // Open score fragment and send corresponding user ID
-    private void openDetails(Long userId) {
+    public void openDetails(Long userId) {
         ScoreFragment scoreFragment = new ScoreFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(SELECTED_USER, userId);

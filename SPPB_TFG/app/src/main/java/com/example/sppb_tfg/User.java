@@ -356,7 +356,6 @@ public class User {
     }
 
     public int getHistorySize() {
-        Log.d("ADAPTER", "TAMAÑO: " + averageSpeed.size());
         return averageSpeed.size();
     }
 
