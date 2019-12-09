@@ -2,90 +2,140 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="112dp"
-        android:paddingVertical="10dp">
+        android:layout_height="wrap_content"
+        android:paddingVertical="16dp">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/viewForeground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
-            android:background="@drawable/dummy_bg"
-            android:elevation="8dp">
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@color/minimum" />
+            android:background="@color/colorBackground"
+            android:visibility="visible">
 
 
             <TextView
-                android:id="@+id/tv_result"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="10"
+                android:id="@+id/tv_score_history"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_textview"
+                android:text="9"
                 android:textAlignment="center"
-                android:textSize="60dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
-            <ImageView
-                android:id="@+id/iv_selected"
-                android:layout_width="10dp"
-                android:layout_height="0dp"
-                android:src="@color/colorPrimary"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textColor="@color/colorTextOverBlue"
+                android:textSize="30dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="2dp"
-                android:layout_height="76dp"
+            <ProgressBar
+                android:id="@+id/pb_history"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="10dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_result"
-                app:layout_constraintStart_toEndOf="@+id/tv_result"
-                app:layout_constraintTop_toTopOf="@+id/tv_result" />
+                android:layout_marginEnd="16dp"
+                android:max="12"
+                android:progress="8"
+                android:progressDrawable="@drawable/shape_gradient_pbscore"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_score_history"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_score_history"
+                app:layout_constraintTop_toTopOf="@+id/tv_score_history"
+                app:layout_constraintVertical_bias="0.19" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/iv_calendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="@+id/divider2"
-                app:layout_constraintTop_toTopOf="@+id/tv_result"
-                app:srcCompat="@drawable/ic_date_range_black_24dp" />
+                app:layout_constraintBottom_toBottomOf="@+id/tv_chair"
+                app:layout_constraintStart_toStartOf="@+id/pb_history"
+                app:layout_constraintTop_toTopOf="@+id/tv_chair"
+                app:srcCompat="@drawable/ic_date_range_black_24dp"
+                tools:visibility="gone" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
-                app:layout_constraintTop_toTopOf="@+id/imageView3" />
+                android:text="Date"
+                android:textColor="@color/colorText"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_calendar"
+                app:layout_constraintStart_toEndOf="@+id/iv_calendar"
+                app:layout_constraintTop_toTopOf="@+id/iv_calendar" />
+
+            <ImageView
+                android:id="@+id/iv_balance"
+                android:layout_width="8dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_balance"
+                app:layout_constraintEnd_toStartOf="@+id/tv_balance"
+                app:layout_constraintTop_toTopOf="@+id/tv_balance"
+                app:srcCompat="@color/colorBalance" />
+
+            <TextView
+                android:id="@+id/tv_balance"
+                android:layout_width="7dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="0"
+                android:textColor="@color/colorBalance"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_chair"
+                app:layout_constraintEnd_toStartOf="@+id/iv_gait"
+                app:layout_constraintTop_toTopOf="@+id/tv_chair" />
+
+            <ImageView
+                android:id="@+id/iv_gait"
+                android:layout_width="8dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_chair"
+                app:layout_constraintEnd_toStartOf="@+id/tv_gait"
+                app:layout_constraintTop_toTopOf="@+id/tv_chair"
+                app:srcCompat="@color/colorGaitSpeed" />
+
+            <TextView
+                android:id="@+id/tv_gait"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="0"
+                android:textColor="@color/colorGaitSpeed"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_chair"
+                app:layout_constraintEnd_toStartOf="@+id/iv_chair"
+                app:layout_constraintTop_toTopOf="@+id/tv_chair" />
+
+            <ImageView
+                android:id="@+id/iv_chair"
+                android:layout_width="8dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_chair"
+                app:layout_constraintEnd_toStartOf="@+id/tv_chair"
+                app:layout_constraintTop_toTopOf="@+id/tv_chair"
+                app:srcCompat="@color/colorChairStand" />
+
+            <TextView
+                android:id="@+id/tv_chair"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="0"
+                android:textColor="@color/colorChairStand"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/pb_history"
+                app:layout_constraintTop_toBottomOf="@+id/pb_history" />
 
         </android.support.constraint.ConstraintLayout>
     </FrameLayout>
-
 
 
 </LinearLayout>

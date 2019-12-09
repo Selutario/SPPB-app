@@ -129,11 +129,11 @@
             android:textSize="40dp"
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_result"
-            app:layout_constraintStart_toEndOf="@+id/tv_result" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_score_history"
+            app:layout_constraintStart_toEndOf="@+id/tv_score_history" />
 
         <TextView
-            android:id="@+id/tv_result"
+            android:id="@+id/tv_score_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

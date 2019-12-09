@@ -206,6 +206,7 @@
     <!-- SCORE -->
     <string name="score">Score</string>
     <string name="points">Points</string>
+    <string name="history">History</string>
     <string name="save_as">Save</string>
     <string name="save_csv">Donwload</string>
     <string name="saved">Saved</string>

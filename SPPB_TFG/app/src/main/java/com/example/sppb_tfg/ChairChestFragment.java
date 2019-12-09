@@ -91,7 +91,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         cl_info = view.findViewById(R.id.cl_info);
         iv_person = (ImageView) view.findViewById(R.id.iv_person);
         test_name = (TextView) view.findViewById(R.id.tv_test_name);
-        tv_result = (TextView) view.findViewById(R.id.tv_result);
+        tv_result = (TextView) view.findViewById(R.id.tv_score_history);
         tv_result_label = (TextView) view.findViewById(R.id.tv_result_label);
         chronometer = view.findViewById(R.id.chronometer);
         btn_play = (ImageButton) view.findViewById(R.id.btn_play);

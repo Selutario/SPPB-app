@@ -12,6 +12,10 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +34,9 @@ public class ScoreFragment extends Fragment {
     ConstraintLayout score_layout;
     ConstraintLayout constraint_explaining;
     ConstraintLayout constraint_history;
+
+    RecyclerView mRecyclerView;
+    HistoryAdapter adapter;
 
     ProgressBar progressBar;
     LinearLayout btn_save;
@@ -55,6 +62,8 @@ public class ScoreFragment extends Fragment {
     TextView tv_chair_score;
     TextView tv_chair_score_label;
 
+    long currentUserID = -1L;
+    long markedUserID = -1L;
     User selectedUser;
     int score = 0;
     int mCurrentTest = 0;
@@ -98,13 +107,37 @@ public class ScoreFragment extends Fragment {
         tv_chair_score_label = (TextView) view.findViewById(R.id.tv_chair_score_label);
         tv_chair_score = (TextView) view.findViewById(R.id.tv_chair_score);
 
-        Long currentUserID = -1L;
+        // Set recyclerview and link it with adapter, to show history
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.history_list);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+        // Get selected user if any
+        sharedPreferences = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
+        markedUserID = sharedPreferences.getLong(SELECTED_USER, -1);
+
 
         // Determine if the fragment is called from UserFragment
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             currentUserID = bundle.getLong(SELECTED_USER);
+
+            if (User.getUser(getActivity(), currentUserID).testNotPerformed()) {
+                constraint_history.setVisibility(View.GONE);
+            } else {
+                adapter = new HistoryAdapter(User.getUser(getActivity(), currentUserID));
+                mRecyclerView.setAdapter(adapter);
+            }
+        } else if (markedUserID != -1) {
+            if (User.getUser(getActivity(), markedUserID).testNotPerformed()) {
+                constraint_history.setVisibility(View.GONE);
+            } else {
+                adapter = new HistoryAdapter(User.getUser(getActivity(), markedUserID));
+                mRecyclerView.setAdapter(adapter);
+            }
         }
+
 
         // If is called from TestActivity, get data from it
         if (currentUserID == -1) {
@@ -223,17 +256,13 @@ public class ScoreFragment extends Fragment {
         tv_chair_score.setText(Integer.toString(mChairScore));
         tv_average_speed.setText(String.format("%.1f", mAverageSpeed));
 
-        // Get selected user if any
-        sharedPreferences = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
-        long selectedUserID = sharedPreferences.getLong(SELECTED_USER, -1);
-
-        // Show save button if there is a selected user
-        if(selectedUserID != -1 && currentUserID == -1) {
+        // There is a marked user
+        if(markedUserID != -1 && currentUserID == -1) {
             btn_save.setVisibility(View.VISIBLE);
             btn_download.setVisibility(View.VISIBLE);
-            selectedUser = User.getUser(getActivity(), selectedUserID);
-
+            selectedUser = User.getUser(getActivity(), markedUserID);
             tv_scorename.setText(selectedUser.getName());
+
         } else if (currentUserID != -1){ // else, if the user is not selected but comes from UserFragment, hide it.
             User currentUser = User.getUser(getActivity(), currentUserID);
             tv_scorename.setText(currentUser.getName());
@@ -252,11 +281,9 @@ public class ScoreFragment extends Fragment {
 
             selectedUser.setBalanceScore(testActivity.getScore(1));
             selectedUser.setSpeedScore(testActivity.getScore(2));
-            Log.e("CHAIR", "SPEED " + String.valueOf(testActivity.getScore(2)));
             selectedUser.setChairScore(testActivity.getScore(3));
-            Log.e("CHAIR", String.valueOf(testActivity.getScore(3)));
             selectedUser.setAverageSpeed(testActivity.getAverageSpeed());
-            selectedUser.setTestDate("11/07/2019");
+            selectedUser.setTestDateToday();
 
             selectedUser.update(getActivity());
         });

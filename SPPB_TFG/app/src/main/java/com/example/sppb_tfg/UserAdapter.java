@@ -40,7 +40,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             super(itemView);
 
             // Get listItemView views
-            tv_score =(TextView) itemView.findViewById(R.id.tv_result);
+            tv_score =(TextView) itemView.findViewById(R.id.tv_score_history);
             tv_name = (TextView) itemView.findViewById(R.id.tv_username);
             iv_deleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
             iv_selected = (ImageView) itemView.findViewById(R.id.iv_selected);

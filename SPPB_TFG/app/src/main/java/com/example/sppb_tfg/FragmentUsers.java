@@ -131,7 +131,6 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
                             usersList.remove(position);
                             showUsersList();
                         }
-
                     }
                 });
         dialogBuilder.setNegativeButton(getString(R.string.cancel),
@@ -152,40 +151,6 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
         Intent intent = new Intent(getActivity(), AddUserActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
-
-        /*AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.add_user_dialog, null);
-        dialogBuilder.setView(dialogView);
-
-        final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
-
-        dialogBuilder.setPositiveButton(getActivity().getResources().getString(R.string.done),
-                new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                        String userName = edt.getText().toString();
-                        if (userName.length() != 0) {
-                            User user = new User(edt.getText().toString());
-                            user.insert(getActivity());
-
-                            selectedId = user.getId();
-                            editor.putLong(SELECTED_USER, selectedId);
-                            editor.apply();
-
-                            showUsersList();
-                        }
-            }
-        });
-        dialogBuilder.setNegativeButton(getActivity().getResources().getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //pass
-            }
-        });
-        AlertDialog b = dialogBuilder.create();
-        b.show();
-
-        b.getButton(b.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));*/
     }
 
     // Update user list in recyclerview
