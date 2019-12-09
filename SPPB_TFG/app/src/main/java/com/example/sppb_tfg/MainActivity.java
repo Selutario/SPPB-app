@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        switch (currentFragment){
+        switch (currentFragment) {
             case 0:
                 MainFragment mainFragment = new MainFragment();
                 openFragment(mainFragment);
@@ -77,7 +77,7 @@ public class MainActivity extends FragmentActivity {
     }
 
 
-    private  void openFragment(Fragment fragment) {
+    private void openFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.main_placeHolder, fragment);

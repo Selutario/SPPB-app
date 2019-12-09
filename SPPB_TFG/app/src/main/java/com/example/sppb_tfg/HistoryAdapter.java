@@ -11,52 +11,27 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
 /*
  * Adapter to display user list in Recyclerview.
  */
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
+    Context context;
     private User mUser;
     private TextView tv_score_history;
     private ProgressBar pb_history;
-
     private ImageView iv_calendar;
     private ImageView iv_balance;
     private ImageView iv_gait;
     private ImageView iv_chair;
-
     private TextView tv_date;
     private TextView tv_balance;
     private TextView tv_gait;
     private TextView tv_chair;
 
-    Context context;
 
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ConstraintLayout viewForeground;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            // Get listItemView views
-            tv_score_history =(TextView) itemView.findViewById(R.id.tv_score_history);
-            pb_history = (ProgressBar) itemView.findViewById(R.id.pb_history);
-
-            iv_calendar = (ImageView) itemView.findViewById(R.id.iv_calendar);
-            iv_balance = (ImageView) itemView.findViewById(R.id.iv_balance);
-            iv_gait = (ImageView) itemView.findViewById(R.id.iv_gait);
-            iv_chair = (ImageView) itemView.findViewById(R.id.iv_chair);
-
-            tv_date =(TextView) itemView.findViewById(R.id.tv_date);
-            tv_balance =(TextView) itemView.findViewById(R.id.tv_balance);
-            tv_gait =(TextView) itemView.findViewById(R.id.tv_gait);
-            tv_chair =(TextView) itemView.findViewById(R.id.tv_chair);
-        }
+    public HistoryAdapter(User user) {
+        this.mUser = user;
     }
 
     @NonNull
@@ -69,10 +44,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         ViewHolder viewHolder = new ViewHolder(userView);
 
         return viewHolder;
-    }
-
-    public HistoryAdapter(User user) {
-        this.mUser = user;
     }
 
     @Override
@@ -106,5 +77,27 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     @Override
     public int getItemCount() {
         return mUser.getHistorySize();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public ConstraintLayout viewForeground;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            // Get listItemView views
+            tv_score_history = (TextView) itemView.findViewById(R.id.tv_score_history);
+            pb_history = (ProgressBar) itemView.findViewById(R.id.pb_history);
+
+            iv_calendar = (ImageView) itemView.findViewById(R.id.iv_calendar);
+            iv_balance = (ImageView) itemView.findViewById(R.id.iv_balance);
+            iv_gait = (ImageView) itemView.findViewById(R.id.iv_gait);
+            iv_chair = (ImageView) itemView.findViewById(R.id.iv_chair);
+
+            tv_date = (TextView) itemView.findViewById(R.id.tv_date);
+            tv_balance = (TextView) itemView.findViewById(R.id.tv_balance);
+            tv_gait = (TextView) itemView.findViewById(R.id.tv_gait);
+            tv_chair = (TextView) itemView.findViewById(R.id.tv_chair);
+        }
     }
 }

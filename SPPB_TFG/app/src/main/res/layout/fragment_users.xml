@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.339"
-            tools:ignore="contentDescription"/>
+            tools:ignore="contentDescription" />
 
         <TextView
             android:id="@+id/tv_empty_box"
@@ -76,8 +76,8 @@
             android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingEnd="20dp"
             android:paddingStart="16dp"
+            android:paddingEnd="20dp"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

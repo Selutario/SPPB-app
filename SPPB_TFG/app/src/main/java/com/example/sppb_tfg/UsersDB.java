@@ -6,7 +6,7 @@ public class UsersDB {
 
 
     public static abstract class UserEntry implements BaseColumns {
-        public static final String TABLE_NAME ="USERS";
+        public static final String TABLE_NAME = "USERS";
 
         public static final String NAME = "name";
         public static final String AGE = "age";

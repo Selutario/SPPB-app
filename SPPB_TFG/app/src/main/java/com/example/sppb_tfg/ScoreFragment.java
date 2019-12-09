@@ -144,11 +144,11 @@ public class ScoreFragment extends Fragment {
 
         // If is called from TestActivity, get data from it
         if (currentUserID == -1) {
-            testActivity = ((TestActivity)getActivity());
+            testActivity = ((TestActivity) getActivity());
 
             mCurrentTest = testActivity.getmCurrentTest();
 
-            if(testActivity.getScore(1) >= 0){
+            if (testActivity.getScore(1) >= 0) {
                 mBalanceScore = testActivity.getScore(1);
                 mAverageSpeed = testActivity.getAverageSpeed();
             } else {
@@ -156,13 +156,13 @@ public class ScoreFragment extends Fragment {
                 mAverageSpeed = 0;
             }
 
-            if(testActivity.getScore(2) >= 0){
+            if (testActivity.getScore(2) >= 0) {
                 mGaitScore = testActivity.getScore(2);
             } else {
                 mGaitScore = 0;
             }
 
-            if(testActivity.getScore(3) >= 0) {
+            if (testActivity.getScore(3) >= 0) {
                 mChairScore = testActivity.getScore(3);
             } else {
                 mChairScore = 0;
@@ -182,13 +182,13 @@ public class ScoreFragment extends Fragment {
         final int pb_score;
 
         // Calculate how much progression bar have to advance and print explaining label if full test.
-        if(mCurrentTest == 0){
-            pb_score = 9*score - (9*score)/18;
+        if (mCurrentTest == 0) {
+            pb_score = 9 * score - (9 * score) / 18;
             constraint_explaining.setVisibility(View.VISIBLE);
 
-            if(score == 0) {
+            if (score == 0) {
                 constraint_explaining.setVisibility(View.GONE);
-            } else if(score <= 3){
+            } else if (score <= 3) {
                 tv_explaining_label.setText(getString(R.string.severe));
             } else if (score <= 6) {
                 tv_explaining_label.setText(getString(R.string.moderate));
@@ -198,10 +198,10 @@ public class ScoreFragment extends Fragment {
                 tv_explaining_label.setText(getString(R.string.minimum));
             }
         } else { // if not full test, show only the corresponding items.
-            pb_score = 25*score;
+            pb_score = 25 * score;
             constraint_explaining.setVisibility(View.GONE);
 
-            if (mCurrentTest == 1){
+            if (mCurrentTest == 1) {
                 iv_gait_color.setVisibility(View.GONE);
                 tv_gait_score_label.setVisibility(View.GONE);
                 tv_gait_score.setVisibility(View.GONE);
@@ -211,7 +211,7 @@ public class ScoreFragment extends Fragment {
                 iv_chair_color.setVisibility(View.GONE);
                 tv_chair_score_label.setVisibility(View.GONE);
                 tv_chair_score.setVisibility(View.GONE);
-            } else if (mCurrentTest == 2){
+            } else if (mCurrentTest == 2) {
                 iv_balance_color.setVisibility(View.GONE);
                 tv_balance_score_label.setVisibility(View.GONE);
                 tv_balance_score.setVisibility(View.GONE);
@@ -219,7 +219,7 @@ public class ScoreFragment extends Fragment {
                 iv_chair_color.setVisibility(View.GONE);
                 tv_chair_score_label.setVisibility(View.GONE);
                 tv_chair_score.setVisibility(View.GONE);
-            } else if (mCurrentTest == 3){
+            } else if (mCurrentTest == 3) {
                 iv_balance_color.setVisibility(View.GONE);
                 tv_balance_score_label.setVisibility(View.GONE);
                 tv_balance_score.setVisibility(View.GONE);
@@ -260,13 +260,13 @@ public class ScoreFragment extends Fragment {
         tv_average_speed.setText(String.format("%.1f", mAverageSpeed));
 
         // There is a marked user
-        if(markedUserID != -1 && currentUserID == -1) {
+        if (markedUserID != -1 && currentUserID == -1) {
             btn_save.setVisibility(View.VISIBLE);
             btn_download.setVisibility(View.VISIBLE);
             selectedUser = User.getUser(getActivity(), markedUserID);
             tv_scorename.setText(selectedUser.getName());
 
-        } else if (currentUserID != -1){ // else, if the user is not selected but comes from UserFragment, hide it.
+        } else if (currentUserID != -1) { // else, if the user is not selected but comes from UserFragment, hide it.
             User currentUser = User.getUser(getActivity(), currentUserID);
             tv_scorename.setText(currentUser.getName());
             btn_save.setVisibility(View.INVISIBLE);

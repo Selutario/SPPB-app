@@ -63,7 +63,7 @@ public class MainFragment extends Fragment {
     }
 
     // Open test in a new activity, send test clicked by the user.
-    private void test_activity(int test){
+    private void test_activity(int test) {
         Intent intent = new Intent(getActivity(), TestActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra("test_number", test);
@@ -75,7 +75,7 @@ public class MainFragment extends Fragment {
         PackageManager manager = getActivity().getPackageManager();
         boolean hasAccelerometer = manager.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER);
 
-        if(!hasAccelerometer) {
+        if (!hasAccelerometer) {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
             dialogBuilder.setTitle(getString(R.string.no_accelerometer_title));
             dialogBuilder.setMessage(getString(R.string.no_accelerometer_descp));

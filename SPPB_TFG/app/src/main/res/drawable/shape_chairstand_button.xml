@@ -13,8 +13,8 @@
         <shape android:shape="rectangle">
             <gradient
                 android:angle="180"
-                android:startColor="@color/colorChairLighter"
                 android:endColor="@color/colorChairLight"
+                android:startColor="@color/colorChairLighter"
                 android:type="linear" />
             <corners android:radius="12dp" />
         </shape>

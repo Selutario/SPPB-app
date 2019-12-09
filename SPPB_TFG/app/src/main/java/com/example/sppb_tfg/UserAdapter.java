@@ -13,58 +13,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /*
-* Adapter to display user list in Recyclerview.
-*/
+ * Adapter to display user list in Recyclerview.
+ */
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
-    private ArrayList<User> mUsers;
     public TextView tv_score;
     public TextView tv_name;
-    private ImageView iv_deleteIcon;
-    private ImageView iv_selected;
     public clickListener mClickListener;
     Long mSelectedId;
     Context context;
-
-    public interface clickListener {
-        public void onUserClick(int position);
-        public boolean onUserLongClick(int position);
-    }
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
-        public ConstraintLayout viewForeground;
-        clickListener clickListener;
-
-        public ViewHolder(View itemView, clickListener clickListener) {
-            super(itemView);
-
-            // Get listItemView views
-            tv_score =(TextView) itemView.findViewById(R.id.tv_score_history);
-            tv_name = (TextView) itemView.findViewById(R.id.tv_username);
-            iv_deleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
-            iv_selected = (ImageView) itemView.findViewById(R.id.iv_selected);
-            viewForeground = itemView.findViewById(R.id.viewForeground);
-            this.clickListener = clickListener;
-
-            // Obtain position of clicked user
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            clickListener.onUserClick(getAdapterPosition());
-        }
-
-
-        @Override
-        public boolean onLongClick(View v) {
-            clickListener.onUserLongClick(getAdapterPosition());
-            return true;
-        }
-    }
-
+    private ArrayList<User> mUsers;
+    private ImageView iv_deleteIcon;
+    private ImageView iv_selected;
 
     public UserAdapter(ArrayList<User> users, long mSelectedId, clickListener clickListener) {
         this.mUsers = users;
@@ -126,10 +86,49 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if(mUsers != null){
+        if (mUsers != null) {
             return mUsers.size();
         } else {
             return 0;
+        }
+    }
+
+    public interface clickListener {
+        public void onUserClick(int position);
+
+        public boolean onUserLongClick(int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+        public ConstraintLayout viewForeground;
+        clickListener clickListener;
+
+        public ViewHolder(View itemView, clickListener clickListener) {
+            super(itemView);
+
+            // Get listItemView views
+            tv_score = (TextView) itemView.findViewById(R.id.tv_score_history);
+            tv_name = (TextView) itemView.findViewById(R.id.tv_username);
+            iv_deleteIcon = (ImageView) itemView.findViewById(R.id.iv_delete);
+            iv_selected = (ImageView) itemView.findViewById(R.id.iv_selected);
+            viewForeground = itemView.findViewById(R.id.viewForeground);
+            this.clickListener = clickListener;
+
+            // Obtain position of clicked user
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onUserClick(getAdapterPosition());
+        }
+
+
+        @Override
+        public boolean onLongClick(View v) {
+            clickListener.onUserLongClick(getAdapterPosition());
+            return true;
         }
     }
 }

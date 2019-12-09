@@ -16,7 +16,7 @@ public class SliderAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
     SliderResources sliderResources = new SliderResources();
 
-    public SliderAdapter(Context context, int test){
+    public SliderAdapter(Context context, int test) {
         this.context = context;
         mCurrentTest = test;
     }
@@ -53,6 +53,6 @@ public class SliderAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((ScrollView)object);
+        container.removeView((ScrollView) object);
     }
 }

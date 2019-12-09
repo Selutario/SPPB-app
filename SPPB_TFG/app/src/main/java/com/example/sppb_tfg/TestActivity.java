@@ -19,23 +19,20 @@ import java.util.Locale;
 
 public class TestActivity extends FragmentActivity {
 
-    private int mCurrentTest;
-    private boolean full_test = false;
-    SharedPreferences settings;
-
     public int balanceScore = -1;
     public int gaitScore = -1;
     public int chairScore = -1;
     public double averageSpeed = -1;
-
     public DownloadAccData excelData;
-
     public String markedUserName = "";
     public TextToSpeech tts;
     public boolean isMuted = false;
     public MediaPlayer beep;
     public boolean ttsReady = false;
     public HashMap<String, String> params = new HashMap<>();
+    SharedPreferences settings;
+    private int mCurrentTest;
+    private boolean full_test = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +43,7 @@ public class TestActivity extends FragmentActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Open selected test in app shortcut
-        if ("android.intent.action.full_shortcut".equals(getIntent().getAction())){
+        if ("android.intent.action.full_shortcut".equals(getIntent().getAction())) {
             mCurrentTest = 0;
         } else if ("android.intent.action.balance_shortcut".equals(getIntent().getAction())) {
             mCurrentTest = Constants.BALANCE_TEST;
@@ -104,7 +101,7 @@ public class TestActivity extends FragmentActivity {
                 mCurrentTest = 1;
             case Constants.BALANCE_TEST:
                 // Show info/instructions if first time user open this test
-                if (settings.getBoolean("FirstUseBalance", true)){
+                if (settings.getBoolean("FirstUseBalance", true)) {
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("FirstUseBalance", false);
                     editor.apply();
@@ -117,7 +114,7 @@ public class TestActivity extends FragmentActivity {
 
             case Constants.GAIT_TEST:
                 // Show info/instructions if first time user open this test
-                if (settings.getBoolean("FirstUseGait", true)){
+                if (settings.getBoolean("FirstUseGait", true)) {
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("FirstUseGait", false);
                     editor.apply();
@@ -130,7 +127,7 @@ public class TestActivity extends FragmentActivity {
 
             case Constants.CHAIR_TEST:
                 // Show info/instructions if first time user open this test
-                if (settings.getBoolean("FirstUseChair", true)){
+                if (settings.getBoolean("FirstUseChair", true)) {
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("FirstUseChair", false);
                     editor.apply();
@@ -146,12 +143,12 @@ public class TestActivity extends FragmentActivity {
 
     // Go to the next test if full test is chosen, or show result if there is no test to be done.
     public void fragmentTestCompleted() {
-        mCurrentTest = mCurrentTest +1;
+        mCurrentTest = mCurrentTest + 1;
 
         if (full_test) {
             if (mCurrentTest < 4) {
                 startTest();
-            } else if (mCurrentTest < 5){
+            } else if (mCurrentTest < 5) {
                 ScoreFragment scoreFragment = new ScoreFragment();
                 openFragment(scoreFragment, true);
             } else {
@@ -168,7 +165,7 @@ public class TestActivity extends FragmentActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        if(animate) {
+        if (animate) {
             transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
         }
 
@@ -177,7 +174,7 @@ public class TestActivity extends FragmentActivity {
     }
 
     // Open info/instructions activity
-    public void slider_activity(int test){
+    public void slider_activity(int test) {
         Intent intent = new Intent(this, SliderActivity.class);
         intent.putExtra("test", test);
         startActivity(intent);
@@ -189,23 +186,23 @@ public class TestActivity extends FragmentActivity {
         beep = MediaPlayer.create(this, R.raw.beep);
 
         // Text to speech
-        tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+        tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (tts.getEngines().size() == 0) {
-                    Toast.makeText(TestActivity.this,"No Engines Installed",
+                    Toast.makeText(TestActivity.this, "No Engines Installed",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    if(status == TextToSpeech.SUCCESS) {
+                    if (status == TextToSpeech.SUCCESS) {
                         Locale locale;
                         switch (Locale.getDefault().getCountry()) {
-                        case "US":
-                            locale = Locale.US;
-                            break;
-                        case "ES":
-                            locale = new Locale("spa", "ES");
-                            tts.setSpeechRate(1.5f);
-                            break;
+                            case "US":
+                                locale = Locale.US;
+                                break;
+                            case "ES":
+                                locale = new Locale("spa", "ES");
+                                tts.setSpeechRate(1.5f);
+                                break;
                             default:
                                 locale = Locale.UK;
                                 break;
@@ -221,7 +218,7 @@ public class TestActivity extends FragmentActivity {
     }
 
     @SuppressWarnings("deprecation")
-    protected void readText(String text){
+    protected void readText(String text) {
         if (!isMuted) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
@@ -235,14 +232,14 @@ public class TestActivity extends FragmentActivity {
     public boolean switchMute() {
         tts.stop();
         isMuted = !isMuted;
-        return  isMuted;
+        return isMuted;
     }
 
     public int getmCurrentTest() {
         if (full_test) {
             return 0;
         } else {
-            return mCurrentTest -1;
+            return mCurrentTest - 1;
         }
     }
 

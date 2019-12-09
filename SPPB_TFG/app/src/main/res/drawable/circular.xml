@@ -16,9 +16,9 @@
                 android:type="sweep" />-->
             <gradient
                 android:endColor="@color/colorBackground"
+                android:gradientRadius="90dp"
                 android:startColor="#999999"
-                android:type="radial"
-                android:gradientRadius="90dp"/>
+                android:type="radial" />
         </shape>
     </item>
 
@@ -43,11 +43,11 @@
                     android:toDegrees="90" />
 
                 <gradient
-                    android:endColor="@color/minimum"
                     android:centerColor="@color/slight"
+                    android:endColor="@color/minimum"
                     android:startColor="@color/severe"
                     android:type="sweep" />
-                <corners android:radius="80dp"/>
+                <corners android:radius="80dp" />
             </shape>
         </rotate>
     </item>

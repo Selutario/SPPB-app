@@ -12,8 +12,8 @@
         <shape android:shape="rectangle">
             <gradient
                 android:angle="90"
-                android:startColor="@color/colorGaitSpeed"
                 android:endColor="@color/colorPrimary"
+                android:startColor="@color/colorGaitSpeed"
                 android:type="linear" />
         </shape>
     </item>

@@ -20,7 +20,7 @@ public class LocalSQLiteOpenHelper extends SQLiteOpenHelper {
                 + UsersDB.UserEntry.WEIGHT + " REAL,"
                 + UsersDB.UserEntry.HEIGHT + " INTEGER,"
                 + UsersDB.UserEntry.BALANCE_SCORE + " TEXT,"
-                + UsersDB.UserEntry.SPEED_SCORE+ " TEXT,"
+                + UsersDB.UserEntry.SPEED_SCORE + " TEXT,"
                 + UsersDB.UserEntry.CHAIR_SCORE + " TEXT,"
                 + UsersDB.UserEntry.TEST_DATE + " TEXT, "
                 + UsersDB.UserEntry.AVERAGE_SPEED + " TEXT)");
