@@ -99,13 +99,13 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
+        testActivity = ((TestActivity)getActivity());
+
         // Set test name and test color on the interface
-        test_name.setText(getActivity().getResources().getText(R.string.chair_name));
+        test_name.setText(getActivity().getResources().getText(R.string.chair_name) + testActivity.markedUserName);
         iv_person.setImageResource(R.drawable.ic_person_sitting);
         drawable = (GradientDrawable)cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
-
-        testActivity = ((TestActivity)getActivity());
 
         TooltipCompat.setTooltipText(btn_info, getString(R.string.info));
         TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));

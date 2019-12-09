@@ -76,12 +76,12 @@ public class GaitFragment extends Fragment implements SensorEventListener {
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
+        testActivity = ((TestActivity)getActivity());
+
         // Set test name and test color on the interface
-        test_name.setText(getActivity().getResources().getText(R.string.gait_name));
+        test_name.setText(getActivity().getResources().getText(R.string.gait_name) + testActivity.markedUserName);
         drawable = (GradientDrawable)cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
-
-        testActivity = ((TestActivity)getActivity());
 
         TooltipCompat.setTooltipText(btn_info, getString(R.string.info));
         TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
@@ -139,6 +139,7 @@ public class GaitFragment extends Fragment implements SensorEventListener {
                     drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorGaitSpeed));
                     btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
                     TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
+                    test_name.setText(getString(R.string.gait_name));
                     tv_result.setVisibility(View.GONE);
                     tv_result_label.setVisibility(View.GONE);
                     chronometer.setVisibility(View.GONE);
@@ -351,8 +352,13 @@ public class GaitFragment extends Fragment implements SensorEventListener {
             score = 1;
         }
 
-        testActivity.averageSpeed = 4/time;
         testActivity.gaitScore = score;
+        if (time != 100) {
+            testActivity.averageSpeed = 4/time;
+        } else {
+            testActivity.averageSpeed = -1;
+        }
+
 
         return score;
     }

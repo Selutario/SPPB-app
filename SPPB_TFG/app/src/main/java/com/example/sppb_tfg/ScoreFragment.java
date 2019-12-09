@@ -16,7 +16,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +61,8 @@ public class ScoreFragment extends Fragment {
     TextView tv_chair_score;
     TextView tv_chair_score_label;
 
+    ImageView btn_download_history;
+
     long currentUserID = -1L;
     long markedUserID = -1L;
     User selectedUser;
@@ -106,6 +107,8 @@ public class ScoreFragment extends Fragment {
         iv_chair_color = (ImageView) view.findViewById(R.id.iv_chair_color);
         tv_chair_score_label = (TextView) view.findViewById(R.id.tv_chair_score_label);
         tv_chair_score = (TextView) view.findViewById(R.id.tv_chair_score);
+
+        btn_download_history = (ImageView) view.findViewById(R.id.iv_download_history);
 
         // Set recyclerview and link it with adapter, to show history
         mRecyclerView = (RecyclerView) view.findViewById(R.id.history_list);
@@ -273,6 +276,24 @@ public class ScoreFragment extends Fragment {
             btn_save.setVisibility(View.GONE);
             constraint_history.setVisibility(View.GONE);
         }
+
+        btn_download_history.setOnClickListener(v -> {
+            Long id;
+            if (currentUserID != -1) {
+                id = currentUserID;
+            } else {
+                id = markedUserID;
+            }
+
+            DownloadHistData downloadHistData = new DownloadHistData(getContext(),
+                    User.getUser(getContext(), id));
+
+            try {
+                downloadHistData.makeCSV();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         // Save data in local db
         btn_save.setOnClickListener(v -> {

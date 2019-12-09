@@ -92,7 +92,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         testActivity = ((TestActivity)getActivity());
 
         // Set test name and test color on the interface
-        test_name.setText(getString(R.string.balance_name));
+        test_name.setText(getString(R.string.balance_name) + testActivity.markedUserName);
         drawable = (GradientDrawable)cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
 
@@ -153,6 +153,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                     btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
                     TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
                     chronometer.setVisibility(View.GONE);
+                    test_name.setText(getString(R.string.balance_name));
                     btn_play.setImageResource(R.drawable.ic_round_play_arrow);
                     btn_play.setVisibility(View.VISIBLE);
                     btn_play.setEnabled(true);

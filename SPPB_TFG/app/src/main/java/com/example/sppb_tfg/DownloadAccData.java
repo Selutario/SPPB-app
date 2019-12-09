@@ -15,7 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AccData {
+public class DownloadAccData {
 
     Context mContext;
     private ArrayList<ArrayList<String>> data_matrix = new ArrayList<>();
@@ -28,7 +28,7 @@ public class AccData {
     CSVWriter writer;
 
 
-    public AccData(Context context, boolean full_test){
+    public DownloadAccData(Context context, boolean full_test){
         this.full_test = full_test;
         mContext = context;
 

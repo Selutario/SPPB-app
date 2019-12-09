@@ -1,21 +1,16 @@
 package com.example.sppb_tfg;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -33,11 +28,11 @@ public class TestActivity extends FragmentActivity {
     public int chairScore = -1;
     public double averageSpeed = -1;
 
-    public AccData excelData;
+    public DownloadAccData excelData;
 
+    public String markedUserName = "";
     public TextToSpeech tts;
     public boolean isMuted = false;
-    public String mostRecentUtteranceID;
     public MediaPlayer beep;
     public boolean ttsReady = false;
     public HashMap<String, String> params = new HashMap<>();
@@ -63,10 +58,15 @@ public class TestActivity extends FragmentActivity {
             mCurrentTest = getIntent().getIntExtra("test_number", mCurrentTest);
 
             // Create a matrix of required size depending on the number of tests to perform.
-            excelData = new AccData(TestActivity.this, mCurrentTest == 0);
+            excelData = new DownloadAccData(TestActivity.this, mCurrentTest == 0);
         }
 
         settings = getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
+        Long id = settings.getLong(Constants.SELECTED_USER, -1);
+
+        if (id != -1) {
+            markedUserName = " (" + User.getUser(this, id).getName() + ")";
+        }
 
         initTTS();
         startTest();

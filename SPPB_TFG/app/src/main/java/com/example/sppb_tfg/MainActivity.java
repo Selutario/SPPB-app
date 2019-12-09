@@ -85,15 +85,9 @@ public class MainActivity extends FragmentActivity {
         transaction.commit();
     }
 
-    // Close app if backpressed on MainFragment or FragmentUsers, go back if on ScoreFragment
+    // Close app if backpressed
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_placeHolder);
-        if ((fragment instanceof MainFragment) || (fragment instanceof FragmentUsers)) {
-            super.onBackPressed();
-        } else if ((fragment instanceof ScoreFragment)) {
-            FragmentUsers fragmentUsers = new FragmentUsers();
-            openFragment(fragmentUsers);
-        }
+        super.onBackPressed();
     }
 }

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /*
@@ -108,7 +109,12 @@ public class User {
     }
 
     public int getAge() {
-        return age;
+        if (this.age != 0) {
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            return (currentYear - this.age);
+        } else {
+            return 0;
+        }
     }
 
     public void setAge(String age) {
@@ -140,6 +146,14 @@ public class User {
             this.weight = 0;
         } else {
             this.height = Integer.valueOf(height);
+        }
+    }
+
+    public double getBMI() {
+        if (getHeight() != 0 && getWeight() != 0) {
+            return (getWeight() / ((getHeight()/100)*(getHeight()/100)));
+        } else {
+            return 0;
         }
     }
 
@@ -221,8 +235,6 @@ public class User {
         double score = 0;
         if(averageSpeed >= 0) {
             score = averageSpeed;
-        } else {
-            score = getAverageSpeed();
         }
 
         if (testNotPerformed()) {
