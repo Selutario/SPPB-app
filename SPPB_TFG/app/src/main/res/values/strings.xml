@@ -107,7 +107,6 @@
     </string>
 
 
-
     <!--ACTUAL TEST-->
     <string name="start">Start</string>
 
@@ -206,10 +205,11 @@
     <!-- SCORE -->
     <string name="score">Score</string>
     <string name="points">Points</string>
+    <string name="history">History</string>
     <string name="save_as">Save</string>
     <string name="save_csv">Donwload</string>
     <string name="saved">Saved</string>
-    <string name="average_speed">Average walking speed</string>
+    <string name="average_speed">Average speed (m/s)</string>
 
     <string name="severe">Severe limitation</string>
     <string name="moderate">Moderate limitation</string>
@@ -225,7 +225,6 @@
     <string name="repeat">Repeat test</string>
     <string name="chest">Chest</string>
     <string name="thigh">Thigh</string>
-
 
 
 </resources>

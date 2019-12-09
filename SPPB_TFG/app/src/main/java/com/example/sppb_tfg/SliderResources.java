@@ -1,8 +1,8 @@
 package com.example.sppb_tfg;
 
 /*
-* When you add an item here, it is automatically updated to be displayed in the corresponding view.
-*/
+ * When you add an item here, it is automatically updated to be displayed in the corresponding view.
+ */
 public class SliderResources {
     /*
      * BALANCE TEST

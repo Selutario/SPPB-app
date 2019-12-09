@@ -21,8 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.IOException;
-
 import static com.example.sppb_tfg.Constants.ACCE_FILTER_DATA_MIN_TIME;
 
 /*
@@ -35,6 +33,8 @@ import static com.example.sppb_tfg.Constants.ACCE_FILTER_DATA_MIN_TIME;
  *
  * Made by José Luis López Sánchez.*/
 public class BalanceFragment extends Fragment implements SensorEventListener {
+    private final int MAX_INDEX = 20;
+    private final float move_allowed = 3;
     private LinearLayout whole_screen;
     private ConstraintLayout cl_info;
     private TextView test_name;
@@ -47,25 +47,19 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
     private ImageButton btn_info;
     private ImageButton btn_replay;
     private GradientDrawable drawable;
-
     private int currentStep = 0;
     private boolean inProgress = false;
-
     // Calibration variables
     private boolean ready_to_calibrate = false;
     private boolean calibrated = false;
     private int sample_index = 0;
-    private final int MAX_INDEX = 20;
-    private float measured_x[] = new float [MAX_INDEX];
-    private float measured_y[] = new float [MAX_INDEX];
-    private float measured_z[] = new float [MAX_INDEX];
-
+    private float measured_x[] = new float[MAX_INDEX];
+    private float measured_y[] = new float[MAX_INDEX];
+    private float measured_z[] = new float[MAX_INDEX];
     // Average of each axis.
     private float mean_x = 0;
     private float mean_y = 0;
     private float mean_z = 0;
-    private final float move_allowed = 3;
-
     private SensorManager sensorManager;
     private Sensor sensorAcc;
     private long lastSaved = System.currentTimeMillis();
@@ -82,7 +76,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         cl_info = view.findViewById(R.id.cl_info);
         iv_person = (ImageView) view.findViewById(R.id.iv_person);
         test_name = (TextView) view.findViewById(R.id.tv_test_name);
-        tv_result = (TextView) view.findViewById(R.id.tv_result);
+        tv_result = (TextView) view.findViewById(R.id.tv_score_history);
         tv_result_label = (TextView) view.findViewById(R.id.tv_result_label);
         test_name = (TextView) view.findViewById(R.id.tv_test_name);
         chronometer = view.findViewById(R.id.chronometer);
@@ -91,11 +85,11 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
-        testActivity = ((TestActivity)getActivity());
+        testActivity = ((TestActivity) getActivity());
 
         // Set test name and test color on the interface
-        test_name.setText(getString(R.string.balance_name));
-        drawable = (GradientDrawable)cl_info.getBackground();
+        test_name.setText(getString(R.string.balance_name) + testActivity.markedUserName);
+        drawable = (GradientDrawable) cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorBalance));
 
         TooltipCompat.setTooltipText(btn_info, getString(R.string.info));
@@ -138,7 +132,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             public void onClick(View view) {
                 testActivity.tts.stop();
 
-                if(calibrated && currentStep != 3 && currentStep != 5 && currentStep != 7){
+                if (calibrated && currentStep != 3 && currentStep != 5 && currentStep != 7) {
                     currentStep = 0;
 
                     sample_index = 0;
@@ -155,16 +149,19 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
                     btn_replay.setImageResource(R.drawable.ic_round_cancel_24px);
                     TooltipCompat.setTooltipText(btn_replay, getString(R.string.unable));
                     chronometer.setVisibility(View.GONE);
+                    test_name.setText(getString(R.string.balance_name));
                     btn_play.setImageResource(R.drawable.ic_round_play_arrow);
                     btn_play.setVisibility(View.VISIBLE);
                     btn_play.setEnabled(true);
                     tv_result.setVisibility(View.GONE);
                     tv_result_label.setVisibility(View.GONE);
                 } else {
-                    if(currentStep == 5) {
+                    if (currentStep == 5) {
                         testActivity.balanceScore = 1;
                     } else if (currentStep == 7) {
                         testActivity.balanceScore = 2;
+                    } else {
+                        testActivity.balanceScore = 0;
                     }
                     testActivity.fragmentTestCompleted();
                 }
@@ -173,7 +170,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
         // Sensor declaration.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager != null){
+        if (sensorManager != null) {
             sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
             sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
         }
@@ -298,7 +295,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
         }
 
-        currentStep = currentStep +1;
+        currentStep = currentStep + 1;
     }
 
     // Used to set click listener in a whole screen layout
@@ -327,7 +324,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
             float z = event.values[2];
 
             // Calibration process
-            if(ready_to_calibrate) {
+            if (ready_to_calibrate) {
                 if (!calibrated) {
                     // If there are enough samples, calculate average.
                     if (sample_index >= MAX_INDEX) {
@@ -368,7 +365,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
 
                 long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
 
-                if(change_x > move_allowed || change_z > move_allowed || change_y > 1) {
+                if (change_x > move_allowed || change_z > move_allowed || change_y > 1) {
                     desbalanced(elapsedMillis);
 
                 } else if (elapsedMillis > 10100) {
@@ -418,7 +415,7 @@ public class BalanceFragment extends Fragment implements SensorEventListener {
         } else {
             iv_person.setImageResource(R.drawable.ic_person_desbalan_3);
 
-            if(elapsedTime < 3000) {
+            if (elapsedTime < 3000) {
                 score = 2;
             } else if (elapsedTime <= 9000) {
                 score = 3;

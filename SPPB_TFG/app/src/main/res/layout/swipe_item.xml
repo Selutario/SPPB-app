@@ -5,9 +5,9 @@
     android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="106dp"
+    android:background="@color/colorError"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:background="@color/colorError">
+    android:paddingRight="16dp">
 
 
     <TextView

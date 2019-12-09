@@ -1,15 +1,15 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-        android:shortcutId="chair_shortcut"
         android:enabled="true"
         android:icon="@drawable/ic_chair_balance_color"
-        android:shortcutShortLabel="@string/chair_name"
+        android:shortcutDisabledMessage="@string/chair_name"
+        android:shortcutId="chair_shortcut"
         android:shortcutLongLabel="@string/chair_name"
-        android:shortcutDisabledMessage="@string/chair_name">
+        android:shortcutShortLabel="@string/chair_name">
         <intent
             android:action="android.intent.action.chair_shortcut"
-            android:targetPackage="com.example.sppb_tfg"
-            android:targetClass="com.example.sppb_tfg.TestActivity" />
+            android:targetClass="com.example.sppb_tfg.TestActivity"
+            android:targetPackage="com.example.sppb_tfg" />
         <!-- If your shortcut is associated with multiple intents, include them
              here. The last intent in the list determines what the user sees when
              they launch this shortcut. -->
@@ -17,16 +17,16 @@
     </shortcut>
 
     <shortcut
-        android:shortcutId="gait_shortcut"
         android:enabled="true"
         android:icon="@drawable/ic_speed_gait_color"
-        android:shortcutShortLabel="@string/gait_name"
+        android:shortcutDisabledMessage="@string/gait_name"
+        android:shortcutId="gait_shortcut"
         android:shortcutLongLabel="@string/gait_name"
-        android:shortcutDisabledMessage="@string/gait_name">
+        android:shortcutShortLabel="@string/gait_name">
         <intent
             android:action="android.intent.action.gait_shortcut"
-            android:targetPackage="com.example.sppb_tfg"
-            android:targetClass="com.example.sppb_tfg.TestActivity" />
+            android:targetClass="com.example.sppb_tfg.TestActivity"
+            android:targetPackage="com.example.sppb_tfg" />
         <!-- If your shortcut is associated with multiple intents, include them
              here. The last intent in the list determines what the user sees when
              they launch this shortcut. -->
@@ -35,16 +35,16 @@
 
     <!-- Specify more shortcuts here. -->
     <shortcut
-        android:shortcutId="balance_shortcut"
         android:enabled="true"
         android:icon="@drawable/ic_balance_wires2"
-        android:shortcutShortLabel="@string/balance_name"
+        android:shortcutDisabledMessage="@string/balance_name"
+        android:shortcutId="balance_shortcut"
         android:shortcutLongLabel="@string/balance_name"
-        android:shortcutDisabledMessage="@string/balance_name">
+        android:shortcutShortLabel="@string/balance_name">
         <intent
             android:action="android.intent.action.balance_shortcut"
-            android:targetPackage="com.example.sppb_tfg"
-            android:targetClass="com.example.sppb_tfg.TestActivity" />
+            android:targetClass="com.example.sppb_tfg.TestActivity"
+            android:targetPackage="com.example.sppb_tfg" />
         <!-- If your shortcut is associated with multiple intents, include them
              here. The last intent in the list determines what the user sees when
              they launch this shortcut. -->
@@ -52,16 +52,16 @@
     </shortcut>
 
     <shortcut
-        android:shortcutId="full_shortcut"
         android:enabled="true"
         android:icon="@drawable/ic_all_wired_blue"
-        android:shortcutShortLabel="@string/all_tests"
+        android:shortcutDisabledMessage="@string/all_tests"
+        android:shortcutId="full_shortcut"
         android:shortcutLongLabel="@string/all_tests"
-        android:shortcutDisabledMessage="@string/all_tests">
+        android:shortcutShortLabel="@string/all_tests">
         <intent
             android:action="android.intent.action.full_shortcut"
-            android:targetPackage="com.example.sppb_tfg"
-            android:targetClass="com.example.sppb_tfg.TestActivity" />
+            android:targetClass="com.example.sppb_tfg.TestActivity"
+            android:targetPackage="com.example.sppb_tfg" />
         <!-- If your shortcut is associated with multiple intents, include them
              here. The last intent in the list determines what the user sees when
              they launch this shortcut. -->

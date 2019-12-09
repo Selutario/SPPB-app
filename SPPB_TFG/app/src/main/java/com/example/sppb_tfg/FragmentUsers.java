@@ -18,7 +18,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +29,8 @@ import static com.example.sppb_tfg.Constants.SELECTED_USER;
 
 public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.RecyclerUserTouchHelperListener, UserAdapter.clickListener {
 
+    SharedPreferences settings;
+    SharedPreferences.Editor editor;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ImageView iv_empty_box;
@@ -37,9 +38,6 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
     private ArrayList<User> usersList;
     private UserAdapter adapter;
     private Long selectedId;
-
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
 
     public FragmentUsers() {
         // Required empty public constructor
@@ -49,7 +47,7 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
     public View onCreateView(LayoutInflater inflater, ViewGroup
             container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_users,null);
+        View view = inflater.inflate(R.layout.fragment_users, null);
         final LinearLayout btn_add_user = (LinearLayout) view.findViewById(R.id.btn_add_user);
 
         // Get selected user to save future test results, if any
@@ -78,9 +76,9 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (dy > 0 && btn_add_user.getVisibility() == View.VISIBLE){
+                if (dy > 0 && btn_add_user.getVisibility() == View.VISIBLE) {
                     btn_add_user.animate().translationY(200);
-                } else if (dy < 0){
+                } else if (dy < 0) {
                     btn_add_user.animate().translationY(0);
                 }
             }
@@ -121,7 +119,7 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
 
                         if (viewHolder instanceof UserAdapter.ViewHolder) {
 
-                            if (toDeleteUser.getId() == selectedId){
+                            if (toDeleteUser.getId() == selectedId) {
                                 editor.putLong(SELECTED_USER, -1);
                                 editor.apply();
                             }
@@ -131,7 +129,6 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
                             usersList.remove(position);
                             showUsersList();
                         }
-
                     }
                 });
         dialogBuilder.setNegativeButton(getString(R.string.cancel),
@@ -152,40 +149,6 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
         Intent intent = new Intent(getActivity(), AddUserActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
-
-        /*AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.add_user_dialog, null);
-        dialogBuilder.setView(dialogView);
-
-        final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
-
-        dialogBuilder.setPositiveButton(getActivity().getResources().getString(R.string.done),
-                new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                        String userName = edt.getText().toString();
-                        if (userName.length() != 0) {
-                            User user = new User(edt.getText().toString());
-                            user.insert(getActivity());
-
-                            selectedId = user.getId();
-                            editor.putLong(SELECTED_USER, selectedId);
-                            editor.apply();
-
-                            showUsersList();
-                        }
-            }
-        });
-        dialogBuilder.setNegativeButton(getActivity().getResources().getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //pass
-            }
-        });
-        AlertDialog b = dialogBuilder.create();
-        b.show();
-
-        b.getButton(b.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));*/
     }
 
     // Update user list in recyclerview
@@ -195,7 +158,7 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
         adapter = new UserAdapter(usersList, selectedId, this);
         mRecyclerView.setAdapter(adapter);
 
-        if (usersList.isEmpty()){
+        if (usersList.isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
             iv_empty_box.setVisibility(View.VISIBLE);
             et_empty_box.setVisibility(View.VISIBLE);
@@ -226,7 +189,7 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
     public boolean onUserLongClick(int position) {
         long newSelectedId = usersList.get(position).getId();
 
-        if(selectedId == newSelectedId) {
+        if (selectedId == newSelectedId) {
             selectedId = (long) -1;
             editor.putLong(SELECTED_USER, -1);
         } else {
@@ -240,7 +203,7 @@ public class FragmentUsers extends Fragment implements RecyclerUserTouchHelper.R
         return true;
     }
 
-    private  void openFragment(Fragment fragment) {
+    private void openFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter, R.anim.exit);

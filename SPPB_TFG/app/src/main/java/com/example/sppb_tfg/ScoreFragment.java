@@ -6,13 +6,16 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +31,11 @@ import static com.example.sppb_tfg.Constants.SELECTED_USER;
 
 public class ScoreFragment extends Fragment {
     ConstraintLayout score_layout;
-    ConstraintLayout constraing_explaining;
-    ConstraintLayout constraing_average_speed;
+    ConstraintLayout constraint_explaining;
+    ConstraintLayout constraint_history;
+
+    RecyclerView mRecyclerView;
+    HistoryAdapter adapter;
 
     ProgressBar progressBar;
     LinearLayout btn_save;
@@ -49,11 +55,16 @@ public class ScoreFragment extends Fragment {
     TextView tv_gait_score_label;
     TextView tv_gait_score;
     TextView tv_average_speed;
+    TextView tv_average_label;
 
     ImageView iv_chair_color;
     TextView tv_chair_score;
     TextView tv_chair_score_label;
 
+    ImageView btn_download_history;
+
+    long currentUserID = -1L;
+    long markedUserID = -1L;
     User selectedUser;
     int score = 0;
     int mCurrentTest = 0;
@@ -70,8 +81,9 @@ public class ScoreFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_score, null);
         score_layout = view.findViewById(R.id.fragment_score);
-        constraing_explaining = view.findViewById(R.id.constraing_explaining);
-        constraing_average_speed = view.findViewById(R.id.constraing_average_speed);
+        constraint_explaining = view.findViewById(R.id.constraing_explaining);
+        constraint_history = view.findViewById(R.id.constraint_history);
+
         progressBar = (ProgressBar) view.findViewById(R.id.score_progressbar);
 
         tv_scorename = (TextView) view.findViewById(R.id.tv_scorename);
@@ -89,31 +101,74 @@ public class ScoreFragment extends Fragment {
         iv_gait_color = (ImageView) view.findViewById(R.id.iv_gait_color);
         tv_gait_score_label = (TextView) view.findViewById(R.id.tv_gait_score_label);
         tv_gait_score = (TextView) view.findViewById(R.id.tv_gait_score);
+        tv_average_label = (TextView) view.findViewById(R.id.tv_average_label);
         tv_average_speed = (TextView) view.findViewById(R.id.tv_average_speed);
 
         iv_chair_color = (ImageView) view.findViewById(R.id.iv_chair_color);
         tv_chair_score_label = (TextView) view.findViewById(R.id.tv_chair_score_label);
         tv_chair_score = (TextView) view.findViewById(R.id.tv_chair_score);
 
-        Long currentUserID = -1L;
+        btn_download_history = (ImageView) view.findViewById(R.id.iv_download_history);
+
+        // Set recyclerview and link it with adapter, to show history
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.history_list);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+        // Get selected user if any
+        sharedPreferences = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
+        markedUserID = sharedPreferences.getLong(SELECTED_USER, -1);
+
 
         // Determine if the fragment is called from UserFragment
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             currentUserID = bundle.getLong(SELECTED_USER);
+
+            if (User.getUser(getActivity(), currentUserID).testNotPerformed()) {
+                constraint_history.setVisibility(View.GONE);
+            } else {
+                adapter = new HistoryAdapter(User.getUser(getActivity(), currentUserID));
+                mRecyclerView.setAdapter(adapter);
+            }
+        } else if (markedUserID != -1) {
+            if (User.getUser(getActivity(), markedUserID).testNotPerformed()) {
+                constraint_history.setVisibility(View.GONE);
+            } else {
+                adapter = new HistoryAdapter(User.getUser(getActivity(), markedUserID));
+                mRecyclerView.setAdapter(adapter);
+            }
         }
+
 
         // If is called from TestActivity, get data from it
         if (currentUserID == -1) {
-            testActivity = ((TestActivity)getActivity());
+            testActivity = ((TestActivity) getActivity());
 
-            score = testActivity.getScore(mCurrentTest);
             mCurrentTest = testActivity.getmCurrentTest();
 
-            mBalanceScore = testActivity.getScore(1);
-            mGaitScore = testActivity.getScore(2);
-            mChairScore = testActivity.getScore(3);
-            mAverageSpeed = testActivity.getAverageSpeed();
+            if (testActivity.getScore(1) >= 0) {
+                mBalanceScore = testActivity.getScore(1);
+                mAverageSpeed = testActivity.getAverageSpeed();
+            } else {
+                mBalanceScore = 0;
+                mAverageSpeed = 0;
+            }
+
+            if (testActivity.getScore(2) >= 0) {
+                mGaitScore = testActivity.getScore(2);
+            } else {
+                mGaitScore = 0;
+            }
+
+            if (testActivity.getScore(3) >= 0) {
+                mChairScore = testActivity.getScore(3);
+            } else {
+                mChairScore = 0;
+            }
+
+            score = mBalanceScore + mGaitScore + mChairScore;
         } else { // else, get data from local data base
             User user = User.getUser(getActivity(), currentUserID);
 
@@ -127,14 +182,13 @@ public class ScoreFragment extends Fragment {
         final int pb_score;
 
         // Calculate how much progression bar have to advance and print explaining label if full test.
-        if(mCurrentTest == 0){
-            pb_score = 9*score - (9*score)/18;
-            constraing_explaining.setVisibility(View.VISIBLE);
-            constraing_average_speed.setVisibility(View.VISIBLE);
+        if (mCurrentTest == 0) {
+            pb_score = 9 * score - (9 * score) / 18;
+            constraint_explaining.setVisibility(View.VISIBLE);
 
-            if(score == 0) {
-                constraing_explaining.setVisibility(View.GONE);
-            } else if(score <= 3){
+            if (score == 0) {
+                constraint_explaining.setVisibility(View.GONE);
+            } else if (score <= 3) {
                 tv_explaining_label.setText(getString(R.string.severe));
             } else if (score <= 6) {
                 tv_explaining_label.setText(getString(R.string.moderate));
@@ -144,21 +198,20 @@ public class ScoreFragment extends Fragment {
                 tv_explaining_label.setText(getString(R.string.minimum));
             }
         } else { // if not full test, show only the corresponding items.
-            pb_score = 25*score;
-            constraing_explaining.setVisibility(View.GONE);
-            constraing_average_speed.setVisibility(View.GONE);
+            pb_score = 25 * score;
+            constraint_explaining.setVisibility(View.GONE);
 
-            if (mCurrentTest == 1){
+            if (mCurrentTest == 1) {
                 iv_gait_color.setVisibility(View.GONE);
                 tv_gait_score_label.setVisibility(View.GONE);
                 tv_gait_score.setVisibility(View.GONE);
+                tv_average_label.setVisibility(View.GONE);
+                tv_average_speed.setVisibility(View.GONE);
 
                 iv_chair_color.setVisibility(View.GONE);
                 tv_chair_score_label.setVisibility(View.GONE);
                 tv_chair_score.setVisibility(View.GONE);
-            } else if (mCurrentTest == 2){
-                constraing_average_speed.setVisibility(View.VISIBLE);
-
+            } else if (mCurrentTest == 2) {
                 iv_balance_color.setVisibility(View.GONE);
                 tv_balance_score_label.setVisibility(View.GONE);
                 tv_balance_score.setVisibility(View.GONE);
@@ -166,10 +219,12 @@ public class ScoreFragment extends Fragment {
                 iv_chair_color.setVisibility(View.GONE);
                 tv_chair_score_label.setVisibility(View.GONE);
                 tv_chair_score.setVisibility(View.GONE);
-            } else if (mCurrentTest == 3){
+            } else if (mCurrentTest == 3) {
                 iv_balance_color.setVisibility(View.GONE);
                 tv_balance_score_label.setVisibility(View.GONE);
                 tv_balance_score.setVisibility(View.GONE);
+                tv_average_label.setVisibility(View.GONE);
+                tv_average_speed.setVisibility(View.GONE);
 
                 iv_gait_color.setVisibility(View.GONE);
                 tv_gait_score_label.setVisibility(View.GONE);
@@ -204,18 +259,14 @@ public class ScoreFragment extends Fragment {
         tv_chair_score.setText(Integer.toString(mChairScore));
         tv_average_speed.setText(String.format("%.1f", mAverageSpeed));
 
-        // Get selected user if any
-        sharedPreferences = getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
-        long selectedUserID = sharedPreferences.getLong(SELECTED_USER, -1);
-
-        // Show save button if there is a selected user
-        if(selectedUserID != -1 && currentUserID == -1) {
+        // There is a marked user
+        if (markedUserID != -1 && currentUserID == -1) {
             btn_save.setVisibility(View.VISIBLE);
             btn_download.setVisibility(View.VISIBLE);
-            selectedUser = User.getUser(getActivity(), selectedUserID);
-
+            selectedUser = User.getUser(getActivity(), markedUserID);
             tv_scorename.setText(selectedUser.getName());
-        } else if (currentUserID != -1){ // else, if the user is not selected but comes from UserFragment, hide it.
+
+        } else if (currentUserID != -1) { // else, if the user is not selected but comes from UserFragment, hide it.
             User currentUser = User.getUser(getActivity(), currentUserID);
             tv_scorename.setText(currentUser.getName());
             btn_save.setVisibility(View.INVISIBLE);
@@ -223,21 +274,58 @@ public class ScoreFragment extends Fragment {
         } else {
             tv_scorename.setVisibility(View.GONE);
             btn_save.setVisibility(View.GONE);
+            constraint_history.setVisibility(View.GONE);
         }
+
+        btn_download_history.setOnClickListener(v -> {
+            Long id;
+            if (currentUserID != -1) {
+                id = currentUserID;
+            } else {
+                id = markedUserID;
+            }
+
+            // Here, thisActivity is the current activity
+            if (ContextCompat.checkSelfPermission(testActivity,
+                    Manifest.permission.READ_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Permission is not granted
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(testActivity,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+                } else {
+                    // No explanation needed; request the permission
+                    ActivityCompat.requestPermissions(testActivity,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            30);
+                }
+            }
+
+            DownloadHistData downloadHistData = new DownloadHistData(getContext(),
+                    User.getUser(getContext(), id));
+
+            try {
+                downloadHistData.makeCSV();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         // Save data in local db
         btn_save.setOnClickListener(v -> {
             tv_save_as.setText(getString(R.string.saved));
             btn_save.setEnabled(false);
 
-            if (tv_balance_score.getVisibility() == View.VISIBLE)
-                selectedUser.setBalanceScore(mBalanceScore);
-            if (tv_gait_score.getVisibility() == View.VISIBLE){
-                selectedUser.setSpeedScore(mGaitScore);
-                selectedUser.setAverageSpeed(mAverageSpeed);
-            }
-            if (tv_chair_score.getVisibility() == View.VISIBLE)
-                selectedUser.setChairScore(mChairScore);
+            selectedUser.setBalanceScore(testActivity.getScore(1));
+            selectedUser.setSpeedScore(testActivity.getScore(2));
+            selectedUser.setChairScore(testActivity.getScore(3));
+            selectedUser.setAverageSpeed(testActivity.getAverageSpeed());
+            selectedUser.setTestDateToday();
+
             selectedUser.update(getActivity());
         });
 

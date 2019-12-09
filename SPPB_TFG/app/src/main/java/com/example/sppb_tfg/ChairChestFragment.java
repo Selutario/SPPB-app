@@ -91,7 +91,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         cl_info = view.findViewById(R.id.cl_info);
         iv_person = (ImageView) view.findViewById(R.id.iv_person);
         test_name = (TextView) view.findViewById(R.id.tv_test_name);
-        tv_result = (TextView) view.findViewById(R.id.tv_result);
+        tv_result = (TextView) view.findViewById(R.id.tv_score_history);
         tv_result_label = (TextView) view.findViewById(R.id.tv_result_label);
         chronometer = view.findViewById(R.id.chronometer);
         btn_play = (ImageButton) view.findViewById(R.id.btn_play);
@@ -99,13 +99,13 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
         btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
 
-        // Set test name and test color on the interface
-        test_name.setText(getActivity().getResources().getText(R.string.chair_name));
-        iv_person.setImageResource(R.drawable.ic_person_sitting);
-        drawable = (GradientDrawable)cl_info.getBackground();
-        drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
+        testActivity = ((TestActivity) getActivity());
 
-        testActivity = ((TestActivity)getActivity());
+        // Set test name and test color on the interface
+        test_name.setText(getActivity().getResources().getText(R.string.chair_name) + testActivity.markedUserName);
+        iv_person.setImageResource(R.drawable.ic_person_sitting);
+        drawable = (GradientDrawable) cl_info.getBackground();
+        drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
 
         TooltipCompat.setTooltipText(btn_info, getString(R.string.info));
         TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
@@ -147,7 +147,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
             public void onClick(View view) {
                 testActivity.tts.stop();
 
-                if(currentStep >= 1){
+                if (currentStep >= 1) {
                     onClickWholeScreen(false);
 
                     currentStep = 0;
@@ -157,7 +157,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                     n_standUp = 0;
                     totalTime = 0;
 
-                    for(int i=0; i<axisChanges.length; i++)
+                    for (int i = 0; i < axisChanges.length; i++)
                         axisChanges[i] = 0;
 
                     movStarted = false;
@@ -187,7 +187,9 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
 
                     SelectPositionFragment selectPositionFragment = new SelectPositionFragment();
                     testActivity.openFragment(selectPositionFragment, true);
+
                 } else {
+                    testActivity.chairScore = 0;
                     testActivity.fragmentTestCompleted();
                 }
 
@@ -201,13 +203,13 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         instructions.add(getString(R.string.chair_instructions2));
         instructions.add(getString(R.string.chair_instructions3));
 
-        for(int i=0; i<axisChanges.length; i++)
+        for (int i = 0; i < axisChanges.length; i++)
             axisChanges[i] = 0;
 
 
         // Sensor declaration.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager != null){
+        if (sensorManager != null) {
             sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
             sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_FASTEST);
         }
@@ -275,7 +277,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
 
         }
 
-        currentStep = currentStep +1;
+        currentStep = currentStep + 1;
     }
 
     // Used to set click listener in a whole screen layout
@@ -298,7 +300,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
         long curTime = System.currentTimeMillis();
 
         // This conditional makes sure that the function is never executed before it is supposed to.
-        if(inProgress && ((curTime - lastSaved) > ACCE_FILTER_DATA_MIN_TIME)) {
+        if (inProgress && ((curTime - lastSaved) > ACCE_FILTER_DATA_MIN_TIME)) {
             lastSaved = curTime;
             long diffChanges = (curTime - lastChangeTime);
 
@@ -315,7 +317,7 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
             yHistory = event.values[1];
             zHistory = event.values[2];
 
-            if (!calibrating){
+            if (!calibrating) {
                 // Store accelerometer data in csv file
                 testActivity.excelData.storeData(Constants.CHAIR_TEST, System.currentTimeMillis(),
                         event.values[0], event.values[1], event.values[2]);
@@ -323,19 +325,19 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                 // If the movement has already begun, it only accepts the
                 // deceleration value that confirms the end of it.
                 if (movStarted) {
-                    if (diffChanges > (timeThreshold)){
-                        if (direction == "UP_STARTED"){
-                            if (yChange > axisChanges[3]/corrCoeff){
+                    if (diffChanges > (timeThreshold)) {
+                        if (direction == "UP_STARTED") {
+                            if (yChange > axisChanges[3] / corrCoeff) {
                                 direction = "UP_FINISHED";
                                 last_direction = "UP";
                                 movStarted = false;
                                 lastChangeTime = curTime;
                             }
                         } else if (direction == "DOWN_STARTED") {
-                            if(!leanDown && yChange < axisChanges[6]/corrCoeff ){
+                            if (!leanDown && yChange < axisChanges[6] / corrCoeff) {
                                 leanDown = true;
                             }
-                            if (leanDown && zChange < axisChanges[4]/(corrCoeff*1.5)){
+                            if (leanDown && zChange < axisChanges[4] / (corrCoeff * 1.5)) {
                                 direction = "DOWN_FINISHED";
                                 last_direction = "DOWN";
                                 movStarted = false;
@@ -347,15 +349,15 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                     // If it hasn't begun, it only accepts values that indicate the
                     // beginning of the movement.
                 } else {
-                    if(!leanUp && zChange > axisChanges[1]/corrCoeff)
+                    if (!leanUp && zChange > axisChanges[1] / corrCoeff)
                         leanUp = true;
                     // From sitting to standing
-                    if (yChange < axisChanges[2]/corrCoeff && leanUp && last_direction != "UP" && diffChanges > timeThreshold){
+                    if (yChange < axisChanges[2] / corrCoeff && leanUp && last_direction != "UP" && diffChanges > timeThreshold) {
                         direction = "UP_STARTED";
                         movStarted = true;
                         lastChangeTime = curTime;
                         leanUp = false;
-                    } else if (yChange > axisChanges[7]/corrCoeff && last_direction != "DOWN" && diffChanges > timeThreshold){
+                    } else if (yChange > axisChanges[7] / corrCoeff && last_direction != "DOWN" && diffChanges > timeThreshold) {
                         direction = "DOWN_STARTED";
                         movStarted = true;
                         lastChangeTime = curTime;
@@ -363,33 +365,33 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                 }
 
                 // Calibrate if TextToSpeech engine is ready
-            } else if(testActivity.ttsReady) {
+            } else if (testActivity.ttsReady) {
                 // Read each instruction only once
-                if(instructionIndex != lastInstruction){
+                if (instructionIndex != lastInstruction) {
                     lastInstruction = instructionIndex;
                     testActivity.readText(instructions.get(instructionIndex));
                     switchImageView();
                 }
 
-                int isSitting = instructionIndex%2;
+                int isSitting = instructionIndex % 2;
 
                 // Wait until reading is finished
                 if (testActivity.tts.isSpeaking()) {
                     lastChangeTime = curTime;
                     beepReady = true;
 
-                    if (zChange < minZchange){
+                    if (zChange < minZchange) {
                         minZchange = zChange;
                     }
-                    if (zChange > maxZchange){
+                    if (zChange > maxZchange) {
                         maxZchange = zChange;
                     }
-                    if (yChange < minYchange){
+                    if (yChange < minYchange) {
                         minYchange = yChange;
                     }
-                    if (yChange > maxYchange){
-                        if(isSitting == 1){
-                            if (minYchange > -0.4){
+                    if (yChange > maxYchange) {
+                        if (isSitting == 1) {
+                            if (minYchange > -0.4) {
                                 maxYchange = yChange;
                             }
                         } else {
@@ -397,27 +399,27 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                         }
                     }
                 } else {
-                    if (beepReady){
+                    if (beepReady) {
                         /*testActivity.beep.start();*/
                         beepReady = false;
                         lastChangeTime = curTime;
                     }
                     // Read the max and min values of Z, Y axis
-                    if (zChange < minZchange){
+                    if (zChange < minZchange) {
                         minZchange = zChange;
                         lastChangeTime = curTime;
                     }
-                    if (zChange > maxZchange){
+                    if (zChange > maxZchange) {
                         maxZchange = zChange;
                         lastChangeTime = curTime;
                     }
-                    if (yChange < minYchange){
+                    if (yChange < minYchange) {
                         minYchange = yChange;
                         lastChangeTime = curTime;
                     }
-                    if (yChange > maxYchange){
-                        if(isSitting == 1){
-                            if (minYchange > -0.4){
+                    if (yChange > maxYchange) {
+                        if (isSitting == 1) {
+                            if (minYchange > -0.4) {
                                 maxYchange = yChange;
                             }
                         } else {
@@ -426,16 +428,16 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                     }
 
                     // When there is no major change in the last 2 seconds
-                    if(diffChanges > 2000){
+                    if (diffChanges > 2000) {
                         // Save the values depending on whether the user is standing up or sitting.
                         // and calculate the average value of the two measurements.
                         // (if sitting instruction, isSitting is 1 so the measurements have to be
                         // saved on the last 4 positions of the array)
 
-                        axisChanges[0 + 4*isSitting] = (axisChanges[0 + 4*isSitting]+minZchange)/(instructionIndex/2 + 1);
-                        axisChanges[1 + 4*isSitting] = (axisChanges[1 + 4*isSitting]+maxZchange)/(instructionIndex/2 + 1);
-                        axisChanges[2 + 4*isSitting] = (axisChanges[2 + 4*isSitting]+minYchange)/(instructionIndex/2 + 1);
-                        axisChanges[3 + 4*isSitting] = (axisChanges[3 + 4*isSitting]+maxYchange)/(instructionIndex/2 + 1);
+                        axisChanges[0 + 4 * isSitting] = (axisChanges[0 + 4 * isSitting] + minZchange) / (instructionIndex / 2 + 1);
+                        axisChanges[1 + 4 * isSitting] = (axisChanges[1 + 4 * isSitting] + maxZchange) / (instructionIndex / 2 + 1);
+                        axisChanges[2 + 4 * isSitting] = (axisChanges[2 + 4 * isSitting] + minYchange) / (instructionIndex / 2 + 1);
+                        axisChanges[3 + 4 * isSitting] = (axisChanges[3 + 4 * isSitting] + maxYchange) / (instructionIndex / 2 + 1);
 
                         // Restore the default value
                         minYchange = 0;
@@ -443,16 +445,16 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                         minZchange = 0;
                         maxZchange = 0;
 
-                        if(instructionIndex < instructions.size()-1) {
+                        if (instructionIndex < instructions.size() - 1) {
                             instructionIndex++;
                         } else {
                             float overall = 0;
 
-                            for(int i = 0; i < axisChanges.length; i++){
+                            for (int i = 0; i < axisChanges.length; i++) {
                                 overall += Math.abs(axisChanges[i]);
                             }
 
-                            if(overall > 8.0f){
+                            if (overall > 8.0f) {
                                 btn_play.setVisibility(View.GONE);
                                 tv_result.setVisibility(View.VISIBLE);
                                 testActivity.readText(getString(R.string.chair_chest_step1));
@@ -471,15 +473,15 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
             }
 
             // Only speaks if it has something different to say
-            if (last_printed_direction != direction && !calibrating){
-                if (direction == "DOWN_FINISHED" && n_standUp != 0){
+            if (last_printed_direction != direction && !calibrating) {
+                if (direction == "DOWN_FINISHED" && n_standUp != 0) {
 
                     tv_result.setText(Integer.toString(n_standUp));
 
                     if (n_standUp == 5) {
                         chronometer.stop();
                         long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-                        totalTime = (double)elapsedMillis/1000;
+                        totalTime = (double) elapsedMillis / 1000;
 
                         inProgress = false;
                         iv_person.setImageResource(R.drawable.ic_test_done);
@@ -488,10 +490,8 @@ public class ChairChestFragment extends Fragment implements SensorEventListener 
                         testActivity.readText(Integer.toString(n_standUp));
                         switchImageView();
                     }
-                }
-
-                else if (direction == "UP_FINISHED"){
-                    if (n_standUp == 0){
+                } else if (direction == "UP_FINISHED") {
+                    if (n_standUp == 0) {
                         testActivity.readText(getString(R.string.start));
                         chronometer.setBase(SystemClock.elapsedRealtime());
                     }

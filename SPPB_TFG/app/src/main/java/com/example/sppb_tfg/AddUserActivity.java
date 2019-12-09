@@ -1,18 +1,9 @@
 package com.example.sppb_tfg;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -23,6 +14,8 @@ import android.widget.Toast;
 
 public class AddUserActivity extends AppCompatActivity {
 
+    SharedPreferences settings;
+    SharedPreferences.Editor editor;
     private EditText et_username;
     private EditText et_age;
     private EditText et_weight;
@@ -30,9 +23,6 @@ public class AddUserActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private Button btn_add_user;
-
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,31 +46,29 @@ public class AddUserActivity extends AppCompatActivity {
         editor = settings.edit();
 
         btn_add_user.setOnClickListener(v -> {
-           String username = et_username.getText().toString();
-           String age = et_age.getText().toString();
-           String weight = et_weight.getText().toString();
-           String height = et_height.getText().toString();
+            String username = et_username.getText().toString();
+            String age = et_age.getText().toString();
+            String weight = et_weight.getText().toString();
+            String height = et_height.getText().toString();
 
-           if(username.isEmpty()){
-               et_username.setHintTextColor(getResources().getColor(R.color.colorError));
-               Toast.makeText(AddUserActivity.this, getString(R.string.need_username), Toast.LENGTH_LONG).show();
-           } else {
-               // Add user to database
-               User user = new User(username, age, weight, height);
-               user.insert(AddUserActivity.this);
-               long selectedId = user.getId();
+            if (username.isEmpty()) {
+                et_username.setHintTextColor(getResources().getColor(R.color.colorError));
+                Toast.makeText(AddUserActivity.this, getString(R.string.need_username), Toast.LENGTH_LONG).show();
+            } else {
+                // Add user to database
+                User user = new User(username, age, weight, height);
+                user.insert(AddUserActivity.this);
+                long selectedId = user.getId();
 
-               // Mark as selected
-               editor.putLong(Constants.SELECTED_USER, selectedId);
-               editor.apply();
-               finish();
-           }
+                // Mark as selected
+                editor.putLong(Constants.SELECTED_USER, selectedId);
+                editor.apply();
+                finish();
+            }
 
 
         });
     }
-
-
 
 
 }

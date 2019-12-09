@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        switch (currentFragment){
+        switch (currentFragment) {
             case 0:
                 MainFragment mainFragment = new MainFragment();
                 openFragment(mainFragment);
@@ -77,7 +77,7 @@ public class MainActivity extends FragmentActivity {
     }
 
 
-    private  void openFragment(Fragment fragment) {
+    private void openFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.main_placeHolder, fragment);
@@ -85,15 +85,9 @@ public class MainActivity extends FragmentActivity {
         transaction.commit();
     }
 
-    // Close app if backpressed on MainFragment or FragmentUsers, go back if on ScoreFragment
+    // Close app if backpressed
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_placeHolder);
-        if ((fragment instanceof MainFragment) || (fragment instanceof FragmentUsers)) {
-            super.onBackPressed();
-        } else if ((fragment instanceof ScoreFragment)) {
-            FragmentUsers fragmentUsers = new FragmentUsers();
-            openFragment(fragmentUsers);
-        }
+        super.onBackPressed();
     }
 }

@@ -13,14 +13,13 @@
         <shape android:shape="rectangle">
             <gradient
                 android:angle="180"
-                android:startColor="@color/colorPrimaryLighter"
                 android:endColor="@color/colorPrimaryLight"
+                android:startColor="@color/colorPrimaryLighter"
                 android:type="linear" />
             <corners android:radius="12dp" />
         </shape>
     </item>
-</ripple>
-    <!-- COLOR FILLED BUTTONS -->
+</ripple><!-- COLOR FILLED BUTTONS -->
 
 
     <!---->

@@ -13,11 +13,11 @@
         <shape android:shape="rectangle">
             <stroke
                 android:width="3dp"
-                android:color="@color/colorBalance"/>
+                android:color="@color/colorBalance" />
             <gradient
                 android:angle="180"
-                android:startColor="@color/colorBackground"
                 android:endColor="@color/colorBackground"
+                android:startColor="@color/colorBackground"
                 android:type="linear" />
             <corners android:radius="12dp" />
         </shape>

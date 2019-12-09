@@ -109,7 +109,6 @@
     </string>
 
 
-
     <!--ACTUAL TEST-->
     <string name="start">Ya</string>
 
@@ -209,10 +208,11 @@
     <!-- SCORE -->
     <string name="score">Puntos</string>
     <string name="points">Puntos</string>
+    <string name="history">Historial</string>
     <string name="save_as">Guardar</string>
     <string name="save_csv">Descargar</string>
     <string name="saved">Guardado</string>
-    <string name="average_speed">Velocidad media de marcha</string>
+    <string name="average_speed">Velocidad media (m/s)</string>
 
     <string name="severe">Limitación severa</string>
     <string name="moderate">Limitación moderada</string>

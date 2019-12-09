@@ -58,25 +58,24 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
         View view = inflater.inflate(R.layout.fragment_test, null);
         whole_screen = view.findViewById(R.id.whole_screen);
         cl_info = view.findViewById(R.id.cl_info);
-        iv_person = (ImageView) view.findViewById(R.id.iv_person);
-        test_name = (TextView) view.findViewById(R.id.tv_test_name);
-        tv_result = (TextView) view.findViewById(R.id.tv_result);
-        tv_result_label = (TextView) view.findViewById(R.id.tv_result_label);
-        test_name = (TextView) view.findViewById(R.id.tv_test_name);
+        iv_person = view.findViewById(R.id.iv_person);
+        test_name = view.findViewById(R.id.tv_test_name);
+        tv_result = view.findViewById(R.id.tv_score_history);
+        tv_result_label = view.findViewById(R.id.tv_result_label);
+        test_name = view.findViewById(R.id.tv_test_name);
         chronometer = view.findViewById(R.id.chronometer);
-        btn_play = (ImageButton) view.findViewById(R.id.btn_play);
-        btn_mute = (ImageButton) view.findViewById(R.id.btn_mute);
-        btn_info = (ImageButton) view.findViewById(R.id.imageButton5);
-        btn_replay = (ImageButton) view.findViewById(R.id.btn_replay);
+        btn_play = view.findViewById(R.id.btn_play);
+        btn_mute = view.findViewById(R.id.btn_mute);
+        btn_info = view.findViewById(R.id.imageButton5);
+        btn_replay = view.findViewById(R.id.btn_replay);
+
+        testActivity = ((TestActivity) getActivity());
 
         // Set test name and test color on the interface
-        test_name.setText(getString(R.string.chair_name));
+        test_name.setText(getString(R.string.chair_name) + testActivity.markedUserName);
         iv_person.setImageResource(R.drawable.ic_person_sitting);
-
-        drawable = (GradientDrawable)cl_info.getBackground();
+        drawable = (GradientDrawable) cl_info.getBackground();
         drawable.setColor(ContextCompat.getColor(getActivity(), R.color.colorChairStand));
-
-        testActivity = ((TestActivity)getActivity());
 
         TooltipCompat.setTooltipText(btn_info, getString(R.string.info));
         TooltipCompat.setTooltipText(btn_mute, getString(R.string.mute));
@@ -117,10 +116,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
             @Override
             public void onClick(View view) {
                 testActivity.tts.stop();
-                /*if (currentStep < 2) {
-                    testActivity.fragmentTestCompleted();
-                } else {*/
-                if (currentStep >= 2){
+                if (currentStep >= 2) {
                     currentStep = 0;
                     inProgress = false;
                     last_direction = "DOWN";
@@ -138,6 +134,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
                     SelectPositionFragment selectPositionFragment = new SelectPositionFragment();
                     testActivity.openFragment(selectPositionFragment, true);
                 } else {
+                    testActivity.chairScore = 0;
                     testActivity.fragmentTestCompleted();
                 }
             }
@@ -145,7 +142,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
 
         // Sensor declaration.
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager != null){
+        if (sensorManager != null) {
             sensorAcc = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
             sensorManager.registerListener(this, sensorAcc, SensorManager.SENSOR_DELAY_GAME);
         }
@@ -196,7 +193,7 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
                 break;
         }
 
-        currentStep = currentStep +1;
+        currentStep = currentStep + 1;
     }
 
     // Used to set click listener in a whole screen layout
@@ -234,10 +231,10 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
                     if (last_direction != "DOWN") {
                         tv_result.setText(Integer.toString(n_standUp));
 
-                        if (n_standUp == 5){
+                        if (n_standUp == 5) {
                             chronometer.stop();
                             long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-                            totalTime = (double)elapsedMillis/1000;
+                            totalTime = (double) elapsedMillis / 1000;
 
                             inProgress = false;
                             iv_person.setImageResource(R.drawable.ic_test_done);
@@ -249,8 +246,8 @@ public class ChairThighFragment extends Fragment implements SensorEventListener 
 
                         last_direction = "DOWN";
                     }
-                } else if (last_direction != "UP"){
-                    if(n_standUp == 0) {
+                } else if (last_direction != "UP") {
+                    if (n_standUp == 0) {
                         chronometer.setBase(SystemClock.elapsedRealtime());
                         testActivity.readText(getString(R.string.start));
                     }

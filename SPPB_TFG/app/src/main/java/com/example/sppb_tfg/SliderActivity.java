@@ -14,8 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /*
-* Info/instruction slides
-*/
+ * Info/instruction slides
+ */
 public class SliderActivity extends AppCompatActivity {
 
     private ViewPager mSlideViewPager;
@@ -30,13 +30,58 @@ public class SliderActivity extends AppCompatActivity {
 
     private int mCurrentPage;
     private int mCurrentTest;
+    // Change Next and Back labels depending on current slide
+    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            addDotsIndicator(i);
+            mCurrentPage = i;
+
+            if (i == 0) {
+
+                mNextButton.setEnabled(true);
+/*                mBackButton.setEnabled(false);
+                mBackButton.setVisibility(View.INVISIBLE);*/
+
+                mNextButton.setText(getResources().getText(R.string.next));
+                mBackButton.setText(getString(R.string.skip));
+
+            } else if (i == mDots.length - 1) {
+
+                mNextButton.setEnabled(true);
+                mBackButton.setEnabled(true);
+                /*mBackButton.setVisibility(View.VISIBLE);*/
+
+                mNextButton.setText(getResources().getText(R.string.finish));
+                mBackButton.setText(getResources().getText(R.string.back));
+
+            } else {
+                mNextButton.setEnabled(true);
+                mBackButton.setEnabled(true);
+                mBackButton.setVisibility(View.VISIBLE);
+
+                mNextButton.setText(getResources().getText(R.string.next));
+                mBackButton.setText(getResources().getText(R.string.back));
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_slider);
 
-        mCurrentTest = getIntent().getIntExtra("test", mCurrentTest)-1;
+        mCurrentTest = getIntent().getIntExtra("test", mCurrentTest) - 1;
 
         mSliderLayout = (ConstraintLayout) findViewById(R.id.slider_layout);
         mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
@@ -56,7 +101,7 @@ public class SliderActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mCurrentPage < mDots.length -1){
+                if (mCurrentPage < mDots.length - 1) {
                     mSlideViewPager.setCurrentItem(mCurrentPage + 1);
                 } else {
                     finish();
@@ -68,7 +113,7 @@ public class SliderActivity extends AppCompatActivity {
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mCurrentPage > 0){
+                if (mCurrentPage > 0) {
                     mSlideViewPager.setCurrentItem(mCurrentPage - 1);
                 } else {
                     finish();
@@ -106,7 +151,7 @@ public class SliderActivity extends AppCompatActivity {
         mDots = new TextView[sliderResources.slide_headings[mCurrentTest].length];
         mDotLayout.removeAllViews();
 
-        for(int i = 0; i < mDots.length; i++) {
+        for (int i = 0; i < mDots.length; i++) {
             mDots[i] = new TextView(this);
             mDots[i].setText(Html.fromHtml("&#8226;"));
             mDots[i].setTextSize(35);
@@ -120,51 +165,5 @@ public class SliderActivity extends AppCompatActivity {
             mDots[position].setAlpha(1);
         }
     }
-
-    // Change Next and Back labels depending on current slide
-    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int i, float v, int i1) {
-
-        }
-
-        @Override
-        public void onPageSelected(int i) {
-            addDotsIndicator(i);
-            mCurrentPage = i;
-
-            if(i == 0) {
-
-                mNextButton.setEnabled(true);
-/*                mBackButton.setEnabled(false);
-                mBackButton.setVisibility(View.INVISIBLE);*/
-
-                mNextButton.setText(getResources().getText(R.string.next));
-                mBackButton.setText(getString(R.string.skip));
-
-            } else if (i == mDots.length -1) {
-
-                mNextButton.setEnabled(true);
-                mBackButton.setEnabled(true);
-                /*mBackButton.setVisibility(View.VISIBLE);*/
-
-                mNextButton.setText(getResources().getText(R.string.finish));
-                mBackButton.setText(getResources().getText(R.string.back));
-
-            } else {
-                mNextButton.setEnabled(true);
-                mBackButton.setEnabled(true);
-                mBackButton.setVisibility(View.VISIBLE);
-
-                mNextButton.setText(getResources().getText(R.string.next));
-                mBackButton.setText(getResources().getText(R.string.back));
-            }
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int i) {
-
-        }
-    };
 
 }

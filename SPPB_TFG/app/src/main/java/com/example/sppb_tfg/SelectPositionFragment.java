@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 /*
-* Show two options, so the user can choose to perform Chair test with device on the chest or leg.
-*/
+ * Show two options, so the user can choose to perform Chair test with device on the chest or leg.
+ */
 public class SelectPositionFragment extends Fragment {
 
     ImageButton btn_chest;
@@ -25,7 +25,7 @@ public class SelectPositionFragment extends Fragment {
         btn_chest = (ImageButton) view.findViewById(R.id.btn_chest);
         btn_thigh = (ImageButton) view.findViewById(R.id.btn_thigh);
 
-        testActivity = ((TestActivity)getActivity());
+        testActivity = ((TestActivity) getActivity());
 
 
         btn_chest.setOnClickListener(new View.OnClickListener() {
